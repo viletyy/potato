@@ -1,0 +1,19 @@
+RUN_MODE = debug
+
+[app]
+PAGE_SIZE = 10
+JWT_SECRET = 23347$040412
+
+[server]
+HTTP_PORT = 8000
+READ_TIMEOUT = 60
+WRITE_TIMEOUT = 60
+
+[database]
+TYPE = postgres
+USER = postgres
+PASSWORD = 123456
+HOST = postgres
+PORT = 5432
+NAME = dbname
+TABLE_PREFIX = g_

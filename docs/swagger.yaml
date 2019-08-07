@@ -1,0 +1,9 @@
+basePath: /
+info:
+  contact: {}
+  description: This is a data_govern use golang
+  license: {}
+  title: Potato Api
+  version: "1.0"
+paths: {}
+swagger: "2.0"

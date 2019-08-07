@@ -1,0 +1,12 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "This is a data_govern use golang",
+        "title": "Potato Api",
+        "contact": {},
+        "license": {},
+        "version": "1.0"
+    },
+    "basePath": "/",
+    "paths": {}
+}
