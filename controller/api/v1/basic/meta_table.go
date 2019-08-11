@@ -1,4 +1,4 @@
-package data
+package basic
 
 import (
 	"github.com/gin-gonic/gin"
@@ -12,8 +12,8 @@ import (
 // @Accept json
 // @Produce json
 // @Param id path int true "数据源 ID"
-// @Success 200 {string} json "{"code" : 200, "data" : {}, "msg": "ok" }"
-// @Router /v1/meta_databases/:id/meta_tables [get]
+// @Success 200 {string} json "{"code" : 200, "basic" : {}, "msg": "ok" }"
+// @Router /v1/meta_databases/{id}/meta_tables [get]
 func GetMetaTables(c *gin.Context) {
 	name := c.Query("name")
 
@@ -29,6 +29,6 @@ func GetMetaTables(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"code": code,
 		"msg": e.GetMsg(code),
-		"data": data,
+		"basic": data,
 	})
 }

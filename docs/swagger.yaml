@@ -1,9 +1,219 @@
-basePath: /
+basePath: /api
 info:
   contact: {}
   description: This is a data_govern use golang
   license: {}
   title: Potato Api
   version: "1.0"
-paths: {}
+paths:
+  /v1/businesses:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code" : 200, "data" : {}, "msg" : "ok"}'
+          schema:
+            type: string
+      summary: 业务系统列表
+      tags:
+      - businesses
+    post:
+      consumes:
+      - multipart/form-data
+      parameters:
+      - description: 业务系统 名称
+        in: formData
+        name: name
+        required: true
+        type: string
+      - description: 业务系统 描述
+        in: formData
+        name: desc
+        type: string
+      - description: 业务系统 云端id
+        in: formData
+        name: c_id
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code" : 200, "msg" : "ok"}'
+          schema:
+            type: string
+      summary: 新增业务系统
+      tags:
+      - businesses
+  /v1/businesses/{id}:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: 业务系统 ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code" : 200, "msg" : "ok"}'
+          schema:
+            type: string
+      summary: 删除业务系统
+      tags:
+      - businesses
+    patch:
+      consumes:
+      - multipart/form-data
+      parameters:
+      - description: 业务系统 ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: 业务系统 名称
+        in: formData
+        name: name
+        type: string
+      - description: 业务系统 描述
+        in: formData
+        name: desc
+        type: string
+      - description: 业务系统 云端id
+        in: formData
+        name: c_id
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code" : 200, "msg" : "ok"}'
+          schema:
+            type: string
+      summary: 修改业务系统
+      tags:
+      - businesses
+  /v1/meta_databases:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code" : 200, "basic" : {}, "msg": "ok" }'
+          schema:
+            type: string
+      summary: 数据源列表
+      tags:
+      - meta_databases
+  /v1/meta_databases/{id}/meta_tables:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: 数据源 ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code" : 200, "basic" : {}, "msg": "ok" }'
+          schema:
+            type: string
+      summary: 元数据列表
+      tags:
+      - meta_tables
+  /v1/vendors:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code" : 200, "data" : {}, "msg" : "ok"}'
+          schema:
+            type: string
+      summary: 系统厂商列表
+      tags:
+      - vendors
+    post:
+      consumes:
+      - multipart/form-data
+      parameters:
+      - description: 系统厂商 名称
+        in: formData
+        name: name
+        required: true
+        type: string
+      - description: 系统厂商 云端id
+        in: formData
+        name: c_id
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code" : 200, "msg" : "ok"}'
+          schema:
+            type: string
+      summary: 新增系统厂商
+      tags:
+      - vendors
+  /v1/vendors/{id}:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: 系统厂商 ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code" : 200, "msg" : "ok"}'
+          schema:
+            type: string
+      summary: 删除系统厂商
+      tags:
+      - vendors
+    patch:
+      consumes:
+      - multipart/form-data
+      parameters:
+      - description: 系统厂商 ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: 系统厂商 名称
+        in: formData
+        name: name
+        type: string
+      - description: 系统厂商 云端id
+        in: formData
+        name: c_id
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code" : 200, "msg" : "ok"}'
+          schema:
+            type: string
+      summary: 修改系统厂商
+      tags:
+      - vendors
 swagger: "2.0"

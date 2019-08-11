@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"github.com/viletyy/potato/pkg/setting"
-	"github.com/viletyy/potato/pkg/util"
 	"github.com/viletyy/potato/routers"
 	"log"
 	"net/http"
@@ -20,12 +19,6 @@ import (
 
 func main() {
 	router := routers.InitRouter()
-
-	// 数据库配置
-	_ = util.InitDB()
-	defer util.CloseDB()
-	util.InitRedis()
-	defer util.CloseRedis()
 
 	server := &http.Server{
 		Addr:              fmt.Sprintf(":%d", setting.HTTPPort),

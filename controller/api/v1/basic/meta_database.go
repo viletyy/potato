@@ -1,9 +1,9 @@
-package data
+package basic
 
 import (
 	"github.com/gin-gonic/gin"
-	_ "github.com/viletyy/potato/models/data"
-	data2 "github.com/viletyy/potato/models/data"
+	"github.com/viletyy/potato/models/basic"
+	_ "github.com/viletyy/potato/models/basic"
 	"github.com/viletyy/potato/pkg/e"
 	"github.com/viletyy/potato/pkg/setting"
 	"github.com/viletyy/potato/pkg/util"
@@ -15,7 +15,7 @@ import (
 // @Description
 // @Accept json
 // @Produce json
-// @Success 200 {string} json "{"code" : 200, "data" : {}, "msg": "ok" }"
+// @Success 200 {string} json "{"code" : 200, "basic" : {}, "msg": "ok" }"
 // @Router /v1/meta_databases [get]
 func GetMetaDatabases(c *gin.Context) {
 	name := c.Query("name")
@@ -27,13 +27,13 @@ func GetMetaDatabases(c *gin.Context) {
 		maps["name"] = name
 	}
 
-	data["lists"] = data2.GetMetaDatabases(util.GetPage(c), setting.PageSize, maps)
-	data["total"] = data2.GetMetaDatabaseTotal(maps)
+	data["lists"] = basic.GetMetaDatabases(util.GetPage(c), setting.PageSize, maps)
+	data["total"] = basic.GetMetaDatabaseTotal(maps)
 	code := e.SUCCESS
 
 	c.JSON(http.StatusOK, gin.H{
 		"code": code,
 		"msg": e.GetMsg(code),
-		"data": data,
+		"basic": data,
 	})
 }

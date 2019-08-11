@@ -30,7 +30,7 @@ func JWT() gin.HandlerFunc {
 			c.JSON(http.StatusUnauthorized, gin.H{
 				"code" : code,
 				"msg" : e.GetMsg(code),
-				"data" : data,
+				"basic" : data,
 			})
 
 			c.Abort()

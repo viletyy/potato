@@ -35,5 +35,5 @@ func InitRouter() *gin.Engine {
 }
 
 func V1InitModule() {
-	V1InitDataRouter()
+	V1InitBasicRouter()
 }

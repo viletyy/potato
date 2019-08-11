@@ -19,9 +19,18 @@ type Model struct {
 
 
 var(
-	DB *gorm.DB
+	DB = InitDB()
 	Redis *redis.Client
 )
+
+
+func init()  {
+	// 数据库配置
+	InitDB()
+	//defer DB.Close()
+	InitRedis()
+	defer Redis.Close()
+}
 
 func InitDB() *gorm.DB {
 	var (
@@ -58,6 +67,8 @@ func InitDB() *gorm.DB {
 	DB.DB().SetMaxIdleConns(10)
 	DB.DB().SetMaxOpenConns(100)
 
+	logging.Info(DB)
+
 	return DB
 }
 
@@ -78,12 +89,4 @@ func InitRedis() {
 	if _, err := Redis.Ping().Result(); err != nil {
 		logging.Fatal("redis连接失败!", err)
 	}
-}
-
-func CloseDB() {
-	DB.Close()
-}
-
-func CloseRedis() {
-	Redis.Close()
 }

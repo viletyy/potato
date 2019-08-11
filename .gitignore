@@ -13,3 +13,4 @@
 
 conf/app.ini
 .idea/*
+runtime/logs/*
