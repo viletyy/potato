@@ -112,6 +112,139 @@ paths:
       summary: 数据源列表
       tags:
       - meta_databases
+    post:
+      consumes:
+      - multipart/form-data
+      parameters:
+      - description: 数据源 名称
+        in: formData
+        name: name
+        required: true
+        type: string
+      - description: 数据源 地址
+        in: formData
+        name: host
+        required: true
+        type: string
+      - description: 数据源 端口号
+        in: formData
+        name: port
+        required: true
+        type: integer
+      - description: 数据源 数据库名称
+        in: formData
+        name: db_name
+        required: true
+        type: string
+      - description: 数据源 用户名
+        in: formData
+        name: username
+        required: true
+        type: string
+      - description: 数据源 密码
+        in: formData
+        name: password
+        required: true
+        type: string
+      - description: 数据源 备注
+        in: formData
+        name: comment
+        type: string
+      - description: 系统厂商 id
+        in: formData
+        name: vendor_id
+        required: true
+        type: integer
+      - description: 业务系统 id
+        in: formData
+        name: business_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code": 200, data: {}, "msg" : "ok"}'
+          schema:
+            type: string
+      summary: 新增数据源
+      tags:
+      - meta_databases
+  /v1/meta_databases/{id}:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: 数据源 ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code" : 200, "msg" : "ok"}'
+          schema:
+            type: string
+      summary: 删除数据源
+      tags:
+      - meta_databases
+    patch:
+      consumes:
+      - multipart/form-data
+      parameters:
+      - description: 数据源 ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: 数据源 名称
+        in: formData
+        name: name
+        type: string
+      - description: 数据源 地址
+        in: formData
+        name: host
+        type: string
+      - description: 数据源 端口号
+        in: formData
+        name: port
+        type: integer
+      - description: 数据源 数据库名称
+        in: formData
+        name: db_name
+        type: string
+      - description: 数据源 用户名
+        in: formData
+        name: username
+        type: string
+      - description: 数据源 密码
+        in: formData
+        name: password
+        type: string
+      - description: 数据源 备注
+        in: formData
+        name: comment
+        type: string
+      - description: 系统厂商 id
+        in: formData
+        name: vendor_id
+        type: integer
+      - description: 业务系统 id
+        in: formData
+        name: business_id
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code" : 200, "msg" : "ok"}'
+          schema:
+            type: string
+      summary: 修改数据源
+      tags:
+      - meta_databases
   /v1/meta_databases/{id}/meta_tables:
     get:
       consumes:

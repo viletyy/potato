@@ -8,6 +8,10 @@ var MsgFlags = map[int]string {
 	ERROR_NOT_EXIST_VENDOR : "该系统厂商不存在",
 	ERROR_EXIST_BUSINESS : "已存在该业务系统",
 	ERROR_NOT_EXIST_BUSINESS : "该业务系统不存在",
+	ERROR_EXIST_META_DATABASE : "已存在该数据源",
+	ERROR_NOT_EXIST_META_DATABASE : "该数据源不存在",
+	ERROR_EXIST_META_TABLE : "已存在该元数据",
+	ERROR_NOT_EXIST_META_TABLE : "该元数据不存在",
 
 	ERROR_AUTH_CHECK_TOKEN_FAIL : "Token鉴权失败",
 	ERROR_AUTH_CHECK_TOKEN_TIMEOUT : "Token已超时",

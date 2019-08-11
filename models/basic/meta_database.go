@@ -2,6 +2,7 @@ package basic
 
 import (
 	"github.com/viletyy/potato/pkg/util"
+	"log"
 	"time"
 )
 
@@ -31,4 +32,45 @@ func GetMetaDatabaseTotal(maps interface{}) (count int) {
 	util.DB.Model(&MetaDatabase{}).Where(maps).Count(&count)
 
 	return
+}
+
+func ExistMetaDatabaseByName(name string) bool {
+	var metaDatabase MetaDatabase
+	util.DB.Select("id").Where("name = ?", name).First(&metaDatabase)
+	if metaDatabase.ID > 0 {
+		return true
+	}
+	return false
+}
+
+func ExistMetaDatabaseById(id int) bool {
+	var metaDatabase MetaDatabase
+	util.DB.Select("id").Where("id = ?", id).First(&metaDatabase)
+	if metaDatabase.ID > 0 {
+		return true
+	}
+	return false 
+}
+
+func AddMetaDatabase(data map[string]interface{}) bool {
+	metaDatabase := &MetaDatabase{}
+	error := util.FillStruct(data, metaDatabase)
+	if error != nil {
+		log.Printf("Fill Struct is Fail")
+	}
+	util.DB.Create(metaDatabase)
+
+	return true
+}
+
+func EditMetaDatabase(id int, data interface{}) bool {
+	util.DB.Model(&MetaDatabase{}).Where("id = ?", id).Update(data)
+
+	return true
+}
+
+func DeleteMetaDatabase(id int) bool {
+	util.DB.Where("id = ?", id).Delete(&MetaDatabase{})
+
+	return true
 }

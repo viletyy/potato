@@ -170,6 +170,204 @@
                         }
                     }
                 }
+            },
+            "post": {
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "meta_databases"
+                ],
+                "summary": "新增数据源",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "数据源 名称",
+                        "name": "name",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "数据源 地址",
+                        "name": "host",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "数据源 端口号",
+                        "name": "port",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "数据源 数据库名称",
+                        "name": "db_name",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "数据源 用户名",
+                        "name": "username",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "数据源 密码",
+                        "name": "password",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "数据源 备注",
+                        "name": "comment",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "系统厂商 id",
+                        "name": "vendor_id",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "业务系统 id",
+                        "name": "business_id",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\": 200, data: {}, \"msg\" : \"ok\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/meta_databases/{id}": {
+            "delete": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "meta_databases"
+                ],
+                "summary": "删除数据源",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "数据源 ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\" : 200, \"msg\" : \"ok\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "meta_databases"
+                ],
+                "summary": "修改数据源",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "数据源 ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "数据源 名称",
+                        "name": "name",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "string",
+                        "description": "数据源 地址",
+                        "name": "host",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "数据源 端口号",
+                        "name": "port",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "string",
+                        "description": "数据源 数据库名称",
+                        "name": "db_name",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "string",
+                        "description": "数据源 用户名",
+                        "name": "username",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "string",
+                        "description": "数据源 密码",
+                        "name": "password",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "string",
+                        "description": "数据源 备注",
+                        "name": "comment",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "系统厂商 id",
+                        "name": "vendor_id",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "业务系统 id",
+                        "name": "business_id",
+                        "in": "formData"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\" : 200, \"msg\" : \"ok\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
             }
         },
         "/v1/meta_databases/{id}/meta_tables": {

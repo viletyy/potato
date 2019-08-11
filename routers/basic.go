@@ -8,6 +8,9 @@ func V1InitBasicRouter() {
 	metaDatabases := V1RouterGroup.Group("/meta_databases")
 	{
 		metaDatabases.GET("", basic.GetMetaDatabases)
+		metaDatabases.POST("", basic.AddMetaDatabase)
+		metaDatabases.PATCH("/:id", basic.EditMetaDatabase)
+		metaDatabases.DELETE("/:id", basic.DeleteMetaDatabase)
 		metaDatabases.GET("/:id/meta_tables", basic.GetMetaTables)
 	}
 	vendors := V1RouterGroup.Group("/vendors")
