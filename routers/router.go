@@ -6,9 +6,10 @@ import (
 	ginSwagger "github.com/swaggo/gin-swagger"
 	"github.com/swaggo/gin-swagger/swaggerFiles"
 	_ "github.com/swaggo/gin-swagger/swaggerFiles"
-	"github.com/viletyy/potato/controller/api"
+	v1 "github.com/viletyy/potato/controller/api/v1"
 	_ "github.com/viletyy/potato/docs"
 	"github.com/viletyy/potato/middleware/cors"
+	"github.com/viletyy/potato/middleware/jwt"
 	"github.com/viletyy/potato/pkg/setting"
 )
 
@@ -26,7 +27,7 @@ func InitRouter() *gin.Engine {
 
 	Engine.Use(cors.CORSMiddleware())
 
-	Engine.GET("/auth", api.GetAuth)
+	Engine.GET("/api/v1/auth", v1.GetUserAuth)
 	Engine.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	V1InitModule()
@@ -35,5 +36,9 @@ func InitRouter() *gin.Engine {
 }
 
 func V1InitModule() {
+	V1RouterGroup.Use(jwt.JWT())
+	users := V1RouterGroup.Group("users")
+	users.GET("", v1.GetUsers)
+	users.POST("", v1.AddUser)
 	V1InitBasicRouter()
 }

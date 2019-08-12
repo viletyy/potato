@@ -32,7 +32,7 @@ func init()  {
 	InitDB()
 	//defer DB.Close()
 	InitRedis()
-	defer Redis.Close()
+	//defer Redis.Close()
 }
 
 func InitDB() *gorm.DB {
@@ -75,7 +75,7 @@ func InitDB() *gorm.DB {
 	return DB
 }
 
-func InitRedis() {
+func InitRedis() *redis.Client {
 	sec, err := setting.Cfg.GetSection("redis")
 
 	if err != nil {
@@ -89,9 +89,11 @@ func InitRedis() {
 		),
 	})
 
-	if _, err := Redis.Ping().Result(); err != nil {
+	_, err = Redis.Ping().Result()
+	if err != nil {
 		logging.Fatal("redis连接失败!", err)
 	}
+	return Redis
 }
 
 func FillStruct(data map[string]interface{}, obj interface{}) error {

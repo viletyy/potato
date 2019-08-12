@@ -1,7 +1,9 @@
 package util
 
 import (
+	"fmt"
 	"github.com/dgrijalva/jwt-go"
+	"github.com/google/uuid"
 	"github.com/viletyy/potato/pkg/setting"
 	"time"
 )
@@ -16,19 +18,23 @@ type Claims struct {
 
 func GenerateToken(username, password string) (string, error) {
 	nowTime := time.Now()
-	expireTime := nowTime.Add(3 * time.Hour)
+	expireTime := nowTime.Add(time.Minute * 30)
+	loginUUID := uuid.New().String()
 
 	claims := Claims{
 		Username:       username,
 		Password:       password,
 		StandardClaims: jwt.StandardClaims{
 			ExpiresAt: expireTime.Unix(),
-			Issuer : "gin-game-demo",
+			Issuer : "data_govern",
+			Id : loginUUID,
 		},
 	}
 
 	tokenClaims := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	token, err := tokenClaims.SignedString(jwtSecret)
+	result, err := Redis.Set("login:" + loginUUID, username, 1*time.Hour).Result()
+	fmt.Println(result, err)
 
 	return token, err
 }

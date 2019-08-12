@@ -16,6 +16,7 @@ import (
 // @Description
 // @Accept json
 // @Produce json
+// @Param Authorization header string true "auth by /auth"
 // @Success 200 {string} json "{"code" : 200, "data" : {}, "msg" : "ok"}"
 // @Router /v1/businesses [get]
 func GetBusinesses(c *gin.Context) {

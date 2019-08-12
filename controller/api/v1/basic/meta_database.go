@@ -36,7 +36,7 @@ func GetMetaDatabases(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"code": code,
 		"msg": e.GetMsg(code),
-		"basic": data,
+		"data": data,
 	})
 }
 

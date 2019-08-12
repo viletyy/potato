@@ -4,6 +4,9 @@ var MsgFlags = map[int]string {
 	SUCCESS : "ok",
 	ERROR : "fail",
 	INVALID_PARAMS : "请求参数错误",
+
+	ERROR_EXIST_USER : "已存在该用户",
+	ERROR_NOT_EXIST_USER : "该用户不存在",
 	ERROR_EXIST_VENDOR : "已存在该系统厂商",
 	ERROR_NOT_EXIST_VENDOR : "该系统厂商不存在",
 	ERROR_EXIST_BUSINESS : "已存在该业务系统",

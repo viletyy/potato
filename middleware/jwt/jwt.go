@@ -1,9 +1,9 @@
 package jwt
 
 import (
-	"game_demo/pkg/e"
-	"game_demo/pkg/util"
 	"github.com/gin-gonic/gin"
+	"github.com/viletyy/potato/pkg/e"
+	"github.com/viletyy/potato/pkg/util"
 	"net/http"
 	"time"
 )
@@ -24,13 +24,19 @@ func JWT() gin.HandlerFunc {
 			} else if time.Now().Unix() > claims.ExpiresAt {
 				code = e.ERROR_AUTH_CHECK_TOKEN_TIMEOUT
 			}
+			username := claims.Username
+			loginUUID := claims.StandardClaims.Id
+			val, err := util.Redis.Get("login:" + loginUUID).Result()
+			if val != username {
+				code = e.ERROR_AUTH_CHECK_TOKEN_FAIL
+			}
 		}
 
 		if code != e.SUCCESS {
 			c.JSON(http.StatusUnauthorized, gin.H{
 				"code" : code,
 				"msg" : e.GetMsg(code),
-				"basic" : data,
+				"data" : data,
 			})
 
 			c.Abort()

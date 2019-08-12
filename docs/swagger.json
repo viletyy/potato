@@ -9,6 +9,41 @@
     },
     "basePath": "/api",
     "paths": {
+        "/v1/auth": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "用户验证",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "用户 用户名",
+                        "name": "username",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "用户 密码",
+                        "name": "password",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\" : 200, \"data\" : {\"token\" : \"\"}, \"msg\" : \"ok\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/v1/businesses": {
             "get": {
                 "consumes": [
@@ -21,6 +56,15 @@
                     "businesses"
                 ],
                 "summary": "业务系统列表",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "auth by /auth",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "{\"code\" : 200, \"data\" : {}, \"msg\" : \"ok\"}",
@@ -394,6 +438,71 @@
                 "responses": {
                     "200": {
                         "description": "{\"code\" : 200, \"basic\" : {}, \"msg\": \"ok\" }",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/users": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "users"
+                ],
+                "summary": "用户列表",
+                "responses": {
+                    "200": {
+                        "description": "{\"code\" : 200, \"data\" : {}, \"msg\" : \"ok\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "users"
+                ],
+                "summary": "新增用户",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "用户 用户名",
+                        "name": "username",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "用户 密码",
+                        "name": "password",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "用户 真实姓名",
+                        "name": "nickname",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\" : 200, data: {}, \"msg\" : \"ok\"}",
                         "schema": {
                             "type": "string"
                         }

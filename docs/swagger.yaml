@@ -6,10 +6,39 @@ info:
   title: Potato Api
   version: "1.0"
 paths:
+  /v1/auth:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: 用户 用户名
+        in: query
+        name: username
+        required: true
+        type: string
+      - description: 用户 密码
+        in: query
+        name: password
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code" : 200, "data" : {"token" : ""}, "msg" : "ok"}'
+          schema:
+            type: string
+      summary: 用户验证
   /v1/businesses:
     get:
       consumes:
       - application/json
+      parameters:
+      - description: auth by /auth
+        in: header
+        name: Authorization
+        required: true
+        type: string
       produces:
       - application/json
       responses:
@@ -265,6 +294,49 @@ paths:
       summary: 元数据列表
       tags:
       - meta_tables
+  /v1/users:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code" : 200, "data" : {}, "msg" : "ok"}'
+          schema:
+            type: string
+      summary: 用户列表
+      tags:
+      - users
+    post:
+      consumes:
+      - multipart/form-data
+      parameters:
+      - description: 用户 用户名
+        in: formData
+        name: username
+        required: true
+        type: string
+      - description: 用户 密码
+        in: formData
+        name: password
+        required: true
+        type: string
+      - description: 用户 真实姓名
+        in: formData
+        name: nickname
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code" : 200, data: {}, "msg" : "ok"}'
+          schema:
+            type: string
+      summary: 新增用户
+      tags:
+      - users
   /v1/vendors:
     get:
       consumes:
