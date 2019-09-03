@@ -17,6 +17,7 @@ import (
 // @Description
 // @Accept json
 // @Produce json
+// @Param Authorization header string true "auth by /auth"
 // @Success 200 {string} json "{"code" : 200, "basic" : {}, "msg": "ok" }"
 // @Router /v1/meta_databases [get]
 func GetMetaDatabases(c *gin.Context) {
@@ -45,6 +46,7 @@ func GetMetaDatabases(c *gin.Context) {
 // @Description
 // @Accept mpfd
 // @Produce json
+// @Param Authorization header string true "auth by /auth"
 // @Param name formData string true "数据源 名称"
 // @Param host formData string true "数据源 地址"
 // @Param port formData int true "数据源 端口号"
@@ -122,6 +124,7 @@ func AddMetaDatabase(c *gin.Context) {
 // @Description
 // @Accept mpfd
 // @Produce json
+// @Param Authorization header string true "auth by /auth"
 // @Param id path int true "数据源 ID"
 // @Param name formData string false "数据源 名称"
 // @Param host formData string false "数据源 地址"
@@ -210,6 +213,7 @@ func EditMetaDatabase(c *gin.Context)  {
 // @Description
 // @Accept json
 // @Produce json
+// @Param Authorization header string true "auth by /auth"
 // @Param id path int true "数据源 ID"
 // @Success 200 {string} json "{"code" : 200, "msg" : "ok"}"
 // @Router /v1/meta_databases/{id} [delete]

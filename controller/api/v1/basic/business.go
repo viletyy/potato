@@ -39,6 +39,7 @@ func GetBusinesses(c *gin.Context) {
 // @Description
 // @Accept mpfd
 // @Produce json
+// @Param Authorization header string true "auth by /auth"
 // @Param name formData string true "业务系统 名称"
 // @Param desc formData string false "业务系统 描述"
 // @Param c_id formData int false "业务系统 云端id"
@@ -75,6 +76,7 @@ func AddBusiness(c *gin.Context) {
 // @Description
 // @Accept mpfd
 // @Produce json
+// @Param Authorization header string true "auth by /auth"
 // @Param id path int true "业务系统 ID"
 // @Param name formData string false "业务系统 名称"
 // @Param desc formData string false "业务系统 描述"
@@ -123,6 +125,7 @@ func EditBusiness(c *gin.Context) {
 // @Description
 // @Accept json
 // @Produce json
+// @Param Authorization header string true "auth by /auth"
 // @Param id path int true "业务系统 ID"
 // @Success 200 {string} json "{"code" : 200, "msg" : "ok"}"
 // @Router /v1/businesses/{id} [delete]

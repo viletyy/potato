@@ -1,6 +1,8 @@
 package basic
 
-import "github.com/viletyy/potato/pkg/util"
+import (
+	"github.com/viletyy/potato/pkg/util"
+)
 
 type Business struct {
 	util.Model

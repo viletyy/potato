@@ -16,6 +16,7 @@ import (
 // @Description
 // @Accept json
 // @Produce json
+// @Param Authorization header string true "auth by /auth"
 // @Success 200 {string} json "{"code" : 200, "data" : {}, "msg" : "ok"}"
 // @Router /v1/vendors [get]
 func GetVendors(c *gin.Context) {
@@ -38,6 +39,7 @@ func GetVendors(c *gin.Context) {
 // @Description
 // @Accept mpfd
 // @Produce json
+// @Param Authorization header string true "auth by /auth"
 // @Param name formData string true "系统厂商 名称"
 // @Param c_id formData int false "系统厂商 云端id"
 // @Success 200 {string} json "{"code" : 200, "msg" : "ok"}"
@@ -72,6 +74,7 @@ func AddVendor(c *gin.Context) {
 // @Description
 // @Accept mpfd
 // @Produce json
+// @Param Authorization header string true "auth by /auth"
 // @Param id path int true "系统厂商 ID"
 // @Param name formData string false "系统厂商 名称"
 // @Param c_id formData int false "系统厂商 云端id"
@@ -117,6 +120,7 @@ func EditVendor(c *gin.Context) {
 // @Description
 // @Accept json
 // @Produce json
+// @Param Authorization header string true "auth by /auth"
 // @Param id path int true "系统厂商 ID"
 // @Success 200 {string} json "{"code" : 200, "msg" : "ok"}"
 // @Router /v1/vendors/{id} [delete]

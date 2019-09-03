@@ -24,10 +24,14 @@ func JWT() gin.HandlerFunc {
 			} else if time.Now().Unix() > claims.ExpiresAt {
 				code = e.ERROR_AUTH_CHECK_TOKEN_TIMEOUT
 			}
-			username := claims.Username
-			loginUUID := claims.StandardClaims.Id
-			val, err := util.Redis.Get("login:" + loginUUID).Result()
-			if val != username {
+			if claims != nil {
+				username := claims.Username
+				loginUUID := claims.StandardClaims.Id
+				val, _ := util.Redis.Get("login:" + loginUUID).Result()
+				if val != username {
+					code = e.ERROR_AUTH_CHECK_TOKEN_FAIL
+				}
+			} else {
 				code = e.ERROR_AUTH_CHECK_TOKEN_FAIL
 			}
 		}

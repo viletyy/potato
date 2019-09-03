@@ -11,6 +11,7 @@ import (
 // @Description
 // @Accept json
 // @Produce json
+// @Param Authorization header string true "auth by /auth"
 // @Param id path int true "数据源 ID"
 // @Success 200 {string} json "{"code" : 200, "basic" : {}, "msg": "ok" }"
 // @Router /v1/meta_databases/{id}/meta_tables [get]
