@@ -11,9 +11,14 @@ WRITE_TIMEOUT = 60
 
 [database]
 TYPE = postgres
-USER = postgres
+USER = postgre
 PASSWORD = 123456
-HOST = postgres
+HOST = 127.0.0.1
 PORT = 5432
-NAME = dbname
-TABLE_PREFIX = g_
+NAME = data_govern
+TABLE_PREFIX = d_
+
+[redis]
+HOST = 127.0.0.1
+PORT = 6379
+DB = 1
