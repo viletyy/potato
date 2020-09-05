@@ -1,8 +1,8 @@
 package basic
 
 import (
-	"github.com/Unknwon/com"
 	"github.com/astaxie/beego/validation"
+	"github.com/com"
 	"github.com/gin-gonic/gin"
 	"github.com/viletyy/potato/models/basic"
 	"github.com/viletyy/potato/pkg/e"

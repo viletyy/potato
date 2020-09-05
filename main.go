@@ -1,10 +1,10 @@
 package main
 
 import (
+	"./pkg/setting"
+	"./routers"
 	"context"
 	"fmt"
-	"github.com/viletyy/potato/pkg/setting"
-	"github.com/viletyy/potato/routers"
 	"log"
 	"net/http"
 	"os"

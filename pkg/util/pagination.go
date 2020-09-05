@@ -1,7 +1,7 @@
 package util
 
 import (
-	"github.com/Unknwon/com"
+	"github.com/com"
 	"github.com/viletyy/potato/pkg/setting"
 
 	"github.com/gin-gonic/gin"
