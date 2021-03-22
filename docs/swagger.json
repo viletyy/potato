@@ -4,7 +4,6 @@
         "description": "This is a data_govern use golang",
         "title": "Potato Api",
         "contact": {},
-        "license": {},
         "version": "1.0"
     },
     "basePath": "/api",
@@ -88,6 +87,13 @@
                 "parameters": [
                     {
                         "type": "string",
+                        "description": "auth by /auth",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
                         "description": "业务系统 名称",
                         "name": "name",
                         "in": "formData",
@@ -130,6 +136,13 @@
                 "summary": "删除业务系统",
                 "parameters": [
                     {
+                        "type": "string",
+                        "description": "auth by /auth",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
                         "type": "integer",
                         "description": "业务系统 ID",
                         "name": "id",
@@ -158,6 +171,13 @@
                 ],
                 "summary": "修改业务系统",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "auth by /auth",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
                     {
                         "type": "integer",
                         "description": "业务系统 ID",
@@ -206,6 +226,15 @@
                     "meta_databases"
                 ],
                 "summary": "数据源列表",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "auth by /auth",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "{\"code\" : 200, \"basic\" : {}, \"msg\": \"ok\" }",
@@ -227,6 +256,13 @@
                 ],
                 "summary": "新增数据源",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "auth by /auth",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
                     {
                         "type": "string",
                         "description": "数据源 名称",
@@ -314,6 +350,13 @@
                 "summary": "删除数据源",
                 "parameters": [
                     {
+                        "type": "string",
+                        "description": "auth by /auth",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
                         "type": "integer",
                         "description": "数据源 ID",
                         "name": "id",
@@ -342,6 +385,13 @@
                 ],
                 "summary": "修改数据源",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "auth by /auth",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
                     {
                         "type": "integer",
                         "description": "数据源 ID",
@@ -427,6 +477,13 @@
                 ],
                 "summary": "元数据列表",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "auth by /auth",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
                     {
                         "type": "integer",
                         "description": "数据源 ID",
@@ -522,6 +579,15 @@
                     "vendors"
                 ],
                 "summary": "系统厂商列表",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "auth by /auth",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "{\"code\" : 200, \"data\" : {}, \"msg\" : \"ok\"}",
@@ -543,6 +609,13 @@
                 ],
                 "summary": "新增系统厂商",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "auth by /auth",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
                     {
                         "type": "string",
                         "description": "系统厂商 名称",
@@ -581,6 +654,13 @@
                 "summary": "删除系统厂商",
                 "parameters": [
                     {
+                        "type": "string",
+                        "description": "auth by /auth",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
                         "type": "integer",
                         "description": "系统厂商 ID",
                         "name": "id",
@@ -609,6 +689,13 @@
                 ],
                 "summary": "修改系统厂商",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "auth by /auth",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
                     {
                         "type": "integer",
                         "description": "系统厂商 ID",

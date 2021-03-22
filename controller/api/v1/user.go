@@ -1,98 +1,63 @@
+/*
+ * @Date: 2021-03-21 19:54:57
+ * @LastEditors: viletyy
+ * @LastEditTime: 2021-03-23 00:44:10
+ * @FilePath: /potato/controller/api/v1/user.go
+ */
 package v1
 
 import (
-	"github.com/astaxie/beego/validation"
-	"github.com/gin-gonic/gin"
-	"github.com/viletyy/potato/models"
-	"github.com/viletyy/potato/pkg/e"
-	"github.com/viletyy/potato/pkg/logging"
-	"github.com/viletyy/potato/pkg/setting"
-	"github.com/viletyy/potato/pkg/util"
 	"net/http"
+
+	"github.com/gin-gonic/gin"
+	"github.com/viletyy/potato/global"
+	"github.com/viletyy/potato/models"
+	"github.com/viletyy/potato/utils"
+	"go.uber.org/zap"
 )
 
-type user struct {
-	Username string `valid:"Required; MaxSize(50)"`
-	Password string `valid:"Required; MaxSize(50)"`
+type LoginResponse struct {
+	User  models.User `json:"user"`
+	Token string      `json:"token"`
 }
 
 // @Summary 用户验证
 // @Description
 // @Accept json
 // @Produce json
-// @Param username query string true "用户 用户名"
-// @Param password query string true "用户 密码"
+// @Param data body models.User true "User模型"
 // @Success 200 {string} json "{"code" : 200, "data" : {"token" : ""}, "msg" : "ok"}"
 // @Router /v1/auth [get]
 func GetUserAuth(c *gin.Context) {
-	username := c.Query("username")
-	password := c.Query("password")
-
-	valid := validation.Validation{}
-	a := user{Username: username, Password: password}
-	ok, err := valid.Valid(&a)
-
-	logging.Info(err)
-
-	data := make(map[string]interface{})
-	code := e.INVALID_PARAMS
-
-	if ok {
-		isExist := models.CheckUser(username, password)
-		if isExist {
-			token, err := util.GenerateToken(username, password)
-			if err != nil {
-				code = e.ERROR_AUTH_TOKEN
-			} else {
-				data["token"] = token
-				code = e.SUCCESS
-			}
-		} else {
-			code = e.ERROR_AUTH
-		}
-	} else {
-		for _, err := range valid.Errors {
-			logging.Info(err.Key, err.Message)
-		}
+	var user models.User
+	if err := c.ShouldBindJSON(&user); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
 	}
 
-	c.JSON(http.StatusOK, gin.H{
-		"code" : code,
-		"msg" : e.GetMsg(code),
-		"data" : data,
-	})
-}
-
-// @Summary 用户列表
-// @Tags users
-// @Description
-// @Accept json
-// @Produce json
-// @Success 200 {string} json "{"code" : 200, "data" : {}, "msg" : "ok"}"
-// @Router /v1/users [get]
-func GetUsers(c *gin.Context) {
-	username := c.Query("username")
-	nickname := c.Query("nickname")
-
-	maps := make(map[string]interface{})
-	data := make(map[string]interface{})
-
-	if username != "" {
-		maps["username"] = username
-	}
-	if nickname != "" {
-		maps["nickname"] = nickname
+	mUser, gErr := models.GetUserByUsername(user.Username)
+	if gErr != nil {
+		global.GO_LOG.Error("查找用户失败", zap.Any("err", gErr))
+		utils.FailWithMessage("查找用户失败", c)
 	}
 
-	data["lists"] = models.GetUsers(util.GetPage(c), setting.PageSize, maps)
-	data["total"] = models.GetUsersTotal(maps)
-	code := e.SUCCESS
+	isTrue := mUser.CheckPassword(user.Password)
+	if !isTrue {
+		global.GO_LOG.Error("用户密码不正确")
+		utils.FailWithMessage("用户密码不正确", c)
+	}
 
-	c.JSON(http.StatusOK, gin.H{
-		"code" : code,
-		"msg" : e.GetMsg(code),
-		"data" : data,
-	})
+	token, tokenErr := utils.GenerateToken(mUser.ID)
+	if tokenErr != nil {
+		global.GO_LOG.Error("获取token失败", zap.Any("err", tokenErr))
+		utils.FailWithMessage("获取token失败", c)
+	}
+
+	utils.OkWithDetailed(LoginResponse{
+		User:  mUser,
+		Token: token,
+	}, "登录成功", c)
 }
 
 // @Summary 新增用户
@@ -100,42 +65,20 @@ func GetUsers(c *gin.Context) {
 // @Description
 // @Accept mpfd
 // @Produce json
-// @Param username formData string true "用户 用户名"
-// @Param password formData string true "用户 密码"
-// @Param nickname formData string true "用户 真实姓名"
-// @Success 200 {string} json "{"code" : 200, data: {}, "msg" : "ok"}"
+// @Param data body basic.User true "User模型"
+// @Success 200 {string} string "{"success":true,"data":{},"msg":"创建成功"}"
 // @Router /v1/users [post]
 func AddUser(c *gin.Context) {
-	username := c.PostForm("username")
-	password := c.PostForm("password")
-	nickname := c.PostForm("nickname")
-
-	valid := validation.Validation{}
-	valid.Required(username, "username").Message("用户名不能为空")
-	valid.Required(password, "password").Message("密码不能为空")
-	valid.Required(nickname, "password").Message("真实姓名不能为空")
-
-	data := make(map[string]interface{})
-	code := e.INVALID_PARAMS
-
-	if ! valid.HasErrors() {
-		if ! models.ExistUserByUsername(username) {
-			data["Username"] = username
-			data["Password"] = models.GetSecretPassword(password)
-			data["Nickname"] = nickname
-			code = e.SUCCESS
-		} else {
-			code = e.ERROR_EXIST_USER
-		}
+	var user models.User
+	if err := c.ShouldBindJSON(&user); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
 	}
-
-	if code == 200 {
-		models.AddUser(data)
+	if err := models.CreateUser(user); err != nil {
+		global.GO_LOG.Error("创建失败!", zap.Any("err", err))
+		utils.FailWithMessage("创建失败", c)
+	} else {
+		utils.OkWithMessage("创建成功", c)
 	}
-
-	c.JSON(http.StatusOK, gin.H{
-		"code" : code,
-		"msg" : e.GetMsg(code),
-		"data" : data,
-	})
 }

@@ -1,84 +1,90 @@
+/*
+ * @Date: 2021-03-21 19:54:57
+ * @LastEditors: viletyy
+ * @LastEditTime: 2021-03-22 23:51:55
+ * @FilePath: /potato/models/user.go
+ */
 package models
 
 import (
-	"crypto/md5"
-	"fmt"
-	"github.com/viletyy/potato/pkg/util"
-	"io"
-	"log"
+	"github.com/viletyy/potato/global"
+	"github.com/viletyy/potato/utils"
+	"github.com/viletyy/potato/utils/crypt"
 )
 
+type UserSearch struct {
+	User
+	utils.PageInfo
+}
+
 type User struct {
-	util.Model
+	global.Model
 
-	Username string `json:"username"`
-	Password string `json:"password"`
+	Username string `json:"username" binding:"required"`
+	Password string `json:"-" binding:"required"`
 	Nickname string `json:"nickname"`
+	IsAdmin  bool   `json:"is_admin" gorm:"default: false"`
 }
 
-func CheckUser(username, password string) bool {
-	var user User
-	util.DB.Select("id").Where(User{Username: username, Password: GetSecretPassword(password)}).First(&user)
-	if user.ID > 0 {
-		return true
+func GetUsers(search *UserSearch) (searchResult utils.SearchResult, err error) {
+	var users []User
+	offset := search.PageInfo.PageSize * (search.PageInfo.Page - 1)
+	limit := search.PageInfo.Page
+	db := global.GO_DB.Where(search.User)
+	err = db.Count(&searchResult.Total).Error
+	if err != nil {
+		return
 	}
-	return false
-}
-
-func GetSecretPassword(password string) string {
-	h := md5.New()
-	io.WriteString(h, password)
-	final := fmt.Sprintf("%x", h.Sum(nil))
-	return final
-}
-
-func GetUsers(pageNum int, pageSize int, maps interface{}) (users []User) {
-	util.DB.Where(maps).Offset(pageNum).Limit(pageSize).Find(&users)
+	err = db.Offset(offset).Limit(limit).Find(&users).Error
+	if err != nil {
+		return
+	}
+	searchResult.Page = search.PageInfo.Page
+	searchResult.PageSize = search.PageInfo.PageSize
+	searchResult.List = users
 	return
 }
 
-func GetUsersTotal(maps interface{}) (count int) {
-	util.DB.Model(&User{}).Where(maps).Count(&count)
+func GetUserById(id int) (user User, err error) {
+	err = global.GO_DB.Where("id = ?", id).First(&user).Error
 	return
+}
+
+func GetUserByUsername(username string) (user User, err error) {
+	err = global.GO_DB.Where("username = ?", username).First(&user).Error
+	return
+}
+
+func ExistUserById(id int64) bool {
+	var user User
+	global.GO_DB.Where("id = ?", id).First(&user)
+
+	return user.ID > 0
 }
 
 func ExistUserByUsername(username string) bool {
 	var user User
-	util.DB.Select("id").Where("name = ?", username).First(&user)
-	if user.ID > 0 {
-		return true
-	}
-	return false
+	global.GO_DB.Where("username = ?", username).First(&user)
+
+	return user.ID > 0
 }
 
-func ExistUserById(id int) bool {
-	var user User
-	util.DB.Select("id").Where("id = ?", id).First(&user)
-	if user.ID > 0 {
-		return true
-	}
-	return false
+func CreateUser(user User) (err error) {
+	err = global.GO_DB.Create(&user).Error
+
+	return
 }
 
-func AddUser(data map[string]interface{}) bool {
-	user := &User{}
-	error := util.FillStruct(data, user)
-	if error != nil {
-		log.Printf("Fill Struct is Fail")
-	}
-	util.DB.Create(user)
-
-	return true
+func UpdateUser(user *User) (err error) {
+	err = global.GO_DB.Save(&user).Error
+	return
 }
 
-func EditUser(id int, data interface{}) bool {
-	util.DB.Model(&User{}).Where("id = ?", id).Update(data)
-
-	return true
+func DeleteUser(user *User) (err error) {
+	err = global.GO_DB.Delete(&user).Error
+	return
 }
 
-func DeleteUser(id int) bool {
-	util.DB.Where("id = ?", id).Delete(&User{})
-
-	return true
+func (user *User) CheckPassword(password string) bool {
+	return crypt.Md5Check(password, user.Password)
 }

@@ -1,15 +1,14 @@
+/*
+ * @Date: 2021-03-21 19:54:57
+ * @LastEditors: viletyy
+ * @LastEditTime: 2021-03-23 00:54:46
+ * @FilePath: /potato/main.go
+ */
 package main
 
 import (
-	"./pkg/setting"
-	"./routers"
-	"context"
-	"fmt"
-	"log"
-	"net/http"
-	"os"
-	"os/signal"
-	"time"
+	"github.com/viletyy/potato/global"
+	"github.com/viletyy/potato/initialize"
 )
 
 // @title Potato Api
@@ -18,33 +17,14 @@ import (
 // @BasePath /api
 
 func main() {
-	router := routers.InitRouter()
+	global.GO_VP = initialize.Viper()
+	global.GO_LOG = initialize.Zap()
+	global.GO_DB = initialize.Gorm()
+	global.GO_REDIS = initialize.Redis()
 
-	server := &http.Server{
-		Addr:              fmt.Sprintf(":%d", setting.HTTPPort),
-		Handler:           router,
-		ReadTimeout:       setting.ReadTimeout,
-		WriteTimeout:      setting.WriteTimeout,
-		MaxHeaderBytes:    1 << 20,
-	}
+	defer global.GO_DB.Close()
+	defer global.GO_REDIS.Close()
 
-	go func() {
-		if err := server.ListenAndServe(); err != nil {
-			log.Printf(fmt.Sprintf("Listen: %s\n", err))
-		}
-	}()
+	initialize.RunServer()
 
-	quit := make(chan os.Signal)
-	signal.Notify(quit, os.Interrupt)
-	<- quit
-
-	log.Printf("Shutdown Server")
-
-	ctx, cancel := context.WithTimeout(context.Background(), 5 * time.Second)
-	defer cancel()
-	if err := server.Shutdown(ctx); err != nil {
-		log.Fatal("Server Shutdown:", err)
-	}
-
-	log.Printf("Server exiting")
 }

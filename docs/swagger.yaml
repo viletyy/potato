@@ -2,7 +2,6 @@ basePath: /api
 info:
   contact: {}
   description: This is a data_govern use golang
-  license: {}
   title: Potato Api
   version: "1.0"
 paths:
@@ -53,6 +52,11 @@ paths:
       consumes:
       - multipart/form-data
       parameters:
+      - description: auth by /auth
+        in: header
+        name: Authorization
+        required: true
+        type: string
       - description: 业务系统 名称
         in: formData
         name: name
@@ -81,6 +85,11 @@ paths:
       consumes:
       - application/json
       parameters:
+      - description: auth by /auth
+        in: header
+        name: Authorization
+        required: true
+        type: string
       - description: 业务系统 ID
         in: path
         name: id
@@ -100,6 +109,11 @@ paths:
       consumes:
       - multipart/form-data
       parameters:
+      - description: auth by /auth
+        in: header
+        name: Authorization
+        required: true
+        type: string
       - description: 业务系统 ID
         in: path
         name: id
@@ -131,6 +145,12 @@ paths:
     get:
       consumes:
       - application/json
+      parameters:
+      - description: auth by /auth
+        in: header
+        name: Authorization
+        required: true
+        type: string
       produces:
       - application/json
       responses:
@@ -145,6 +165,11 @@ paths:
       consumes:
       - multipart/form-data
       parameters:
+      - description: auth by /auth
+        in: header
+        name: Authorization
+        required: true
+        type: string
       - description: 数据源 名称
         in: formData
         name: name
@@ -204,6 +229,11 @@ paths:
       consumes:
       - application/json
       parameters:
+      - description: auth by /auth
+        in: header
+        name: Authorization
+        required: true
+        type: string
       - description: 数据源 ID
         in: path
         name: id
@@ -223,6 +253,11 @@ paths:
       consumes:
       - multipart/form-data
       parameters:
+      - description: auth by /auth
+        in: header
+        name: Authorization
+        required: true
+        type: string
       - description: 数据源 ID
         in: path
         name: id
@@ -279,6 +314,11 @@ paths:
       consumes:
       - application/json
       parameters:
+      - description: auth by /auth
+        in: header
+        name: Authorization
+        required: true
+        type: string
       - description: 数据源 ID
         in: path
         name: id
@@ -341,6 +381,12 @@ paths:
     get:
       consumes:
       - application/json
+      parameters:
+      - description: auth by /auth
+        in: header
+        name: Authorization
+        required: true
+        type: string
       produces:
       - application/json
       responses:
@@ -355,6 +401,11 @@ paths:
       consumes:
       - multipart/form-data
       parameters:
+      - description: auth by /auth
+        in: header
+        name: Authorization
+        required: true
+        type: string
       - description: 系统厂商 名称
         in: formData
         name: name
@@ -379,6 +430,11 @@ paths:
       consumes:
       - application/json
       parameters:
+      - description: auth by /auth
+        in: header
+        name: Authorization
+        required: true
+        type: string
       - description: 系统厂商 ID
         in: path
         name: id
@@ -398,6 +454,11 @@ paths:
       consumes:
       - multipart/form-data
       parameters:
+      - description: auth by /auth
+        in: header
+        name: Authorization
+        required: true
+        type: string
       - description: 系统厂商 ID
         in: path
         name: id

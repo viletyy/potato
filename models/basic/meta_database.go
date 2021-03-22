@@ -1,76 +1,96 @@
+/*
+ * @Date: 2021-03-21 19:54:57
+ * @LastEditors: viletyy
+ * @LastEditTime: 2021-03-22 23:54:39
+ * @FilePath: /potato/models/basic/meta_database.go
+ */
 package basic
 
 import (
-	"github.com/viletyy/potato/pkg/util"
-	"log"
 	"time"
+
+	"github.com/viletyy/potato/global"
+	"github.com/viletyy/potato/utils"
 )
 
+type MetaDatabaseSearch struct {
+	MetaDatabase
+	utils.PageInfo
+}
+
 type MetaDatabase struct {
-	util.Model
-	Name string `json:"name"`
-	Host string `json:"host"`
-	Port string `json:"port"`
-	DbName string `json:"db_name"`
-	Username string `json:"username"`
-	Password string `json:"password"`
+	global.Model
+	Name            string    `json:"name" binding:"required"`
+	Adapter         string    `json:"adapter" binding:"required"`
+	Host            string    `json:"host" binding:"required"`
+	Port            string    `json:"port" binding:"required"`
+	DbName          string    `json:"db_name" binding:"required"`
+	Username        string    `json:"username" binding:"required"`
+	Password        string    `json:"password" binding:"required"`
 	LastConnectTime time.Time `json:"last_connect_time"`
-	Usable bool `json:"usable"`
-	Comment string `json:"comment"`
-	Vendor Vendor
-	VendorId int `json:"vendor_id"`
-	Business Business
-	BusinessId int `json:"business_id"`
+	Usable          bool      `json:"usable"`
+	Comment         string    `json:"comment"`
+	VendorId        int64     `json:"vendor_id" binding:"required"`
+	BusinessId      int64     `json:"business_id" binding:"required"`
+	Vendor          Vendor
+	Business        Business
 }
 
-func GetMetaDatabases(pageNum int, pageSize int, maps interface{}) (metaDatabases []MetaDatabase) {
-	util.DB.Where(maps).Offset(pageNum).Limit(pageSize).Find(&metaDatabases)
-	return
-}
-
-func GetMetaDatabaseTotal(maps interface{}) (count int) {
-	util.DB.Model(&MetaDatabase{}).Where(maps).Count(&count)
-
-	return
-}
-
-func ExistMetaDatabaseByName(name string) bool {
-	var metaDatabase MetaDatabase
-	util.DB.Select("id").Where("name = ?", name).First(&metaDatabase)
-	if metaDatabase.ID > 0 {
-		return true
+func GetMetaDatabases(search *MetaDatabaseSearch) (searchResult utils.SearchResult, err error) {
+	var metaDatabases []MetaDatabase
+	offset := search.PageInfo.PageSize * (search.PageInfo.Page - 1)
+	limit := search.PageInfo.Page
+	db := global.GO_DB.Where(search.MetaDatabase)
+	err = db.Count(&searchResult.Total).Error
+	if err != nil {
+		return
 	}
-	return false
+	err = db.Offset(offset).Limit(limit).Find(&metaDatabases).Error
+	if err != nil {
+		return
+	}
+	searchResult.Page = search.PageInfo.Page
+	searchResult.PageSize = search.PageInfo.PageSize
+	searchResult.List = metaDatabases
+	return
+}
+
+func GetMetaDatabaseById(id int) (metaDatabase MetaDatabase, err error) {
+	err = global.GO_DB.Where("id = ?", id).First(&metaDatabase).Error
+	return
+}
+
+func GetMetaDatabaseByName(name string) (metaDatabase MetaDatabase, err error) {
+	err = global.GO_DB.Where("name = ?", name).First(&metaDatabase).Error
+	return
 }
 
 func ExistMetaDatabaseById(id int) bool {
 	var metaDatabase MetaDatabase
-	util.DB.Select("id").Where("id = ?", id).First(&metaDatabase)
-	if metaDatabase.ID > 0 {
-		return true
-	}
-	return false 
+	global.GO_DB.Where("id = ?", id).First(&metaDatabase)
+
+	return metaDatabase.ID > 0
 }
 
-func AddMetaDatabase(data map[string]interface{}) bool {
-	metaDatabase := &MetaDatabase{}
-	error := util.FillStruct(data, metaDatabase)
-	if error != nil {
-		log.Printf("Fill Struct is Fail")
-	}
-	util.DB.Create(metaDatabase)
+func ExistMetaDatabaseByName(name string) bool {
+	var metaDatabase MetaDatabase
+	global.GO_DB.Where("name = ?", name).First(&metaDatabase)
 
-	return true
+	return metaDatabase.ID > 0
 }
 
-func EditMetaDatabase(id int, data interface{}) bool {
-	util.DB.Model(&MetaDatabase{}).Where("id = ?", id).Update(data)
+func CreateMetaDatabase(metaDatabase MetaDatabase) (err error) {
+	err = global.GO_DB.Create(&metaDatabase).Error
 
-	return true
+	return err
 }
 
-func DeleteMetaDatabase(id int) bool {
-	util.DB.Where("id = ?", id).Delete(&MetaDatabase{})
+func UpdateMetaDatabase(metaDatabase *MetaDatabase) (err error) {
+	err = global.GO_DB.Save(&metaDatabase).Error
+	return
+}
 
-	return true
+func DeleteMetaDatabase(metaDatabase *MetaDatabase) (err error) {
+	err = global.GO_DB.Delete(&metaDatabase).Error
+	return
 }

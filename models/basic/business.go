@@ -1,63 +1,96 @@
+/*
+ * @Date: 2021-03-21 19:54:57
+ * @LastEditors: viletyy
+ * @LastEditTime: 2021-03-22 23:54:52
+ * @FilePath: /potato/models/basic/business.go
+ */
 package basic
 
 import (
-	"github.com/viletyy/potato/pkg/util"
+	"github.com/viletyy/potato/global"
+	"github.com/viletyy/potato/utils"
 )
 
+type BusinessSearch struct {
+	Business
+	utils.PageInfo
+}
+
 type Business struct {
-	util.Model
+	global.Model
 
-	Name string `json:"name"`
-	Desc string `json:"desc"`
-	CId int `json:"c_id"`
+	Name        string `json:"name" binding:"required"`
+	Description string `json:"description"`
+	Uuid        int    `json:"uuid"`
 }
 
-func GetBusinesses(pageNum int, pageSize int, maps interface{}) (businesses []Business) {
-	util.DB.Where(maps).Offset(pageNum).Limit(pageSize).Find(&businesses)
-	return 
-}
-
-func GetBusinessTotal(maps interface{}) (count int) {
-	util.DB.Model(&Business{}).Where(maps).Count(&count)
+func GetBusinesses(search *BusinessSearch) (searchResult utils.SearchResult, err error) {
+	var businesses []Business
+	offset := search.PageInfo.PageSize * (search.PageInfo.Page - 1)
+	limit := search.PageInfo.Page
+	db := global.GO_DB.Where(search.Business)
+	err = db.Count(&searchResult.Total).Error
+	if err != nil {
+		return
+	}
+	err = db.Offset(offset).Limit(limit).Find(&businesses).Error
+	if err != nil {
+		return
+	}
+	searchResult.Page = search.PageInfo.Page
+	searchResult.PageSize = search.PageInfo.PageSize
+	searchResult.List = businesses
 	return
 }
 
-func ExistBusinessByName(name string) bool {
-	var business Business
-	util.DB.Select("id").Where("name = ?", name).First(&business)
-	if business.ID > 0 {
-		return true
-	}
-	return false
+func GetBusinessById(id int) (business Business, err error) {
+	err = global.GO_DB.Where("id = ?", id).First(&business).Error
+	return
+}
+
+func GetBusinessByName(name string) (business Business, err error) {
+	err = global.GO_DB.Where("name = ?", name).First(&business).Error
+	return
+}
+
+func GetBusinessByUuid(uuid int64) (business Business, err error) {
+	err = global.GO_DB.Where("uuid = ?", uuid).First(&business).Error
+	return
 }
 
 func ExistBusinessById(id int) bool {
 	var business Business
-	util.DB.Select("id").Where("id = ?", id).First(&business)
-	if business.ID > 0 {
-		return true
-	}
-	return false
+	global.GO_DB.Where("id = ?", id).First(&business)
+
+	return business.ID > 0
 }
 
-func AddBusiness(name string, desc string, cId int) bool {
-	util.DB.Create(&Business {
-		Name: name,
-		Desc: desc,
-		CId: cId,
-	})
+func ExistBusinessByName(name string) bool {
+	var business Business
+	global.GO_DB.Where("name = ?", name).First(&business)
 
-	return true
+	return business.ID > 0
 }
 
-func EditBusiness(id int, data interface{}) bool {
-	util.DB.Model(&Business{}).Where("id = ?", id).Update(data)
+func ExistBusinessByUuid(uuid int64) bool {
+	var business Business
+	global.GO_DB.Where("uuid = ?", uuid).First(&business)
 
-	return true
+	return business.ID > 0
 }
 
-func DeleteBusiness(id int) bool {
-	util.DB.Where("id = ?", id).Delete(&Business{})
+func CreateBusiness(business Business) (err error) {
+	err = global.GO_DB.Create(&business).Error
 
-	return true
+	return err
+}
+
+func UpdateBusiness(business *Business) (err error) {
+	err = global.GO_DB.Save(&business).Error
+	return
+}
+
+func DeleteBusiness(business *Business) (err error) {
+	err = global.GO_DB.Delete(&business).Error
+	return
 }

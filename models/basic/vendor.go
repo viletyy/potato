@@ -1,61 +1,95 @@
+/*
+ * @Date: 2021-03-21 19:54:57
+ * @LastEditors: viletyy
+ * @LastEditTime: 2021-03-22 23:52:13
+ * @FilePath: /potato/models/basic/vendor.go
+ */
 package basic
 
 import (
-	"github.com/viletyy/potato/pkg/util"
+	"github.com/viletyy/potato/global"
+	"github.com/viletyy/potato/utils"
 )
 
+type VendorSearch struct {
+	Vendor
+	utils.PageInfo
+}
+
 type Vendor struct {
-	util.Model
+	global.Model
 
-	Name string `json:"name"`
-	CId int `json:"c_id"`
+	Name string `json:"name" binding:"require"`
+	Uuid int    `json:"uuid"`
 }
 
-func GetVendors(pageNum int, pageSize int, maps interface{}) (vendors []Vendor) {
-	util.DB.Where(maps).Offset(pageNum).Limit(pageSize).Find(&vendors)
-	return
-}
-
-func GetVendorsTotal(maps interface{}) (count int) {
-	util.DB.Model(&Vendor{}).Where(maps).Count(&count)
-	return
-}
-
-func ExistVendorByName(name string) bool {
-	var vendor Vendor
-	util.DB.Select("id").Where("name = ?", name).First(&vendor)
-	if vendor.ID > 0 {
-		return true
+func GetVendors(search *VendorSearch) (searchResult utils.SearchResult, err error) {
+	var vendors []Vendor
+	offset := search.PageInfo.PageSize * (search.PageInfo.Page - 1)
+	limit := search.PageInfo.Page
+	db := global.GO_DB.Where(search.Vendor)
+	err = db.Count(&searchResult.Total).Error
+	if err != nil {
+		return
 	}
-	return false
+	err = db.Offset(offset).Limit(limit).Find(&vendors).Error
+	if err != nil {
+		return
+	}
+	searchResult.Page = search.PageInfo.Page
+	searchResult.PageSize = search.PageInfo.PageSize
+	searchResult.List = vendors
+	return
+}
+
+func GetVendorById(id int) (vendor Vendor, err error) {
+	err = global.GO_DB.Where("id = ?", id).First(&vendor).Error
+	return
+}
+
+func GetVendorByName(name string) (vendor Vendor, err error) {
+	err = global.GO_DB.Where("name = ?", name).First(&vendor).Error
+	return
+}
+
+func GetVendorByUuid(uuid int64) (vendor Vendor, err error) {
+	err = global.GO_DB.Where("uuid = ?", uuid).First(&vendor).Error
+	return
 }
 
 func ExistVendorById(id int) bool {
 	var vendor Vendor
-	util.DB.Select("id").Where("id = ?", id).First(&vendor)
-	if vendor.ID > 0 {
-		return true
-	}
-	return false
+	global.GO_DB.Where("id = ?", id).First(&vendor)
+
+	return vendor.ID > 0
 }
 
-func AddVendor(name string, cId int) bool {
-	util.DB.Create(&Vendor {
-		Name: name,
-		CId: cId,
-	})
+func ExistVendorByName(name string) bool {
+	var vendor Vendor
+	global.GO_DB.Where("name = ?", name).First(&vendor)
 
-	return true
+	return vendor.ID > 0
 }
 
-func EditVendor(id int, data interface{}) bool {
-	util.DB.Model(&Vendor{}).Where("id = ?", id).Update(data)
+func ExistVendorByUuid(uuid int64) bool {
+	var vendor Vendor
+	global.GO_DB.Where("uuid = ?", uuid).First(&vendor)
 
-	return true
+	return vendor.ID > 0
 }
 
-func DeleteVendor(id int) bool {
-	util.DB.Where("id = ?", id).Delete(&Vendor{})
+func CreateVendor(vendor Vendor) (err error) {
+	err = global.GO_DB.Create(&vendor).Error
 
-	return true
+	return err
+}
+
+func UpdateVendor(vendor *Vendor) (err error) {
+	err = global.GO_DB.Save(&vendor).Error
+	return
+}
+
+func DeleteVendor(vendor *Vendor) (err error) {
+	err = global.GO_DB.Delete(&vendor).Error
+	return
 }
