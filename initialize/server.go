@@ -1,7 +1,7 @@
 /*
  * @Date: 2021-03-22 17:03:27
  * @LastEditors: viletyy
- * @LastEditTime: 2021-03-22 23:55:32
+ * @LastEditTime: 2021-03-23 10:23:12
  * @FilePath: /potato/initialize/server.go
  */
 package initialize
@@ -20,18 +20,15 @@ import (
 	"github.com/viletyy/potato/utils"
 )
 
-var serverConfig = global.GO_CONFIG.Server
-
 func RunServer() {
 	binding.Validator = new(utils.DefaultValidator)
 
 	router := routers.InitRouter()
-
 	server := &http.Server{
-		Addr:           fmt.Sprintf(":%d", serverConfig.HttpPort),
+		Addr:           fmt.Sprintf(":%d", global.GO_CONFIG.Server.HttpPort),
 		Handler:        router,
-		ReadTimeout:    time.Duration(serverConfig.ReadTimeout),
-		WriteTimeout:   time.Duration(serverConfig.WriteTimeout),
+		ReadTimeout:    time.Duration(global.GO_CONFIG.Server.ReadTimeout) * time.Second,
+		WriteTimeout:   time.Duration(global.GO_CONFIG.Server.ReadTimeout) * time.Second,
 		MaxHeaderBytes: 1 << 20,
 	}
 

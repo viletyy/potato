@@ -1,15 +1,15 @@
 /*
  * @Date: 2021-03-22 10:45:37
  * @LastEditors: viletyy
- * @LastEditTime: 2021-03-22 10:49:19
+ * @LastEditTime: 2021-03-23 09:29:06
  * @FilePath: /potato/utils/directory.go
  */
 package utils
 
 import (
+	"fmt"
 	"os"
 
-	"github.com/viletyy/potato/global"
 	"go.uber.org/zap"
 )
 
@@ -31,10 +31,10 @@ func CreateDir(dirs ...string) (err error) {
 			return err
 		}
 		if !exist {
-			global.GO_LOG.Debug("create directory" + v)
+			fmt.Println("create directory" + v)
 			err = os.MkdirAll(v, os.ModePerm)
 			if err != nil {
-				global.GO_LOG.Error("create directory"+v, zap.Any(" error:", err))
+				fmt.Println("create directory"+v, zap.Any(" error:", err))
 			}
 		}
 	}

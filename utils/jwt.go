@@ -1,7 +1,7 @@
 /*
  * @Date: 2021-03-22 17:16:46
  * @LastEditors: viletyy
- * @LastEditTime: 2021-03-23 00:54:22
+ * @LastEditTime: 2021-03-23 09:24:08
  * @FilePath: /potato/utils/jwt.go
  */
 package utils
@@ -14,8 +14,6 @@ import (
 	"github.com/google/uuid"
 	"github.com/viletyy/potato/global"
 )
-
-var jwtSecret = []byte(global.GO_CONFIG.App.JwtSecret)
 
 type CustomClaims struct {
 	UserId int64
@@ -37,7 +35,7 @@ func GenerateToken(userId int64) (string, error) {
 	}
 
 	tokenClaims := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	tokenString, err := tokenClaims.SignedString(jwtSecret)
+	tokenString, err := tokenClaims.SignedString([]byte(global.GO_CONFIG.App.JwtSecret))
 	if err != nil {
 		global.GO_LOG.Error(fmt.Sprintf("General Token Error: %v", err))
 	}
@@ -56,7 +54,7 @@ func ParseToken(tokenString string) (*CustomClaims, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, fmt.Errorf("Unexpected signing method: %v", token.Header["alg"])
 		}
-		return jwtSecret, nil
+		return []byte(global.GO_CONFIG.App.JwtSecret), nil
 	})
 
 	if tokenClaims != nil {

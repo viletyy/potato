@@ -1,7 +1,7 @@
 /*
  * @Date: 2021-03-22 10:12:38
  * @LastEditors: viletyy
- * @LastEditTime: 2021-03-22 16:56:26
+ * @LastEditTime: 2021-03-23 09:49:41
  * @FilePath: /potato/initialize/gorm.go
  */
 package initialize
@@ -10,13 +10,15 @@ import (
 	"fmt"
 
 	"github.com/jinzhu/gorm"
+	_ "github.com/jinzhu/gorm/dialects/mysql"
+	_ "github.com/jinzhu/gorm/dialects/postgres"
 	"github.com/viletyy/potato/global"
+	"github.com/viletyy/potato/models"
+	"github.com/viletyy/potato/models/basic"
 )
 
-var dbConfig = global.GO_CONFIG.Database
-
 func Gorm() *gorm.DB {
-	switch dbConfig.Type {
+	switch global.GO_CONFIG.Database.Type {
 	case "mysql":
 		return GormMysql()
 	case "postgresql":
@@ -27,7 +29,7 @@ func Gorm() *gorm.DB {
 }
 
 func GormMysql() *gorm.DB {
-	db, err := gorm.Open("mysql", fmt.Sprintf("%s:%s@(%s:%d)/%s?charset=utf8mb4&parseTime=True&loc=Local", dbConfig.User, dbConfig.Password, dbConfig.Host, dbConfig.Port, dbConfig.Name))
+	db, err := gorm.Open("mysql", fmt.Sprintf("%s:%s@(%s:%d)/%s?charset=utf8mb4&parseTime=True&loc=Local", global.GO_CONFIG.Database.User, global.GO_CONFIG.Database.Password, global.GO_CONFIG.Database.Host, global.GO_CONFIG.Database.Port, global.GO_CONFIG.Database.Name))
 	if err != nil {
 		global.GO_LOG.Error(fmt.Sprintf("Mysql Gorm Open Error: %v", err))
 	}
@@ -36,7 +38,7 @@ func GormMysql() *gorm.DB {
 }
 
 func GormPostgresql() *gorm.DB {
-	db, err := gorm.Open("postgres", fmt.Sprintf("host=%s user=%s dbname=%s port=%d sslmode=disable password=%s", dbConfig.Host, dbConfig.User, dbConfig.Name, dbConfig.Port, dbConfig.Password))
+	db, err := gorm.Open("postgres", fmt.Sprintf("host=%s user=%s dbname=%s port=%d sslmode=disable password=%s", global.GO_CONFIG.Database.Host, global.GO_CONFIG.Database.User, global.GO_CONFIG.Database.Name, global.GO_CONFIG.Database.Port, global.GO_CONFIG.Database.Password))
 	if err != nil {
 		global.GO_LOG.Error(fmt.Sprintf("Postgresql Gorm Open Error: %v", err))
 	}
@@ -47,14 +49,19 @@ func GormPostgresql() *gorm.DB {
 func GormSet(db *gorm.DB) {
 	// 设置表前缀
 	gorm.DefaultTableNameHandler = func(db *gorm.DB, defaultTableName string) string {
-		return dbConfig.TablePrefix + defaultTableName
+		return global.GO_CONFIG.Database.TablePrefix + defaultTableName
 	}
 
 	// 设置日志
 	db.LogMode(true)
 
 	// 设置迁移
-	db.AutoMigrate()
+	db.AutoMigrate(
+		basic.Vendor{},
+		basic.Business{},
+		basic.MetaDatabase{},
+		models.User{},
+	)
 
 	// 设置空闲连接池中的最大连接数
 	db.DB().SetMaxIdleConns(10)
