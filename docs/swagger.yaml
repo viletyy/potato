@@ -1,4 +1,41 @@
 basePath: /api
+definitions:
+  basic.CreateVendorRequest:
+    properties:
+      name:
+        type: string
+      uuid:
+        type: integer
+    required:
+    - name
+    type: object
+  basic.UpdateVendorRequest:
+    properties:
+      name:
+        type: string
+      uuid:
+        type: integer
+    type: object
+  v1.AuthRequest:
+    properties:
+      password:
+        type: string
+      username:
+        type: string
+    required:
+    - username
+    type: object
+  v1.RegisterRequest:
+    properties:
+      nickname:
+        type: string
+      password:
+        type: string
+      username:
+        type: string
+    required:
+    - username
+    type: object
 info:
   contact: {}
   description: This is a data_govern use golang
@@ -6,20 +43,16 @@ info:
   version: "1.0"
 paths:
   /v1/auth:
-    get:
+    post:
       consumes:
       - application/json
       parameters:
-      - description: 用户 用户名
-        in: query
-        name: username
+      - description: 用户名,密码
+        in: body
+        name: data
         required: true
-        type: string
-      - description: 用户 密码
-        in: query
-        name: password
-        required: true
-        type: string
+        schema:
+          $ref: '#/definitions/v1.AuthRequest'
       produces:
       - application/json
       responses:
@@ -28,355 +61,25 @@ paths:
           schema:
             type: string
       summary: 用户验证
-  /v1/businesses:
-    get:
-      consumes:
-      - application/json
-      parameters:
-      - description: auth by /auth
-        in: header
-        name: Authorization
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: '{"code" : 200, "data" : {}, "msg" : "ok"}'
-          schema:
-            type: string
-      summary: 业务系统列表
-      tags:
-      - businesses
+  /v1/register:
     post:
       consumes:
-      - multipart/form-data
-      parameters:
-      - description: auth by /auth
-        in: header
-        name: Authorization
-        required: true
-        type: string
-      - description: 业务系统 名称
-        in: formData
-        name: name
-        required: true
-        type: string
-      - description: 业务系统 描述
-        in: formData
-        name: desc
-        type: string
-      - description: 业务系统 云端id
-        in: formData
-        name: c_id
-        type: integer
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: '{"code" : 200, "msg" : "ok"}'
-          schema:
-            type: string
-      summary: 新增业务系统
-      tags:
-      - businesses
-  /v1/businesses/{id}:
-    delete:
-      consumes:
       - application/json
       parameters:
-      - description: auth by /auth
-        in: header
-        name: Authorization
+      - description: 用户名
+        in: body
+        name: data
         required: true
-        type: string
-      - description: 业务系统 ID
-        in: path
-        name: id
-        required: true
-        type: integer
+        schema:
+          $ref: '#/definitions/v1.RegisterRequest'
       produces:
       - application/json
       responses:
         "200":
-          description: '{"code" : 200, "msg" : "ok"}'
+          description: '{"success":true,"data":{},"msg":"创建成功"}'
           schema:
             type: string
-      summary: 删除业务系统
-      tags:
-      - businesses
-    patch:
-      consumes:
-      - multipart/form-data
-      parameters:
-      - description: auth by /auth
-        in: header
-        name: Authorization
-        required: true
-        type: string
-      - description: 业务系统 ID
-        in: path
-        name: id
-        required: true
-        type: integer
-      - description: 业务系统 名称
-        in: formData
-        name: name
-        type: string
-      - description: 业务系统 描述
-        in: formData
-        name: desc
-        type: string
-      - description: 业务系统 云端id
-        in: formData
-        name: c_id
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: '{"code" : 200, "msg" : "ok"}'
-          schema:
-            type: string
-      summary: 修改业务系统
-      tags:
-      - businesses
-  /v1/meta_databases:
-    get:
-      consumes:
-      - application/json
-      parameters:
-      - description: auth by /auth
-        in: header
-        name: Authorization
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: '{"code" : 200, "basic" : {}, "msg": "ok" }'
-          schema:
-            type: string
-      summary: 数据源列表
-      tags:
-      - meta_databases
-    post:
-      consumes:
-      - multipart/form-data
-      parameters:
-      - description: auth by /auth
-        in: header
-        name: Authorization
-        required: true
-        type: string
-      - description: 数据源 名称
-        in: formData
-        name: name
-        required: true
-        type: string
-      - description: 数据源 地址
-        in: formData
-        name: host
-        required: true
-        type: string
-      - description: 数据源 端口号
-        in: formData
-        name: port
-        required: true
-        type: integer
-      - description: 数据源 数据库名称
-        in: formData
-        name: db_name
-        required: true
-        type: string
-      - description: 数据源 用户名
-        in: formData
-        name: username
-        required: true
-        type: string
-      - description: 数据源 密码
-        in: formData
-        name: password
-        required: true
-        type: string
-      - description: 数据源 备注
-        in: formData
-        name: comment
-        type: string
-      - description: 系统厂商 id
-        in: formData
-        name: vendor_id
-        required: true
-        type: integer
-      - description: 业务系统 id
-        in: formData
-        name: business_id
-        required: true
-        type: integer
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: '{"code": 200, data: {}, "msg" : "ok"}'
-          schema:
-            type: string
-      summary: 新增数据源
-      tags:
-      - meta_databases
-  /v1/meta_databases/{id}:
-    delete:
-      consumes:
-      - application/json
-      parameters:
-      - description: auth by /auth
-        in: header
-        name: Authorization
-        required: true
-        type: string
-      - description: 数据源 ID
-        in: path
-        name: id
-        required: true
-        type: integer
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: '{"code" : 200, "msg" : "ok"}'
-          schema:
-            type: string
-      summary: 删除数据源
-      tags:
-      - meta_databases
-    patch:
-      consumes:
-      - multipart/form-data
-      parameters:
-      - description: auth by /auth
-        in: header
-        name: Authorization
-        required: true
-        type: string
-      - description: 数据源 ID
-        in: path
-        name: id
-        required: true
-        type: integer
-      - description: 数据源 名称
-        in: formData
-        name: name
-        type: string
-      - description: 数据源 地址
-        in: formData
-        name: host
-        type: string
-      - description: 数据源 端口号
-        in: formData
-        name: port
-        type: integer
-      - description: 数据源 数据库名称
-        in: formData
-        name: db_name
-        type: string
-      - description: 数据源 用户名
-        in: formData
-        name: username
-        type: string
-      - description: 数据源 密码
-        in: formData
-        name: password
-        type: string
-      - description: 数据源 备注
-        in: formData
-        name: comment
-        type: string
-      - description: 系统厂商 id
-        in: formData
-        name: vendor_id
-        type: integer
-      - description: 业务系统 id
-        in: formData
-        name: business_id
-        type: integer
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: '{"code" : 200, "msg" : "ok"}'
-          schema:
-            type: string
-      summary: 修改数据源
-      tags:
-      - meta_databases
-  /v1/meta_databases/{id}/meta_tables:
-    get:
-      consumes:
-      - application/json
-      parameters:
-      - description: auth by /auth
-        in: header
-        name: Authorization
-        required: true
-        type: string
-      - description: 数据源 ID
-        in: path
-        name: id
-        required: true
-        type: integer
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: '{"code" : 200, "basic" : {}, "msg": "ok" }'
-          schema:
-            type: string
-      summary: 元数据列表
-      tags:
-      - meta_tables
-  /v1/users:
-    get:
-      consumes:
-      - application/json
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: '{"code" : 200, "data" : {}, "msg" : "ok"}'
-          schema:
-            type: string
-      summary: 用户列表
-      tags:
-      - users
-    post:
-      consumes:
-      - multipart/form-data
-      parameters:
-      - description: 用户 用户名
-        in: formData
-        name: username
-        required: true
-        type: string
-      - description: 用户 密码
-        in: formData
-        name: password
-        required: true
-        type: string
-      - description: 用户 真实姓名
-        in: formData
-        name: nickname
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: '{"code" : 200, data: {}, "msg" : "ok"}'
-          schema:
-            type: string
-      summary: 新增用户
-      tags:
-      - users
+      summary: 注册用户
   /v1/vendors:
     get:
       consumes:
@@ -387,11 +90,23 @@ paths:
         name: Authorization
         required: true
         type: string
+      - description: 系统厂商名称
+        in: query
+        name: name
+        type: string
+      - description: 页码
+        in: query
+        name: page
+        type: integer
+      - description: 每页数量
+        in: query
+        name: page_size
+        type: integer
       produces:
       - application/json
       responses:
         "200":
-          description: '{"code" : 200, "data" : {}, "msg" : "ok"}'
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
           schema:
             type: string
       summary: 系统厂商列表
@@ -406,20 +121,17 @@ paths:
         name: Authorization
         required: true
         type: string
-      - description: 系统厂商 名称
-        in: formData
-        name: name
+      - description: Vendor模型
+        in: body
+        name: data
         required: true
-        type: string
-      - description: 系统厂商 云端id
-        in: formData
-        name: c_id
-        type: integer
+        schema:
+          $ref: '#/definitions/basic.CreateVendorRequest'
       produces:
       - application/json
       responses:
         "200":
-          description: '{"code" : 200, "msg" : "ok"}'
+          description: '{"success":true,"data":{},"msg":"创建成功"}'
           schema:
             type: string
       summary: 新增系统厂商
@@ -444,7 +156,7 @@ paths:
       - application/json
       responses:
         "200":
-          description: '{"code" : 200, "msg" : "ok"}'
+          description: '{"success":true,"data":{},"msg":"删除成功"}'
           schema:
             type: string
       summary: 删除系统厂商
@@ -464,19 +176,17 @@ paths:
         name: id
         required: true
         type: integer
-      - description: 系统厂商 名称
-        in: formData
-        name: name
-        type: string
-      - description: 系统厂商 云端id
-        in: formData
-        name: c_id
-        type: integer
+      - description: Vendor模型
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/basic.UpdateVendorRequest'
       produces:
       - application/json
       responses:
         "200":
-          description: '{"code" : 200, "msg" : "ok"}'
+          description: '{"success":true,"data":{},"msg":"更新成功"}'
           schema:
             type: string
       summary: 修改系统厂商

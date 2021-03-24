@@ -19,7 +19,7 @@ type BusinessSearch struct {
 type Business struct {
 	global.Model
 
-	Name        string `json:"name" binding:"required"`
+	Name        string `json:"name"`
 	Description string `json:"description"`
 	Uuid        int    `json:"uuid"`
 }

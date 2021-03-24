@@ -1,7 +1,7 @@
 /*
  * @Date: 2021-03-21 19:54:57
  * @LastEditors: viletyy
- * @LastEditTime: 2021-03-23 00:50:00
+ * @LastEditTime: 2021-03-24 11:05:16
  * @FilePath: /potato/middleware/jwt.go
  */
 package middleware
@@ -24,6 +24,7 @@ func JWT() gin.HandlerFunc {
 				"error": "请求参数错误",
 			})
 			c.Abort()
+			return
 		} else {
 			claims, err := utils.ParseToken(token)
 			if err != nil {
@@ -31,11 +32,13 @@ func JWT() gin.HandlerFunc {
 					"error": "token验证失败",
 				})
 				c.Abort()
+				return
 			} else if time.Now().Unix() > claims.ExpiresAt {
 				c.JSON(http.StatusBadRequest, gin.H{
 					"error": "token已超时",
 				})
 				c.Abort()
+				return
 			}
 			if claims != nil {
 				userId := claims.UserId
@@ -46,12 +49,14 @@ func JWT() gin.HandlerFunc {
 						"error": "token鉴权失败",
 					})
 					c.Abort()
+					return
 				}
 			} else {
 				c.JSON(http.StatusBadRequest, gin.H{
 					"error": "token鉴权失败",
 				})
 				c.Abort()
+				return
 			}
 		}
 

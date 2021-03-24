@@ -9,7 +9,7 @@
     "basePath": "/api",
     "paths": {
         "/v1/auth": {
-            "get": {
+            "post": {
                 "consumes": [
                     "application/json"
                 ],
@@ -19,18 +19,13 @@
                 "summary": "用户验证",
                 "parameters": [
                     {
-                        "type": "string",
-                        "description": "用户 用户名",
-                        "name": "username",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "用户 密码",
-                        "name": "password",
-                        "in": "query",
-                        "required": true
+                        "description": "用户名,密码",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/v1.AuthRequest"
+                        }
                     }
                 ],
                 "responses": {
@@ -43,523 +38,29 @@
                 }
             }
         },
-        "/v1/businesses": {
-            "get": {
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "businesses"
-                ],
-                "summary": "业务系统列表",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "auth by /auth",
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "{\"code\" : 200, \"data\" : {}, \"msg\" : \"ok\"}",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            },
+        "/v1/register": {
             "post": {
                 "consumes": [
-                    "multipart/form-data"
+                    "application/json"
                 ],
                 "produces": [
                     "application/json"
                 ],
-                "tags": [
-                    "businesses"
-                ],
-                "summary": "新增业务系统",
+                "summary": "注册用户",
                 "parameters": [
                     {
-                        "type": "string",
-                        "description": "auth by /auth",
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "业务系统 名称",
-                        "name": "name",
-                        "in": "formData",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "业务系统 描述",
-                        "name": "desc",
-                        "in": "formData"
-                    },
-                    {
-                        "type": "integer",
-                        "description": "业务系统 云端id",
-                        "name": "c_id",
-                        "in": "formData"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "{\"code\" : 200, \"msg\" : \"ok\"}",
+                        "description": "用户名",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/v1.RegisterRequest"
                         }
                     }
-                }
-            }
-        },
-        "/v1/businesses/{id}": {
-            "delete": {
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "businesses"
-                ],
-                "summary": "删除业务系统",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "auth by /auth",
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true
-                    },
-                    {
-                        "type": "integer",
-                        "description": "业务系统 ID",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
                 ],
                 "responses": {
                     "200": {
-                        "description": "{\"code\" : 200, \"msg\" : \"ok\"}",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            },
-            "patch": {
-                "consumes": [
-                    "multipart/form-data"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "businesses"
-                ],
-                "summary": "修改业务系统",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "auth by /auth",
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true
-                    },
-                    {
-                        "type": "integer",
-                        "description": "业务系统 ID",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "业务系统 名称",
-                        "name": "name",
-                        "in": "formData"
-                    },
-                    {
-                        "type": "string",
-                        "description": "业务系统 描述",
-                        "name": "desc",
-                        "in": "formData"
-                    },
-                    {
-                        "type": "string",
-                        "description": "业务系统 云端id",
-                        "name": "c_id",
-                        "in": "formData"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "{\"code\" : 200, \"msg\" : \"ok\"}",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
-        "/v1/meta_databases": {
-            "get": {
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "meta_databases"
-                ],
-                "summary": "数据源列表",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "auth by /auth",
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "{\"code\" : 200, \"basic\" : {}, \"msg\": \"ok\" }",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            },
-            "post": {
-                "consumes": [
-                    "multipart/form-data"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "meta_databases"
-                ],
-                "summary": "新增数据源",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "auth by /auth",
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "数据源 名称",
-                        "name": "name",
-                        "in": "formData",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "数据源 地址",
-                        "name": "host",
-                        "in": "formData",
-                        "required": true
-                    },
-                    {
-                        "type": "integer",
-                        "description": "数据源 端口号",
-                        "name": "port",
-                        "in": "formData",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "数据源 数据库名称",
-                        "name": "db_name",
-                        "in": "formData",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "数据源 用户名",
-                        "name": "username",
-                        "in": "formData",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "数据源 密码",
-                        "name": "password",
-                        "in": "formData",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "数据源 备注",
-                        "name": "comment",
-                        "in": "formData"
-                    },
-                    {
-                        "type": "integer",
-                        "description": "系统厂商 id",
-                        "name": "vendor_id",
-                        "in": "formData",
-                        "required": true
-                    },
-                    {
-                        "type": "integer",
-                        "description": "业务系统 id",
-                        "name": "business_id",
-                        "in": "formData",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "{\"code\": 200, data: {}, \"msg\" : \"ok\"}",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
-        "/v1/meta_databases/{id}": {
-            "delete": {
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "meta_databases"
-                ],
-                "summary": "删除数据源",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "auth by /auth",
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true
-                    },
-                    {
-                        "type": "integer",
-                        "description": "数据源 ID",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "{\"code\" : 200, \"msg\" : \"ok\"}",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            },
-            "patch": {
-                "consumes": [
-                    "multipart/form-data"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "meta_databases"
-                ],
-                "summary": "修改数据源",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "auth by /auth",
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true
-                    },
-                    {
-                        "type": "integer",
-                        "description": "数据源 ID",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "数据源 名称",
-                        "name": "name",
-                        "in": "formData"
-                    },
-                    {
-                        "type": "string",
-                        "description": "数据源 地址",
-                        "name": "host",
-                        "in": "formData"
-                    },
-                    {
-                        "type": "integer",
-                        "description": "数据源 端口号",
-                        "name": "port",
-                        "in": "formData"
-                    },
-                    {
-                        "type": "string",
-                        "description": "数据源 数据库名称",
-                        "name": "db_name",
-                        "in": "formData"
-                    },
-                    {
-                        "type": "string",
-                        "description": "数据源 用户名",
-                        "name": "username",
-                        "in": "formData"
-                    },
-                    {
-                        "type": "string",
-                        "description": "数据源 密码",
-                        "name": "password",
-                        "in": "formData"
-                    },
-                    {
-                        "type": "string",
-                        "description": "数据源 备注",
-                        "name": "comment",
-                        "in": "formData"
-                    },
-                    {
-                        "type": "integer",
-                        "description": "系统厂商 id",
-                        "name": "vendor_id",
-                        "in": "formData"
-                    },
-                    {
-                        "type": "integer",
-                        "description": "业务系统 id",
-                        "name": "business_id",
-                        "in": "formData"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "{\"code\" : 200, \"msg\" : \"ok\"}",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
-        "/v1/meta_databases/{id}/meta_tables": {
-            "get": {
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "meta_tables"
-                ],
-                "summary": "元数据列表",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "auth by /auth",
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true
-                    },
-                    {
-                        "type": "integer",
-                        "description": "数据源 ID",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "{\"code\" : 200, \"basic\" : {}, \"msg\": \"ok\" }",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
-        "/v1/users": {
-            "get": {
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "users"
-                ],
-                "summary": "用户列表",
-                "responses": {
-                    "200": {
-                        "description": "{\"code\" : 200, \"data\" : {}, \"msg\" : \"ok\"}",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            },
-            "post": {
-                "consumes": [
-                    "multipart/form-data"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "users"
-                ],
-                "summary": "新增用户",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "用户 用户名",
-                        "name": "username",
-                        "in": "formData",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "用户 密码",
-                        "name": "password",
-                        "in": "formData",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "用户 真实姓名",
-                        "name": "nickname",
-                        "in": "formData",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "{\"code\" : 200, data: {}, \"msg\" : \"ok\"}",
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"创建成功\"}",
                         "schema": {
                             "type": "string"
                         }
@@ -586,11 +87,29 @@
                         "name": "Authorization",
                         "in": "header",
                         "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "系统厂商名称",
+                        "name": "name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "页码",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "每页数量",
+                        "name": "page_size",
+                        "in": "query"
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "{\"code\" : 200, \"data\" : {}, \"msg\" : \"ok\"}",
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"获取成功\"}",
                         "schema": {
                             "type": "string"
                         }
@@ -617,22 +136,18 @@
                         "required": true
                     },
                     {
-                        "type": "string",
-                        "description": "系统厂商 名称",
-                        "name": "name",
-                        "in": "formData",
-                        "required": true
-                    },
-                    {
-                        "type": "integer",
-                        "description": "系统厂商 云端id",
-                        "name": "c_id",
-                        "in": "formData"
+                        "description": "Vendor模型",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/basic.CreateVendorRequest"
+                        }
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "{\"code\" : 200, \"msg\" : \"ok\"}",
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"创建成功\"}",
                         "schema": {
                             "type": "string"
                         }
@@ -670,7 +185,7 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "{\"code\" : 200, \"msg\" : \"ok\"}",
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"删除成功\"}",
                         "schema": {
                             "type": "string"
                         }
@@ -704,25 +219,80 @@
                         "required": true
                     },
                     {
-                        "type": "string",
-                        "description": "系统厂商 名称",
-                        "name": "name",
-                        "in": "formData"
-                    },
-                    {
-                        "type": "integer",
-                        "description": "系统厂商 云端id",
-                        "name": "c_id",
-                        "in": "formData"
+                        "description": "Vendor模型",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/basic.UpdateVendorRequest"
+                        }
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "{\"code\" : 200, \"msg\" : \"ok\"}",
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"更新成功\"}",
                         "schema": {
                             "type": "string"
                         }
                     }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "basic.CreateVendorRequest": {
+            "type": "object",
+            "required": [
+                "name"
+            ],
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "uuid": {
+                    "type": "integer"
+                }
+            }
+        },
+        "basic.UpdateVendorRequest": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "uuid": {
+                    "type": "integer"
+                }
+            }
+        },
+        "v1.AuthRequest": {
+            "type": "object",
+            "required": [
+                "username"
+            ],
+            "properties": {
+                "password": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string"
+                }
+            }
+        },
+        "v1.RegisterRequest": {
+            "type": "object",
+            "required": [
+                "username"
+            ],
+            "properties": {
+                "nickname": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string"
                 }
             }
         }

@@ -10,23 +10,32 @@ import (
 	"go.uber.org/zap"
 )
 
+type CreateVendorRequest struct {
+	Name string `json:"name" binding:"required"`
+	Uuid int    `json:"uuid"`
+}
+
+type UpdateVendorRequest struct {
+	Name string `json:"name"`
+	Uuid int    `json:"uuid"`
+}
+
 // @Summary 系统厂商列表
 // @Tags vendors
 // @Description
 // @Accept json
 // @Produce json
 // @Param Authorization header string true "auth by /auth"
-// @Param data body models.VendorSearch true "页码, 每页大小, 搜索条件"
+// @Param name query string false "系统厂商名称"
+// @Param page query int false "页码"
+// @Param page_size query int false "每页数量"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /v1/vendors [get]
 func GetVendors(c *gin.Context) {
 	var search basic.VendorSearch
 
-	if err := c.ShouldBindJSON(&search); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"error": err.Error(),
-		})
-	}
+	search.Name = c.Query("name")
+	search.Page, search.PageSize = utils.GetPageInfo(c)
 
 	if result, err := basic.GetVendors(&search); err != nil {
 		global.GO_LOG.Error("获取失败!", zap.Any("err", err))
@@ -42,17 +51,29 @@ func GetVendors(c *gin.Context) {
 // @Accept mpfd
 // @Produce json
 // @Param Authorization header string true "auth by /auth"
-// @Param data body basic.Vendor true "Vendor模型"
+// @Param data body CreateVendorRequest true "Vendor模型"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"创建成功"}"
 // @Router /v1/vendors [post]
-func AddVendor(c *gin.Context) {
-	var vendor basic.Vendor
+func CreateVendor(c *gin.Context) {
+	var vendor CreateVendorRequest
 	if err := c.ShouldBindJSON(&vendor); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": err.Error(),
 		})
+		return
 	}
-	if err := basic.CreateVendor(vendor); err != nil {
+	if exist := basic.ExistVendorByName(vendor.Name); exist {
+		global.GO_LOG.Error("该系统厂商名称已存在!")
+		utils.FailWithMessage("该系统厂商名称已存在", c)
+		return
+	}
+	if exist := basic.ExistVendorByUuid(vendor.Uuid); exist {
+		global.GO_LOG.Error("该系统厂商uuid已存在!")
+		utils.FailWithMessage("该系统厂商uuid已存在", c)
+		return
+	}
+
+	if err := basic.CreateVendor(basic.Vendor{Name: vendor.Name, Uuid: vendor.Uuid}); err != nil {
 		global.GO_LOG.Error("创建失败!", zap.Any("err", err))
 		utils.FailWithMessage("创建失败", c)
 	} else {
@@ -67,16 +88,35 @@ func AddVendor(c *gin.Context) {
 // @Produce json
 // @Param Authorization header string true "auth by /auth"
 // @Param id path int true "系统厂商 ID"
-// @Param data body basic.Vendor true "Vendor模型"
+// @Param data body UpdateVendorRequest true "Vendor模型"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"更新成功"}"
 // @Router /v1/vendors/{id} [patch]
 func UpdateVendor(c *gin.Context) {
-	var vendor basic.Vendor
+	vendor, gErr := basic.GetVendorById(c.Param("id"))
+	if gErr != nil {
+		global.GO_LOG.Error("系统厂商不存在!", zap.Any("err", gErr))
+		utils.FailWithMessage("系统厂商不存在!", c)
+		return
+	}
+
 	if err := c.ShouldBindJSON(&vendor); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": err.Error(),
 		})
+		return
 	}
+
+	if exist := basic.ExistVendorByName(vendor.Name); exist {
+		global.GO_LOG.Error("该系统厂商名称已存在!")
+		utils.FailWithMessage("该系统厂商名称已存在", c)
+		return
+	}
+	if exist := basic.ExistVendorByUuid(vendor.Uuid); exist {
+		global.GO_LOG.Error("该系统厂商uuid已存在!")
+		utils.FailWithMessage("该系统厂商uuid已存在", c)
+		return
+	}
+
 	if err := basic.UpdateVendor(&vendor); err != nil {
 		global.GO_LOG.Error("更新失败!", zap.Any("err", err))
 		utils.FailWithMessage("更新失败", c)
@@ -95,11 +135,11 @@ func UpdateVendor(c *gin.Context) {
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"删除成功"}"
 // @Router /v1/vendors/{id} [delete]
 func DeleteVendor(c *gin.Context) {
-	var vendor basic.Vendor
-	if err := c.ShouldBindJSON(&vendor); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"error": err.Error(),
-		})
+	vendor, gErr := basic.GetVendorById(c.Param("id"))
+	if gErr != nil {
+		global.GO_LOG.Error("系统厂商不存在!", zap.Any("err", gErr))
+		utils.FailWithMessage("系统厂商不存在!", c)
+		return
 	}
 	if err := basic.DeleteVendor(&vendor); err != nil {
 		global.GO_LOG.Error("删除失败!", zap.Any("err", err))

@@ -1,7 +1,7 @@
 /*
  * @Date: 2021-03-21 19:54:57
  * @LastEditors: viletyy
- * @LastEditTime: 2021-03-22 23:54:39
+ * @LastEditTime: 2021-03-24 11:10:19
  * @FilePath: /potato/models/basic/meta_database.go
  */
 package basic
@@ -20,18 +20,18 @@ type MetaDatabaseSearch struct {
 
 type MetaDatabase struct {
 	global.Model
-	Name            string    `json:"name" binding:"required"`
-	Adapter         string    `json:"adapter" binding:"required"`
-	Host            string    `json:"host" binding:"required"`
-	Port            string    `json:"port" binding:"required"`
-	DbName          string    `json:"db_name" binding:"required"`
-	Username        string    `json:"username" binding:"required"`
-	Password        string    `json:"password" binding:"required"`
+	Name            string    `json:"name"`
+	Adapter         string    `json:"adapter"`
+	Host            string    `json:"host"`
+	Port            string    `json:"port"`
+	DbName          string    `json:"db_name"`
+	Username        string    `json:"username"`
+	Password        string    `json:"password"`
 	LastConnectTime time.Time `json:"last_connect_time"`
 	Usable          bool      `json:"usable"`
 	Comment         string    `json:"comment"`
-	VendorId        int64     `json:"vendor_id" binding:"required"`
-	BusinessId      int64     `json:"business_id" binding:"required"`
+	VendorId        int64     `json:"vendor_id"`
+	BusinessId      int64     `json:"business_id"`
 	Vendor          Vendor
 	Business        Business
 }

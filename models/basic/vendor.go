@@ -1,7 +1,7 @@
 /*
  * @Date: 2021-03-21 19:54:57
  * @LastEditors: viletyy
- * @LastEditTime: 2021-03-22 23:52:13
+ * @LastEditTime: 2021-03-24 11:16:27
  * @FilePath: /potato/models/basic/vendor.go
  */
 package basic
@@ -19,15 +19,15 @@ type VendorSearch struct {
 type Vendor struct {
 	global.Model
 
-	Name string `json:"name" binding:"require"`
+	Name string `json:"name"`
 	Uuid int    `json:"uuid"`
 }
 
 func GetVendors(search *VendorSearch) (searchResult utils.SearchResult, err error) {
 	var vendors []Vendor
 	offset := search.PageInfo.PageSize * (search.PageInfo.Page - 1)
-	limit := search.PageInfo.Page
-	db := global.GO_DB.Where(search.Vendor)
+	limit := search.PageInfo.PageSize
+	db := global.GO_DB.Model(&Vendor{}).Where(search.Vendor)
 	err = db.Count(&searchResult.Total).Error
 	if err != nil {
 		return
@@ -42,7 +42,7 @@ func GetVendors(search *VendorSearch) (searchResult utils.SearchResult, err erro
 	return
 }
 
-func GetVendorById(id int) (vendor Vendor, err error) {
+func GetVendorById(id interface{}) (vendor Vendor, err error) {
 	err = global.GO_DB.Where("id = ?", id).First(&vendor).Error
 	return
 }
@@ -52,12 +52,12 @@ func GetVendorByName(name string) (vendor Vendor, err error) {
 	return
 }
 
-func GetVendorByUuid(uuid int64) (vendor Vendor, err error) {
+func GetVendorByUuid(uuid interface{}) (vendor Vendor, err error) {
 	err = global.GO_DB.Where("uuid = ?", uuid).First(&vendor).Error
 	return
 }
 
-func ExistVendorById(id int) bool {
+func ExistVendorById(id interface{}) bool {
 	var vendor Vendor
 	global.GO_DB.Where("id = ?", id).First(&vendor)
 
@@ -71,7 +71,7 @@ func ExistVendorByName(name string) bool {
 	return vendor.ID > 0
 }
 
-func ExistVendorByUuid(uuid int64) bool {
+func ExistVendorByUuid(uuid interface{}) bool {
 	var vendor Vendor
 	global.GO_DB.Where("uuid = ?", uuid).First(&vendor)
 

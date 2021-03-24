@@ -1,7 +1,7 @@
 /*
  * @Date: 2021-03-21 19:54:57
  * @LastEditors: viletyy
- * @LastEditTime: 2021-03-23 00:50:38
+ * @LastEditTime: 2021-03-24 11:23:01
  * @FilePath: /potato/routers/basic.go
  */
 package routers
@@ -22,7 +22,7 @@ func V1InitBasicRouter() {
 	vendors := V1RouterGroup.Group("/vendors")
 	{
 		vendors.GET("", basic.GetVendors)
-		vendors.POST("", basic.AddVendor)
+		vendors.POST("", basic.CreateVendor)
 		vendors.PATCH("/:id", basic.UpdateVendor)
 		vendors.DELETE("/:id", basic.DeleteVendor)
 	}

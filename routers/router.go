@@ -1,7 +1,7 @@
 /*
  * @Date: 2021-03-21 19:54:57
  * @LastEditors: viletyy
- * @LastEditTime: 2021-03-23 00:50:54
+ * @LastEditTime: 2021-03-23 14:39:19
  * @FilePath: /potato/routers/router.go
  */
 package routers
@@ -32,7 +32,8 @@ func InitRouter() *gin.Engine {
 
 	Engine.Use(middleware.CORS())
 
-	Engine.GET("/api/v1/auth", v1.GetUserAuth)
+	Engine.POST("/api/v1/auth", v1.Auth)
+	Engine.POST("/api/v1/register", v1.Register)
 	Engine.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	V1InitModule()
@@ -42,7 +43,5 @@ func InitRouter() *gin.Engine {
 
 func V1InitModule() {
 	V1RouterGroup.Use(middleware.JWT())
-	users := V1RouterGroup.Group("users")
-	users.POST("", v1.AddUser)
 	V1InitBasicRouter()
 }

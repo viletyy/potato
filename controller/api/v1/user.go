@@ -1,7 +1,7 @@
 /*
  * @Date: 2021-03-21 19:54:57
  * @LastEditors: viletyy
- * @LastEditTime: 2021-03-23 00:44:10
+ * @LastEditTime: 2021-03-24 10:08:27
  * @FilePath: /potato/controller/api/v1/user.go
  */
 package v1
@@ -13,69 +13,92 @@ import (
 	"github.com/viletyy/potato/global"
 	"github.com/viletyy/potato/models"
 	"github.com/viletyy/potato/utils"
+	"github.com/viletyy/potato/utils/crypt"
 	"go.uber.org/zap"
 )
 
-type LoginResponse struct {
+type AuthResponse struct {
 	User  models.User `json:"user"`
 	Token string      `json:"token"`
+}
+
+type AuthRequest struct {
+	Username string `json:"username" binding:"required"`
+	Password string `json:"password" binding:"required,gte=6`
+}
+
+type RegisterRequest struct {
+	Username string `json:"username" binding:"required"`
+	Password string `json:"password" binding:"required,gte=6`
+	Nickname string `json:"nickname"`
 }
 
 // @Summary 用户验证
 // @Description
 // @Accept json
 // @Produce json
-// @Param data body models.User true "User模型"
+// @Param data body AuthRequest true "用户名,密码"
 // @Success 200 {string} json "{"code" : 200, "data" : {"token" : ""}, "msg" : "ok"}"
-// @Router /v1/auth [get]
-func GetUserAuth(c *gin.Context) {
-	var user models.User
+// @Router /v1/auth [post]
+func Auth(c *gin.Context) {
+	var user AuthRequest
 	if err := c.ShouldBindJSON(&user); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": err.Error(),
 		})
+		return
 	}
 
 	mUser, gErr := models.GetUserByUsername(user.Username)
 	if gErr != nil {
 		global.GO_LOG.Error("查找用户失败", zap.Any("err", gErr))
 		utils.FailWithMessage("查找用户失败", c)
+		return
 	}
 
 	isTrue := mUser.CheckPassword(user.Password)
 	if !isTrue {
 		global.GO_LOG.Error("用户密码不正确")
 		utils.FailWithMessage("用户密码不正确", c)
+		return
 	}
 
 	token, tokenErr := utils.GenerateToken(mUser.ID)
 	if tokenErr != nil {
 		global.GO_LOG.Error("获取token失败", zap.Any("err", tokenErr))
 		utils.FailWithMessage("获取token失败", c)
+		return
 	}
 
-	utils.OkWithDetailed(LoginResponse{
+	utils.OkWithDetailed(AuthResponse{
 		User:  mUser,
 		Token: token,
 	}, "登录成功", c)
 }
 
-// @Summary 新增用户
-// @Tags users
+// @Summary 注册用户
 // @Description
-// @Accept mpfd
+// @Accept json
 // @Produce json
-// @Param data body basic.User true "User模型"
+// @Param data body RegisterRequest true "用户名"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"创建成功"}"
-// @Router /v1/users [post]
-func AddUser(c *gin.Context) {
-	var user models.User
+// @Router /v1/register [post]
+func Register(c *gin.Context) {
+	var user RegisterRequest
 	if err := c.ShouldBindJSON(&user); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": err.Error(),
 		})
+		return
 	}
-	if err := models.CreateUser(user); err != nil {
+
+	if isExsit := models.ExistUserByUsername(user.Username); isExsit {
+		global.GO_LOG.Error("用户已存在")
+		utils.FailWithMessage("用户已存在", c)
+		return
+	}
+
+	if err := models.CreateUser(models.User{Username: user.Username, Password: crypt.Md5Encode(user.Password), Nickname: user.Nickname}); err != nil {
 		global.GO_LOG.Error("创建失败!", zap.Any("err", err))
 		utils.FailWithMessage("创建失败", c)
 	} else {
