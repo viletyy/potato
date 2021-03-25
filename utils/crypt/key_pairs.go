@@ -1,8 +1,8 @@
 /*
  * @Date: 2021-03-11 18:02:34
  * @LastEditors: viletyy
- * @LastEditTime: 2021-03-11 18:06:05
- * @FilePath: /hello/util/crypt/key_pairs.go
+ * @LastEditTime: 2021-03-25 14:47:39
+ * @FilePath: /potato/utils/crypt/key_pairs.go
  */
 package crypt
 
@@ -14,7 +14,8 @@ import (
 	"encoding/pem"
 	"os"
 
-	"github.com/beego/beego/v2/core/logs"
+	"github.com/viletyy/potato/global"
+	"go.uber.org/zap"
 )
 
 // ecdsaCmd represents the doc command
@@ -23,26 +24,26 @@ func KeyPairs(keyName string) {
 
 	privateKey, err := ecdsa.GenerateKey(elliptic.P521(), rand.Reader)
 	if err != nil {
-		logs.Error("Genera KeyPairs Error: %v", err)
+		global.GO_LOG.Error("Genera KeyPairs Error:", zap.Any("err", err))
 	}
 	x509Encoded, _ := x509.MarshalECPrivateKey(privateKey)
 	privateBs := pem.EncodeToMemory(&pem.Block{Type: "PRIVATE KEY", Bytes: x509Encoded})
 	privateFile, err := os.Create(keyName + ".private.pem")
 	if err != nil {
-		logs.Error("Genera KeyPairs Error: %v", err)
+		global.GO_LOG.Error("Genera KeyPairs Error:", zap.Any("err", err))
 	}
 	_, err = privateFile.Write(privateBs)
 	if err != nil {
-		logs.Error("Genera KeyPairs Error: %v", err)
+		global.GO_LOG.Error("Genera KeyPairs Error:", zap.Any("err", err))
 	}
 	x509EncodedPub, _ := x509.MarshalPKIXPublicKey(privateKey.Public())
 	publicBs := pem.EncodeToMemory(&pem.Block{Type: "PUBLIC KEY", Bytes: x509EncodedPub})
 	publicKeyFile, err := os.Create(keyName + ".public.pem")
 	if err != nil {
-		logs.Error("Genera KeyPairs Error: %v", err)
+		global.GO_LOG.Error("Genera KeyPairs Error:", zap.Any("err", err))
 	}
 	_, err = publicKeyFile.Write(publicBs)
 	if err != nil {
-		logs.Error("Genera KeyPairs Error: %v", err)
+		global.GO_LOG.Error("Genera KeyPairs Error:", zap.Any("err", err))
 	}
 }

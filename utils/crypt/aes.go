@@ -1,8 +1,8 @@
 /*
  * @Date: 2021-03-11 17:03:16
  * @LastEditors: viletyy
- * @LastEditTime: 2021-03-11 17:42:16
- * @FilePath: /hello/util/crypt/aes.go
+ * @LastEditTime: 2021-03-25 14:46:17
+ * @FilePath: /potato/utils/crypt/aes.go
  */
 package crypt
 
@@ -13,7 +13,7 @@ import (
 	"encoding/base64"
 	"fmt"
 
-	"github.com/beego/beego/v2/core/logs"
+	"github.com/viletyy/potato/global"
 )
 
 /*
@@ -38,7 +38,7 @@ func AesEncrypt(orig string, key string) string {
 	// 分组密钥
 	block, err := aes.NewCipher(k)
 	if err != nil {
-		logs.Error(fmt.Sprintf("key 长度必须 16/24/32长度：%s", err.Error()))
+		global.GO_LOG.Error(fmt.Sprintf("key 长度必须 16/24/32长度：%s", err.Error()))
 	}
 	// 获取密钥块的长度
 	blockSize := block.BlockSize()
@@ -65,7 +65,7 @@ func AesDecrypt(cryted string, key string) string {
 	// 分组密钥
 	block, err := aes.NewCipher(k)
 	if err != nil {
-		logs.Error(fmt.Sprintf("key 长度必须 16/24/32长度：%s", err.Error()))
+		global.GO_LOG.Error(fmt.Sprintf("key 长度必须 16/24/32长度：%s", err.Error()))
 	}
 	// 获取密钥块的长度
 	blockSize := block.BlockSize()
