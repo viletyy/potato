@@ -1,7 +1,7 @@
 /*
  * @Date: 2021-03-22 18:51:29
  * @LastEditors: viletyy
- * @LastEditTime: 2021-03-22 18:54:59
+ * @LastEditTime: 2021-04-06 09:36:05
  * @FilePath: /potato/utils/response.go
  */
 package utils
@@ -53,6 +53,10 @@ func Fail(c *gin.Context) {
 
 func FailWithMessage(message string, c *gin.Context) {
 	Result(ERROR, map[string]interface{}{}, message, c)
+}
+
+func FailWithData(data interface{}, c *gin.Context) {
+	Result(ERROR, data, "操作失败", c)
 }
 
 func FailWithDetailed(data interface{}, message string, c *gin.Context) {
