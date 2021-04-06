@@ -1,7 +1,7 @@
 /*
  * @Date: 2021-03-22 17:03:27
  * @LastEditors: viletyy
- * @LastEditTime: 2021-03-23 10:23:12
+ * @LastEditTime: 2021-04-06 17:47:11
  * @FilePath: /potato/initialize/server.go
  */
 package initialize
@@ -14,15 +14,16 @@ import (
 	"os/signal"
 	"time"
 
-	"github.com/gin-gonic/gin/binding"
 	"github.com/viletyy/potato/global"
 	"github.com/viletyy/potato/routers"
 	"github.com/viletyy/potato/utils"
 )
 
 func RunServer() {
-	binding.Validator = new(utils.DefaultValidator)
-
+	if err := utils.InitTrans("zh"); err != nil {
+		fmt.Printf("init trans failed, err:%v\n", err)
+		return
+	}
 	router := routers.InitRouter()
 	server := &http.Server{
 		Addr:           fmt.Sprintf(":%d", global.GO_CONFIG.Server.HttpPort),

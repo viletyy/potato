@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/go-playground/validator/v10"
 	"github.com/viletyy/potato/global"
 	"github.com/viletyy/potato/models/basic"
 	"github.com/viletyy/potato/utils"
@@ -11,7 +12,7 @@ import (
 )
 
 type CreateVendorRequest struct {
-	Name string `json:"name" binding:"required"`
+	Name string `json:"name" validate:"required"`
 	Uuid int    `json:"uuid"`
 }
 
@@ -57,11 +58,19 @@ func GetVendors(c *gin.Context) {
 func CreateVendor(c *gin.Context) {
 	var vendor CreateVendorRequest
 	if err := c.ShouldBindJSON(&vendor); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"error": err.Error(),
-		})
-		return
+		if errs, ok := err.(validator.ValidationErrors); !ok {
+			c.JSON(http.StatusBadRequest, gin.H{
+				"msg": err.Error(),
+			})
+			return
+		} else {
+			c.JSON(http.StatusBadRequest, gin.H{
+				"msg": errs.Translate(utils.Trans),
+			})
+			return
+		}
 	}
+
 	if exist := basic.ExistVendorByName(vendor.Name); exist {
 		global.GO_LOG.Error("该系统厂商名称已存在!")
 		utils.FailWithMessage("该系统厂商名称已存在", c)

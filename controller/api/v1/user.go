@@ -1,7 +1,7 @@
 /*
  * @Date: 2021-03-21 19:54:57
  * @LastEditors: viletyy
- * @LastEditTime: 2021-03-24 10:08:27
+ * @LastEditTime: 2021-04-06 17:02:38
  * @FilePath: /potato/controller/api/v1/user.go
  */
 package v1
@@ -23,13 +23,13 @@ type AuthResponse struct {
 }
 
 type AuthRequest struct {
-	Username string `json:"username" binding:"required"`
-	Password string `json:"password" binding:"required,gte=6`
+	Username string `json:"username" validate:"required"`
+	Password string `json:"password" validate:"required,gte=6`
 }
 
 type RegisterRequest struct {
-	Username string `json:"username" binding:"required"`
-	Password string `json:"password" binding:"required,gte=6`
+	Username string `json:"username" validate:"required"`
+	Password string `json:"password" validate:"required,gte=6`
 	Nickname string `json:"nickname"`
 }
 
