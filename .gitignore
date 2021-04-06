@@ -19,3 +19,4 @@ vendor/*
 config.yaml
 go.sum
 __debug_bin
+latest_log

@@ -73,11 +73,11 @@ func CreateVendor(c *gin.Context) {
 		return
 	}
 
-	if err := basic.CreateVendor(basic.Vendor{Name: vendor.Name, Uuid: vendor.Uuid}); err != nil {
+	if mVendor, err := basic.CreateVendor(basic.Vendor{Name: vendor.Name, Uuid: vendor.Uuid}); err != nil {
 		global.GO_LOG.Error("创建失败!", zap.Any("err", err))
 		utils.FailWithMessage("创建失败", c)
 	} else {
-		utils.OkWithMessage("创建成功", c)
+		utils.OkWithDetailed(mVendor, "创建成功", c)
 	}
 }
 
@@ -121,7 +121,7 @@ func UpdateVendor(c *gin.Context) {
 		global.GO_LOG.Error("更新失败!", zap.Any("err", err))
 		utils.FailWithMessage("更新失败", c)
 	} else {
-		utils.OkWithMessage("更新成功", c)
+		utils.OkWithDetailed(vendor, "更新成功", c)
 	}
 }
 

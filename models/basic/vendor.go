@@ -1,7 +1,7 @@
 /*
  * @Date: 2021-03-21 19:54:57
  * @LastEditors: viletyy
- * @LastEditTime: 2021-03-24 11:16:27
+ * @LastEditTime: 2021-04-06 15:55:59
  * @FilePath: /potato/models/basic/vendor.go
  */
 package basic
@@ -78,10 +78,10 @@ func ExistVendorByUuid(uuid interface{}) bool {
 	return vendor.ID > 0
 }
 
-func CreateVendor(vendor Vendor) (err error) {
+func CreateVendor(vendor Vendor) (mVendor *Vendor, err error) {
 	err = global.GO_DB.Create(&vendor).Error
 
-	return err
+	return &vendor, err
 }
 
 func UpdateVendor(vendor *Vendor) (err error) {
