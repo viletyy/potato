@@ -109,10 +109,17 @@ func UpdateVendor(c *gin.Context) {
 	}
 
 	if err := c.ShouldBindJSON(&vendor); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"error": err.Error(),
-		})
-		return
+		if errs, ok := err.(validator.ValidationErrors); !ok {
+			c.JSON(http.StatusBadRequest, gin.H{
+				"msg": err.Error(),
+			})
+			return
+		} else {
+			c.JSON(http.StatusBadRequest, gin.H{
+				"msg": errs.Translate(utils.Trans),
+			})
+			return
+		}
 	}
 
 	if exist := basic.ExistVendorByName(vendor.Name); exist {

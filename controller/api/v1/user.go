@@ -1,7 +1,7 @@
 /*
  * @Date: 2021-03-21 19:54:57
  * @LastEditors: viletyy
- * @LastEditTime: 2021-04-06 17:02:38
+ * @LastEditTime: 2021-04-06 18:01:36
  * @FilePath: /potato/controller/api/v1/user.go
  */
 package v1
@@ -10,6 +10,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/go-playground/validator/v10"
 	"github.com/viletyy/potato/global"
 	"github.com/viletyy/potato/models"
 	"github.com/viletyy/potato/utils"
@@ -24,12 +25,12 @@ type AuthResponse struct {
 
 type AuthRequest struct {
 	Username string `json:"username" validate:"required"`
-	Password string `json:"password" validate:"required,gte=6`
+	Password string `json:"password" validate:"required,gte=6"`
 }
 
 type RegisterRequest struct {
 	Username string `json:"username" validate:"required"`
-	Password string `json:"password" validate:"required,gte=6`
+	Password string `json:"password" validate:"required,gte=6"`
 	Nickname string `json:"nickname"`
 }
 
@@ -43,10 +44,17 @@ type RegisterRequest struct {
 func Auth(c *gin.Context) {
 	var user AuthRequest
 	if err := c.ShouldBindJSON(&user); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"error": err.Error(),
-		})
-		return
+		if errs, ok := err.(validator.ValidationErrors); !ok {
+			c.JSON(http.StatusBadRequest, gin.H{
+				"msg": err.Error(),
+			})
+			return
+		} else {
+			c.JSON(http.StatusBadRequest, gin.H{
+				"msg": errs.Translate(utils.Trans),
+			})
+			return
+		}
 	}
 
 	mUser, gErr := models.GetUserByUsername(user.Username)
@@ -86,10 +94,17 @@ func Auth(c *gin.Context) {
 func Register(c *gin.Context) {
 	var user RegisterRequest
 	if err := c.ShouldBindJSON(&user); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"error": err.Error(),
-		})
-		return
+		if errs, ok := err.(validator.ValidationErrors); !ok {
+			c.JSON(http.StatusBadRequest, gin.H{
+				"msg": err.Error(),
+			})
+			return
+		} else {
+			c.JSON(http.StatusBadRequest, gin.H{
+				"msg": errs.Translate(utils.Trans),
+			})
+			return
+		}
 	}
 
 	if isExsit := models.ExistUserByUsername(user.Username); isExsit {

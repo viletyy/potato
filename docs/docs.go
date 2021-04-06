@@ -284,6 +284,7 @@ var doc = `{
         "v1.AuthRequest": {
             "type": "object",
             "required": [
+                "password",
                 "username"
             ],
             "properties": {
@@ -298,6 +299,7 @@ var doc = `{
         "v1.RegisterRequest": {
             "type": "object",
             "required": [
+                "password",
                 "username"
             ],
             "properties": {

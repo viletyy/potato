@@ -1,7 +1,7 @@
 /*
  * @Date: 2021-03-22 09:42:09
  * @LastEditors: viletyy
- * @LastEditTime: 2021-03-22 10:08:22
+ * @LastEditTime: 2021-04-06 18:18:15
  * @FilePath: /potato/global/global.go
  */
 package global

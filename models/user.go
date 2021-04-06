@@ -20,8 +20,8 @@ type UserSearch struct {
 type User struct {
 	global.Model
 
-	Username string `json:"username" binding:"required"`
-	Password string `json:"-" binding:"required"`
+	Username string `json:"username"`
+	Password string `json:"-"`
 	Nickname string `json:"nickname"`
 	IsAdmin  bool   `json:"is_admin" gorm:"default: false"`
 }

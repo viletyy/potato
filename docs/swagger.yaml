@@ -23,6 +23,7 @@ definitions:
       username:
         type: string
     required:
+    - password
     - username
     type: object
   v1.RegisterRequest:
@@ -34,6 +35,7 @@ definitions:
       username:
         type: string
     required:
+    - password
     - username
     type: object
 info:
