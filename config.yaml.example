@@ -1,5 +1,5 @@
 app:
-  jwt_secret: 'viletyy
+  jwt_secret: 'viletyy'
   jwt_issuer: 'potato'
   jwt_expire: '7200'
   run_mode: 'debug'
@@ -25,7 +25,7 @@ zap:
   level: 'info'
   format: 'console'
   prefix: '[POTATO]'
-  director: 'log'
+  director: 'tmp/log'
   link-name: 'latest_log'
   show-line: true
   encode-level: 'LowercaseColorLevelEncoder'

@@ -1,63 +1,48 @@
 /*
  * @Date: 2021-03-21 19:54:57
  * @LastEditors: viletyy
- * @LastEditTime: 2021-06-10 15:20:29
+ * @LastEditTime: 2021-06-10 21:49:20
  * @FilePath: /potato/internal/middleware/jwt.go
  */
 package middleware
 
 import (
-	"net/http"
-	"strconv"
-	"time"
-
+	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
-	"github.com/viletyy/potato/global"
-	"github.com/viletyy/potato/pkg"
+	"github.com/viletyy/potato/pkg/app"
+	"github.com/viletyy/potato/pkg/errcode"
 )
 
 func JWT() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		token := c.Request.Header.Get("Authorization")
+		var (
+			token string
+			ecode = errcode.Success
+		)
+		if s, exist := c.GetQuery("token"); exist {
+			token = s
+		} else {
+			token = c.GetHeader("token")
+		}
 		if token == "" {
-			c.JSON(http.StatusBadRequest, gin.H{
-				"error": "请求参数错误",
-			})
+			ecode = errcode.InvalidParams
+		} else {
+			_, err := app.ParseToken(token)
+			if err != nil {
+				switch err.(*jwt.ValidationError).Errors {
+				case jwt.ValidationErrorExpired:
+					ecode = errcode.UnauthorizedTokenTimeout
+				default:
+					ecode = errcode.UnauthorizedTokenError
+				}
+			}
+		}
+
+		if ecode != errcode.Success {
+			response := app.NewResponse(c)
+			response.ToErrorResponse(ecode)
 			c.Abort()
 			return
-		} else {
-			claims, err := pkg.ParseToken(token)
-			if err != nil {
-				c.JSON(http.StatusBadRequest, gin.H{
-					"error": "token验证失败",
-				})
-				c.Abort()
-				return
-			} else if time.Now().Unix() > claims.ExpiresAt {
-				c.JSON(http.StatusBadRequest, gin.H{
-					"error": "token已超时",
-				})
-				c.Abort()
-				return
-			}
-			if claims != nil {
-				userId := claims.UserId
-				loginUUID := claims.StandardClaims.Id
-				val, _ := global.GO_REDIS.Get("login:" + loginUUID).Result()
-				if val != strconv.Itoa(int(userId)) {
-					c.JSON(http.StatusBadRequest, gin.H{
-						"error": "token鉴权失败",
-					})
-					c.Abort()
-					return
-				}
-			} else {
-				c.JSON(http.StatusBadRequest, gin.H{
-					"error": "token鉴权失败",
-				})
-				c.Abort()
-				return
-			}
 		}
 
 		c.Next()

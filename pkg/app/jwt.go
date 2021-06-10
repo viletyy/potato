@@ -1,7 +1,7 @@
 /*
  * @Date: 2021-06-10 18:25:19
  * @LastEditors: viletyy
- * @LastEditTime: 2021-06-10 18:41:57
+ * @LastEditTime: 2021-06-10 22:23:51
  * @FilePath: /potato/pkg/app/jwt.go
  */
 package app
@@ -26,7 +26,8 @@ func GetJWTSecret() []byte {
 
 func GenerateToken(appKey, appSecret string) (string, error) {
 	nowTime := time.Now()
-	expireTime := nowTime.Add(time.Duration(global.GO_CONFIG.App.JwtExpire))
+	expireTime := nowTime.Add(time.Duration(global.GO_CONFIG.App.JwtExpire) * time.Second)
+
 	claims := Claims{
 		AppKey:    crypt.Md5Encode(appKey),
 		AppSecret: crypt.Md5Encode(appSecret),
@@ -36,7 +37,7 @@ func GenerateToken(appKey, appSecret string) (string, error) {
 		},
 	}
 
-	tokenClaims := jwt.NewWithClaims(jwt.SigningMethodES256, claims)
+	tokenClaims := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	token, err := tokenClaims.SignedString(GetJWTSecret())
 	return token, err
 }

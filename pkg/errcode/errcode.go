@@ -1,7 +1,7 @@
 /*
  * @Date: 2021-06-10 16:30:10
  * @LastEditors: viletyy
- * @LastEditTime: 2021-06-10 17:27:59
+ * @LastEditTime: 2021-06-10 21:43:05
  * @FilePath: /potato/pkg/errcode/errcode.go
  */
 package errcode

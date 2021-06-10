@@ -27,7 +27,7 @@ var doc = `{
         "/v1/auth": {
             "post": {
                 "consumes": [
-                    "application/json"
+                    "multipart/form-data"
                 ],
                 "produces": [
                     "application/json"
@@ -35,50 +35,20 @@ var doc = `{
                 "summary": "用户验证",
                 "parameters": [
                     {
-                        "description": "用户名,密码",
+                        "description": "Vendor模型",
                         "name": "data",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/v1.AuthRequest"
+                            "$ref": "#/definitions/service.AuthRequest"
                         }
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "{\"code\" : 200, \"data\" : {\"token\" : \"\"}, \"msg\" : \"ok\"}",
+                        "description": "请求成功",
                         "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
-        "/v1/register": {
-            "post": {
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "summary": "注册用户",
-                "parameters": [
-                    {
-                        "description": "用户名",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/v1.RegisterRequest"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "{\"success\":true,\"data\":{},\"msg\":\"创建成功\"}",
-                        "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/errcode.Error"
                         }
                     }
                 }
@@ -100,7 +70,7 @@ var doc = `{
                     {
                         "type": "string",
                         "description": "auth by /auth",
-                        "name": "Authorization",
+                        "name": "token",
                         "in": "header",
                         "required": true
                     },
@@ -128,19 +98,7 @@ var doc = `{
                     "200": {
                         "description": "请求成功",
                         "schema": {
-                            "$ref": "#/definitions/errcode.Error"
-                        }
-                    },
-                    "400": {
-                        "description": "请求错误",
-                        "schema": {
-                            "$ref": "#/definitions/errcode.Error"
-                        }
-                    },
-                    "500": {
-                        "description": "内部错误",
-                        "schema": {
-                            "$ref": "#/definitions/errcode.Error"
+                            "$ref": "#/definitions/basic.Vendor"
                         }
                     }
                 }
@@ -160,28 +118,25 @@ var doc = `{
                     {
                         "type": "string",
                         "description": "auth by /auth",
-                        "name": "Authorization",
+                        "name": "token",
                         "in": "header",
                         "required": true
+                    },
+                    {
+                        "description": "Vendor模型",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/service.CreateVendorRequest"
+                        }
                     }
                 ],
                 "responses": {
                     "200": {
                         "description": "请求成功",
                         "schema": {
-                            "$ref": "#/definitions/errcode.Error"
-                        }
-                    },
-                    "400": {
-                        "description": "请求错误",
-                        "schema": {
-                            "$ref": "#/definitions/errcode.Error"
-                        }
-                    },
-                    "500": {
-                        "description": "内部错误",
-                        "schema": {
-                            "$ref": "#/definitions/errcode.Error"
+                            "$ref": "#/definitions/basic.Vendor"
                         }
                     }
                 }
@@ -203,7 +158,7 @@ var doc = `{
                     {
                         "type": "string",
                         "description": "auth by /auth",
-                        "name": "Authorization",
+                        "name": "token",
                         "in": "header",
                         "required": true
                     },
@@ -219,19 +174,7 @@ var doc = `{
                     "200": {
                         "description": "请求成功",
                         "schema": {
-                            "$ref": "#/definitions/errcode.Error"
-                        }
-                    },
-                    "400": {
-                        "description": "请求错误",
-                        "schema": {
-                            "$ref": "#/definitions/errcode.Error"
-                        }
-                    },
-                    "500": {
-                        "description": "内部错误",
-                        "schema": {
-                            "$ref": "#/definitions/errcode.Error"
+                            "$ref": "#/definitions/basic.Vendor"
                         }
                     }
                 }
@@ -251,7 +194,7 @@ var doc = `{
                     {
                         "type": "string",
                         "description": "auth by /auth",
-                        "name": "Authorization",
+                        "name": "token",
                         "in": "header",
                         "required": true
                     },
@@ -261,25 +204,22 @@ var doc = `{
                         "name": "id",
                         "in": "path",
                         "required": true
+                    },
+                    {
+                        "description": "Vendor模型",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/service.UpdateVendorRequest"
+                        }
                     }
                 ],
                 "responses": {
                     "200": {
                         "description": "请求成功",
                         "schema": {
-                            "$ref": "#/definitions/errcode.Error"
-                        }
-                    },
-                    "400": {
-                        "description": "请求错误",
-                        "schema": {
-                            "$ref": "#/definitions/errcode.Error"
-                        }
-                    },
-                    "500": {
-                        "description": "内部错误",
-                        "schema": {
-                            "$ref": "#/definitions/errcode.Error"
+                            "$ref": "#/definitions/basic.Vendor"
                         }
                     }
                 }
@@ -287,6 +227,9 @@ var doc = `{
         }
     },
     "definitions": {
+        "basic.Vendor": {
+            "type": "object"
+        },
         "errcode.Error": {
             "type": "object",
             "properties": {
@@ -301,36 +244,49 @@ var doc = `{
                 }
             }
         },
-        "v1.AuthRequest": {
+        "service.AuthRequest": {
             "type": "object",
             "required": [
-                "password",
-                "username"
+                "app_key",
+                "app_secret"
             ],
             "properties": {
-                "password": {
+                "app_key": {
                     "type": "string"
                 },
-                "username": {
+                "app_secret": {
                     "type": "string"
                 }
             }
         },
-        "v1.RegisterRequest": {
+        "service.CreateVendorRequest": {
             "type": "object",
             "required": [
-                "password",
-                "username"
+                "name"
             ],
             "properties": {
-                "nickname": {
+                "name": {
                     "type": "string"
                 },
-                "password": {
+                "uuid": {
+                    "type": "integer"
+                }
+            }
+        },
+        "service.UpdateVendorRequest": {
+            "type": "object",
+            "required": [
+                "id"
+            ],
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
                     "type": "string"
                 },
-                "username": {
-                    "type": "string"
+                "uuid": {
+                    "type": "integer"
                 }
             }
         }

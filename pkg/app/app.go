@@ -1,7 +1,7 @@
 /*
  * @Date: 2021-06-10 16:47:58
  * @LastEditors: viletyy
- * @LastEditTime: 2021-06-10 17:25:49
+ * @LastEditTime: 2021-06-10 22:28:15
  * @FilePath: /potato/pkg/app/app.go
  */
 package app
@@ -29,6 +29,12 @@ func (r *Response) ToResponse(data interface{}) {
 	err := errcode.Success
 	err.WithData(data)
 
+	r.ToErrorResponse(err)
+}
+
+func (r *Response) ToResponseErrors(data interface{}) {
+	err := errcode.InvalidParams
+	err.WithData(data)
 	r.ToErrorResponse(err)
 }
 

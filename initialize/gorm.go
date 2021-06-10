@@ -1,7 +1,7 @@
 /*
  * @Date: 2021-03-22 10:12:38
  * @LastEditors: viletyy
- * @LastEditTime: 2021-06-10 17:52:06
+ * @LastEditTime: 2021-06-10 21:53:31
  * @FilePath: /potato/initialize/gorm.go
  */
 package initialize
@@ -60,7 +60,7 @@ func GormSet(db *gorm.DB) {
 	// 设置迁移
 	db.AutoMigrate(
 		basic.Vendor{},
-		model.User{},
+		model.Auth{},
 	)
 
 	// 设置空闲连接池中的最大连接数

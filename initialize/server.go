@@ -1,7 +1,7 @@
 /*
  * @Date: 2021-03-22 17:03:27
  * @LastEditors: viletyy
- * @LastEditTime: 2021-06-10 15:43:37
+ * @LastEditTime: 2021-06-10 22:24:39
  * @FilePath: /potato/initialize/server.go
  */
 package initialize
@@ -16,14 +16,9 @@ import (
 
 	"github.com/viletyy/potato/global"
 	"github.com/viletyy/potato/internal/routers"
-	"github.com/viletyy/potato/pkg"
 )
 
 func RunServer() {
-	if err := pkg.InitTrans("zh"); err != nil {
-		fmt.Printf("init trans failed, err:%v\n", err)
-		return
-	}
 	router := routers.InitRouter()
 	server := &http.Server{
 		Addr:           fmt.Sprintf(":%d", global.GO_CONFIG.Server.HttpPort),
