@@ -32,16 +32,21 @@ var doc = `{
                 "produces": [
                     "application/json"
                 ],
-                "summary": "用户验证",
+                "summary": "鉴权验证",
                 "parameters": [
                     {
-                        "description": "Vendor模型",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/service.AuthRequest"
-                        }
+                        "type": "string",
+                        "description": "app key",
+                        "name": "app_key",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "app secret",
+                        "name": "app_secret",
+                        "in": "formData",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -75,13 +80,6 @@ var doc = `{
                         "required": true
                     },
                     {
-                        "maxLength": 100,
-                        "type": "string",
-                        "description": "名称",
-                        "name": "name",
-                        "in": "query"
-                    },
-                    {
                         "type": "integer",
                         "description": "页码",
                         "name": "page",
@@ -91,6 +89,19 @@ var doc = `{
                         "type": "integer",
                         "description": "每页数量",
                         "name": "page_size",
+                        "in": "query"
+                    },
+                    {
+                        "maxLength": 100,
+                        "type": "string",
+                        "description": "系统厂商名称",
+                        "name": "name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "系统厂商云id",
+                        "name": "uuid",
                         "in": "query"
                     }
                 ],
@@ -123,13 +134,19 @@ var doc = `{
                         "required": true
                     },
                     {
-                        "description": "Vendor模型",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/service.CreateVendorRequest"
-                        }
+                        "maxLength": 100,
+                        "minLength": 1,
+                        "type": "string",
+                        "description": "系统厂商名称",
+                        "name": "name",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "系统厂商云id",
+                        "name": "uuid",
+                        "in": "formData"
                     }
                 ],
                 "responses": {
@@ -143,6 +160,42 @@ var doc = `{
             }
         },
         "/v1/vendors/{id}": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "vendors"
+                ],
+                "summary": "系统厂商",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "auth by /auth",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "系统厂商 ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "请求成功",
+                        "schema": {
+                            "$ref": "#/definitions/basic.Vendor"
+                        }
+                    }
+                }
+            },
             "delete": {
                 "consumes": [
                     "application/json"
@@ -206,13 +259,18 @@ var doc = `{
                         "required": true
                     },
                     {
-                        "description": "Vendor模型",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/service.UpdateVendorRequest"
-                        }
+                        "maxLength": 100,
+                        "minLength": 1,
+                        "type": "string",
+                        "description": "系统厂商名称",
+                        "name": "name",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "系统厂商云id",
+                        "name": "uuid",
+                        "in": "formData"
                     }
                 ],
                 "responses": {
@@ -241,52 +299,6 @@ var doc = `{
                 },
                 "msg": {
                     "type": "string"
-                }
-            }
-        },
-        "service.AuthRequest": {
-            "type": "object",
-            "required": [
-                "app_key",
-                "app_secret"
-            ],
-            "properties": {
-                "app_key": {
-                    "type": "string"
-                },
-                "app_secret": {
-                    "type": "string"
-                }
-            }
-        },
-        "service.CreateVendorRequest": {
-            "type": "object",
-            "required": [
-                "name"
-            ],
-            "properties": {
-                "name": {
-                    "type": "string"
-                },
-                "uuid": {
-                    "type": "integer"
-                }
-            }
-        },
-        "service.UpdateVendorRequest": {
-            "type": "object",
-            "required": [
-                "id"
-            ],
-            "properties": {
-                "id": {
-                    "type": "integer"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "uuid": {
-                    "type": "integer"
                 }
             }
         }

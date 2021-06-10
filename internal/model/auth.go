@@ -1,7 +1,7 @@
 /*
  * @Date: 2021-06-10 18:21:37
  * @LastEditors: viletyy
- * @LastEditTime: 2021-06-10 21:59:51
+ * @LastEditTime: 2021-06-11 01:00:59
  * @FilePath: /potato/internal/model/auth.go
  */
 package model

@@ -11,36 +11,6 @@ definitions:
       msg:
         type: string
     type: object
-  service.AuthRequest:
-    properties:
-      app_key:
-        type: string
-      app_secret:
-        type: string
-    required:
-    - app_key
-    - app_secret
-    type: object
-  service.CreateVendorRequest:
-    properties:
-      name:
-        type: string
-      uuid:
-        type: integer
-    required:
-    - name
-    type: object
-  service.UpdateVendorRequest:
-    properties:
-      id:
-        type: integer
-      name:
-        type: string
-      uuid:
-        type: integer
-    required:
-    - id
-    type: object
 info:
   contact: {}
   description: This is a potato use golang
@@ -52,12 +22,16 @@ paths:
       consumes:
       - multipart/form-data
       parameters:
-      - description: Vendor模型
-        in: body
-        name: data
+      - description: app key
+        in: formData
+        name: app_key
         required: true
-        schema:
-          $ref: '#/definitions/service.AuthRequest'
+        type: string
+      - description: app secret
+        in: formData
+        name: app_secret
+        required: true
+        type: string
       produces:
       - application/json
       responses:
@@ -65,7 +39,7 @@ paths:
           description: 请求成功
           schema:
             $ref: '#/definitions/errcode.Error'
-      summary: 用户验证
+      summary: 鉴权验证
   /v1/vendors:
     get:
       consumes:
@@ -76,11 +50,6 @@ paths:
         name: token
         required: true
         type: string
-      - description: 名称
-        in: query
-        maxLength: 100
-        name: name
-        type: string
       - description: 页码
         in: query
         name: page
@@ -88,6 +57,15 @@ paths:
       - description: 每页数量
         in: query
         name: page_size
+        type: integer
+      - description: 系统厂商名称
+        in: query
+        maxLength: 100
+        name: name
+        type: string
+      - description: 系统厂商云id
+        in: query
+        name: uuid
         type: integer
       produces:
       - application/json
@@ -108,12 +86,17 @@ paths:
         name: token
         required: true
         type: string
-      - description: Vendor模型
-        in: body
-        name: data
+      - description: 系统厂商名称
+        in: formData
+        maxLength: 100
+        minLength: 1
+        name: name
         required: true
-        schema:
-          $ref: '#/definitions/service.CreateVendorRequest'
+        type: string
+      - description: 系统厂商云id
+        in: formData
+        name: uuid
+        type: integer
       produces:
       - application/json
       responses:
@@ -149,6 +132,30 @@ paths:
       summary: 删除系统厂商
       tags:
       - vendors
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: auth by /auth
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: 系统厂商 ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 请求成功
+          schema:
+            $ref: '#/definitions/basic.Vendor'
+      summary: 系统厂商
+      tags:
+      - vendors
     patch:
       consumes:
       - multipart/form-data
@@ -163,12 +170,16 @@ paths:
         name: id
         required: true
         type: integer
-      - description: Vendor模型
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/service.UpdateVendorRequest'
+      - description: 系统厂商名称
+        in: formData
+        maxLength: 100
+        minLength: 1
+        name: name
+        type: string
+      - description: 系统厂商云id
+        in: formData
+        name: uuid
+        type: integer
       produces:
       - application/json
       responses:

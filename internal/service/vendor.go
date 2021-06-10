@@ -1,30 +1,65 @@
 /*
  * @Date: 2021-06-10 17:57:48
  * @LastEditors: viletyy
- * @LastEditTime: 2021-06-10 18:01:40
+ * @LastEditTime: 2021-06-11 01:17:09
  * @FilePath: /potato/internal/service/vendor.go
  */
 package service
 
+import (
+	"github.com/viletyy/potato/internal/model/basic"
+	"github.com/viletyy/potato/pkg/app"
+)
+
 type CountVendorRequest struct {
-	Name string `json:"name" validate:"max=100"`
+	Name string `form:"name" json:"name" validate:"max=100"`
+	Uuid int    `form:"uuid" json:"uuid" `
 }
 
-type ListVendorRequest struct {
-	Name string `json:"name" validate:"max=100"`
+type VendorListRequest struct {
+	Name string `form:"name" json:"name" validate:"max=100"`
+	Uuid int    `form:"uuid" json:"uuid"`
+}
+
+type VendorRequest struct {
+	ID int64 `form:"id" json:"id" validate:"required,gte=1"`
 }
 
 type CreateVendorRequest struct {
-	Name string `json:"name" validate:"required"`
-	Uuid int    `json:"uuid"`
+	Name string `form:"name" json:"name" validate:"required"`
+	Uuid int    `form:"uuid"  json:"uuid"`
 }
 
 type UpdateVendorRequest struct {
-	ID   int64  `json:"id" validate:"required,gte=1"`
-	Name string `json:"name"`
-	Uuid int    `json:"uuid"`
+	ID   int64  `form:"id" json:"id" validate:"required,gte=1"`
+	Name string `form:"name" json:"name"`
+	Uuid int    `form:"uuid" json:"uuid"`
 }
 
 type DeleteVendorRequest struct {
 	ID int64 `json:"id" validate:"required,gte=1"`
+}
+
+func (svc *Service) CountVendor(param *CountVendorRequest) (int, error) {
+	return svc.dao.CountVendor(param.Name, param.Uuid)
+}
+
+func (svc *Service) GetVendorList(param *VendorListRequest, pager *app.Pager) ([]basic.Vendor, error) {
+	return svc.dao.GetVendorList(param.Name, param.Uuid, pager.Page, pager.PageSize)
+}
+
+func (svc *Service) GetVendor(param *VendorRequest) (basic.Vendor, error) {
+	return svc.dao.GetVendor(param.ID)
+}
+
+func (svc *Service) CreateVendor(param *CreateVendorRequest) (basic.Vendor, error) {
+	return svc.dao.CreateVendor(param.Name, param.Uuid)
+}
+
+func (svc *Service) UpdateVendor(param *UpdateVendorRequest) (basic.Vendor, error) {
+	return svc.dao.UpdateVendor(param.ID, param.Name, param.Uuid)
+}
+
+func (svc *Service) DeleteVendor(param *DeleteVendorRequest) error {
+	return svc.dao.DeleteVendor(param.ID)
 }

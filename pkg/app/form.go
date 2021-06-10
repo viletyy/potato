@@ -1,7 +1,7 @@
 /*
  * @Date: 2021-06-10 18:10:14
  * @LastEditors: viletyy
- * @LastEditTime: 2021-06-10 22:04:50
+ * @LastEditTime: 2021-06-11 01:15:10
  * @FilePath: /potato/pkg/app/form.go
  */
 package app
@@ -38,7 +38,7 @@ func (v ValidErrors) Errors() (errs []string) {
 
 func BindAndValid(c *gin.Context, v interface{}) (bool, ValidErrors) {
 	var errs ValidErrors
-	err := c.ShouldBindJSON(v)
+	err := c.ShouldBind(v)
 	if err != nil {
 		v := c.Value("trans")
 		trans, _ := v.(ut.Translator)

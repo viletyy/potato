@@ -1,7 +1,7 @@
 /*
  * @Date: 2021-06-10 18:55:46
  * @LastEditors: viletyy
- * @LastEditTime: 2021-06-10 18:58:09
+ * @LastEditTime: 2021-06-11 01:03:11
  * @FilePath: /potato/internal/service/auth.go
  */
 package service
@@ -9,8 +9,8 @@ package service
 import "errors"
 
 type AuthRequest struct {
-	AppKey    string `json:"app_key" validate:"required"`
-	AppSecret string `json:"app_secret" validate:"required"`
+	AppKey    string `form:"app_key" validate:"required"`
+	AppSecret string `form:"app_secret" validate:"required"`
 }
 
 func (svc *Service) CheckAuth(param *AuthRequest) error {

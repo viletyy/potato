@@ -1,7 +1,7 @@
 /*
  * @Date: 2021-06-10 18:58:25
  * @LastEditors: viletyy
- * @LastEditTime: 2021-06-10 22:28:29
+ * @LastEditTime: 2021-06-11 01:14:45
  * @FilePath: /potato/internal/controller/api/v1/auth.go
  */
 package v1
@@ -14,11 +14,12 @@ import (
 	"github.com/viletyy/potato/pkg/errcode"
 )
 
-// @Summary 用户验证
+// @Summary 鉴权验证
 // @Description
 // @Accept mpfd
 // @Produce json
-// @Param data body service.AuthRequest true "Vendor模型"
+// @Param app_key formData string true "app key"
+// @Param app_secret formData string true "app secret"
 // @Success 200 {object} errcode.Error "请求成功"
 // @Router /v1/auth [post]
 func GetAuth(c *gin.Context) {
