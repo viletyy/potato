@@ -1,7 +1,7 @@
 <!--
  * @Date: 2021-03-21 19:54:57
  * @LastEditors: viletyy
- * @LastEditTime: 2021-06-10 15:14:37
+ * @LastEditTime: 2021-06-10 15:39:28
  * @FilePath: /potato/README.md
 -->
 # Potato
@@ -31,6 +31,7 @@ Go项目脚手架
   - [使用许可](#使用许可)
 
 ## 项目结构
+```
 potato
 ├── config(配置目录)
 ├── docs(文档集合)
@@ -46,7 +47,7 @@ potato
 ├── pkg(项目相关等模块包)
 ├── scripts(各类构建、按照，分析等操作等脚本)
 └── tmp(项目生成的临时文件)
-
+```
 
 ## 安装
 
