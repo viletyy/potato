@@ -1,20 +1,13 @@
 basePath: /api
 definitions:
-  basic.CreateVendorRequest:
+  errcode.Error:
     properties:
-      name:
-        type: string
-      uuid:
+      code:
         type: integer
-    required:
-    - name
-    type: object
-  basic.UpdateVendorRequest:
-    properties:
-      name:
+      data:
+        type: object
+      msg:
         type: string
-      uuid:
-        type: integer
     type: object
   v1.AuthRequest:
     properties:
@@ -40,7 +33,7 @@ definitions:
     type: object
 info:
   contact: {}
-  description: This is a data_govern use golang
+  description: This is a potato use golang
   title: Potato Api
   version: "1.0"
 paths:
@@ -92,8 +85,9 @@ paths:
         name: Authorization
         required: true
         type: string
-      - description: 系统厂商名称
+      - description: 名称
         in: query
+        maxLength: 100
         name: name
         type: string
       - description: 页码
@@ -108,9 +102,17 @@ paths:
       - application/json
       responses:
         "200":
-          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          description: 请求成功
           schema:
-            type: string
+            $ref: '#/definitions/errcode.Error'
+        "400":
+          description: 请求错误
+          schema:
+            $ref: '#/definitions/errcode.Error'
+        "500":
+          description: 内部错误
+          schema:
+            $ref: '#/definitions/errcode.Error'
       summary: 系统厂商列表
       tags:
       - vendors
@@ -123,19 +125,21 @@ paths:
         name: Authorization
         required: true
         type: string
-      - description: Vendor模型
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/basic.CreateVendorRequest'
       produces:
       - application/json
       responses:
         "200":
-          description: '{"success":true,"data":{},"msg":"创建成功"}'
+          description: 请求成功
           schema:
-            type: string
+            $ref: '#/definitions/errcode.Error'
+        "400":
+          description: 请求错误
+          schema:
+            $ref: '#/definitions/errcode.Error'
+        "500":
+          description: 内部错误
+          schema:
+            $ref: '#/definitions/errcode.Error'
       summary: 新增系统厂商
       tags:
       - vendors
@@ -158,9 +162,17 @@ paths:
       - application/json
       responses:
         "200":
-          description: '{"success":true,"data":{},"msg":"删除成功"}'
+          description: 请求成功
           schema:
-            type: string
+            $ref: '#/definitions/errcode.Error'
+        "400":
+          description: 请求错误
+          schema:
+            $ref: '#/definitions/errcode.Error'
+        "500":
+          description: 内部错误
+          schema:
+            $ref: '#/definitions/errcode.Error'
       summary: 删除系统厂商
       tags:
       - vendors
@@ -178,19 +190,21 @@ paths:
         name: id
         required: true
         type: integer
-      - description: Vendor模型
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/basic.UpdateVendorRequest'
       produces:
       - application/json
       responses:
         "200":
-          description: '{"success":true,"data":{},"msg":"更新成功"}'
+          description: 请求成功
           schema:
-            type: string
+            $ref: '#/definitions/errcode.Error'
+        "400":
+          description: 请求错误
+          schema:
+            $ref: '#/definitions/errcode.Error'
+        "500":
+          description: 内部错误
+          schema:
+            $ref: '#/definitions/errcode.Error'
       summary: 修改系统厂商
       tags:
       - vendors

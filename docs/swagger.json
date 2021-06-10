@@ -1,7 +1,7 @@
 {
     "swagger": "2.0",
     "info": {
-        "description": "This is a data_govern use golang",
+        "description": "This is a potato use golang",
         "title": "Potato Api",
         "contact": {},
         "version": "1.0"
@@ -89,8 +89,9 @@
                         "required": true
                     },
                     {
+                        "maxLength": 100,
                         "type": "string",
-                        "description": "系统厂商名称",
+                        "description": "名称",
                         "name": "name",
                         "in": "query"
                     },
@@ -109,9 +110,21 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "{\"success\":true,\"data\":{},\"msg\":\"获取成功\"}",
+                        "description": "请求成功",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/errcode.Error"
+                        }
+                    },
+                    "400": {
+                        "description": "请求错误",
+                        "schema": {
+                            "$ref": "#/definitions/errcode.Error"
+                        }
+                    },
+                    "500": {
+                        "description": "内部错误",
+                        "schema": {
+                            "$ref": "#/definitions/errcode.Error"
                         }
                     }
                 }
@@ -134,22 +147,25 @@
                         "name": "Authorization",
                         "in": "header",
                         "required": true
-                    },
-                    {
-                        "description": "Vendor模型",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/basic.CreateVendorRequest"
-                        }
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "{\"success\":true,\"data\":{},\"msg\":\"创建成功\"}",
+                        "description": "请求成功",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/errcode.Error"
+                        }
+                    },
+                    "400": {
+                        "description": "请求错误",
+                        "schema": {
+                            "$ref": "#/definitions/errcode.Error"
+                        }
+                    },
+                    "500": {
+                        "description": "内部错误",
+                        "schema": {
+                            "$ref": "#/definitions/errcode.Error"
                         }
                     }
                 }
@@ -185,9 +201,21 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "{\"success\":true,\"data\":{},\"msg\":\"删除成功\"}",
+                        "description": "请求成功",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/errcode.Error"
+                        }
+                    },
+                    "400": {
+                        "description": "请求错误",
+                        "schema": {
+                            "$ref": "#/definitions/errcode.Error"
+                        }
+                    },
+                    "500": {
+                        "description": "内部错误",
+                        "schema": {
+                            "$ref": "#/definitions/errcode.Error"
                         }
                     }
                 }
@@ -217,22 +245,25 @@
                         "name": "id",
                         "in": "path",
                         "required": true
-                    },
-                    {
-                        "description": "Vendor模型",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/basic.UpdateVendorRequest"
-                        }
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "{\"success\":true,\"data\":{},\"msg\":\"更新成功\"}",
+                        "description": "请求成功",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/errcode.Error"
+                        }
+                    },
+                    "400": {
+                        "description": "请求错误",
+                        "schema": {
+                            "$ref": "#/definitions/errcode.Error"
+                        }
+                    },
+                    "500": {
+                        "description": "内部错误",
+                        "schema": {
+                            "$ref": "#/definitions/errcode.Error"
                         }
                     }
                 }
@@ -240,28 +271,17 @@
         }
     },
     "definitions": {
-        "basic.CreateVendorRequest": {
-            "type": "object",
-            "required": [
-                "name"
-            ],
-            "properties": {
-                "name": {
-                    "type": "string"
-                },
-                "uuid": {
-                    "type": "integer"
-                }
-            }
-        },
-        "basic.UpdateVendorRequest": {
+        "errcode.Error": {
             "type": "object",
             "properties": {
-                "name": {
-                    "type": "string"
-                },
-                "uuid": {
+                "code": {
                     "type": "integer"
+                },
+                "data": {
+                    "type": "object"
+                },
+                "msg": {
+                    "type": "string"
                 }
             }
         },

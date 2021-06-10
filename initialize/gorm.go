@@ -1,7 +1,7 @@
 /*
  * @Date: 2021-03-22 10:12:38
  * @LastEditors: viletyy
- * @LastEditTime: 2021-06-10 15:43:12
+ * @LastEditTime: 2021-06-10 17:52:06
  * @FilePath: /potato/initialize/gorm.go
  */
 package initialize
@@ -60,8 +60,6 @@ func GormSet(db *gorm.DB) {
 	// 设置迁移
 	db.AutoMigrate(
 		basic.Vendor{},
-		basic.Business{},
-		basic.MetaDatabase{},
 		model.User{},
 	)
 

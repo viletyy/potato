@@ -105,8 +105,9 @@ var doc = `{
                         "required": true
                     },
                     {
+                        "maxLength": 100,
                         "type": "string",
-                        "description": "系统厂商名称",
+                        "description": "名称",
                         "name": "name",
                         "in": "query"
                     },
@@ -125,9 +126,21 @@ var doc = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "{\"success\":true,\"data\":{},\"msg\":\"获取成功\"}",
+                        "description": "请求成功",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/errcode.Error"
+                        }
+                    },
+                    "400": {
+                        "description": "请求错误",
+                        "schema": {
+                            "$ref": "#/definitions/errcode.Error"
+                        }
+                    },
+                    "500": {
+                        "description": "内部错误",
+                        "schema": {
+                            "$ref": "#/definitions/errcode.Error"
                         }
                     }
                 }
@@ -150,22 +163,25 @@ var doc = `{
                         "name": "Authorization",
                         "in": "header",
                         "required": true
-                    },
-                    {
-                        "description": "Vendor模型",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/basic.CreateVendorRequest"
-                        }
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "{\"success\":true,\"data\":{},\"msg\":\"创建成功\"}",
+                        "description": "请求成功",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/errcode.Error"
+                        }
+                    },
+                    "400": {
+                        "description": "请求错误",
+                        "schema": {
+                            "$ref": "#/definitions/errcode.Error"
+                        }
+                    },
+                    "500": {
+                        "description": "内部错误",
+                        "schema": {
+                            "$ref": "#/definitions/errcode.Error"
                         }
                     }
                 }
@@ -201,9 +217,21 @@ var doc = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "{\"success\":true,\"data\":{},\"msg\":\"删除成功\"}",
+                        "description": "请求成功",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/errcode.Error"
+                        }
+                    },
+                    "400": {
+                        "description": "请求错误",
+                        "schema": {
+                            "$ref": "#/definitions/errcode.Error"
+                        }
+                    },
+                    "500": {
+                        "description": "内部错误",
+                        "schema": {
+                            "$ref": "#/definitions/errcode.Error"
                         }
                     }
                 }
@@ -233,22 +261,25 @@ var doc = `{
                         "name": "id",
                         "in": "path",
                         "required": true
-                    },
-                    {
-                        "description": "Vendor模型",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/basic.UpdateVendorRequest"
-                        }
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "{\"success\":true,\"data\":{},\"msg\":\"更新成功\"}",
+                        "description": "请求成功",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/errcode.Error"
+                        }
+                    },
+                    "400": {
+                        "description": "请求错误",
+                        "schema": {
+                            "$ref": "#/definitions/errcode.Error"
+                        }
+                    },
+                    "500": {
+                        "description": "内部错误",
+                        "schema": {
+                            "$ref": "#/definitions/errcode.Error"
                         }
                     }
                 }
@@ -256,28 +287,17 @@ var doc = `{
         }
     },
     "definitions": {
-        "basic.CreateVendorRequest": {
-            "type": "object",
-            "required": [
-                "name"
-            ],
-            "properties": {
-                "name": {
-                    "type": "string"
-                },
-                "uuid": {
-                    "type": "integer"
-                }
-            }
-        },
-        "basic.UpdateVendorRequest": {
+        "errcode.Error": {
             "type": "object",
             "properties": {
-                "name": {
-                    "type": "string"
-                },
-                "uuid": {
+                "code": {
                     "type": "integer"
+                },
+                "data": {
+                    "type": "object"
+                },
+                "msg": {
+                    "type": "string"
                 }
             }
         },
@@ -333,7 +353,7 @@ var SwaggerInfo = swaggerInfo{
 	BasePath:    "/api",
 	Schemes:     []string{},
 	Title:       "Potato Api",
-	Description: "This is a data_govern use golang",
+	Description: "This is a potato use golang",
 }
 
 type s struct{}

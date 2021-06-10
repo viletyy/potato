@@ -1,7 +1,7 @@
 /*
  * @Date: 2021-03-21 19:54:57
  * @LastEditors: viletyy
- * @LastEditTime: 2021-06-10 15:17:07
+ * @LastEditTime: 2021-06-10 19:02:31
  * @FilePath: /potato/internal/routers/router.go
  */
 package routers
@@ -27,13 +27,13 @@ func InitRouter() *gin.Engine {
 	Engine.Use(gin.Logger())
 
 	Engine.Use(gin.Recovery())
+	Engine.Use(middleware.Translations())
 
 	gin.SetMode(global.GO_CONFIG.App.RunMode)
 
 	Engine.Use(middleware.CORS())
 
-	Engine.POST("/api/v1/auth", v1.Auth)
-	Engine.POST("/api/v1/register", v1.Register)
+	Engine.POST("/api/v1/auth", v1.GetAuth)
 	Engine.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	V1InitModule()
