@@ -1,7 +1,7 @@
 /*
  * @Date: 2021-06-10 15:27:36
  * @LastEditors: viletyy
- * @LastEditTime: 2021-06-10 15:30:56
+ * @LastEditTime: 2021-06-10 15:52:48
  * @FilePath: /potato/pkg/paginator.go
  */
 package pkg
@@ -12,7 +12,7 @@ import (
 )
 
 func GetPageInfo(c *gin.Context) (page, pageSize int) {
-	page = convert.ToString(c.DefaultQuery("page", "1")).Int()
-	pageSize = convert.ToString(c.DefaultQuery("page_size", "10")).Int()
+	page, _ = convert.StrTo(c.DefaultQuery("page", "1")).Int()
+	pageSize, _ = convert.StrTo(c.DefaultQuery("page_size", "10")).Int()
 	return
 }

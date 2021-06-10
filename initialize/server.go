@@ -1,7 +1,7 @@
 /*
  * @Date: 2021-03-22 17:03:27
  * @LastEditors: viletyy
- * @LastEditTime: 2021-04-06 17:47:11
+ * @LastEditTime: 2021-06-10 15:43:37
  * @FilePath: /potato/initialize/server.go
  */
 package initialize
@@ -15,11 +15,12 @@ import (
 	"time"
 
 	"github.com/viletyy/potato/global"
-	"github.com/viletyy/potato/routers"
+	"github.com/viletyy/potato/internal/routers"
+	"github.com/viletyy/potato/pkg"
 )
 
 func RunServer() {
-	if err := utils.InitTrans("zh"); err != nil {
+	if err := pkg.InitTrans("zh"); err != nil {
 		fmt.Printf("init trans failed, err:%v\n", err)
 		return
 	}

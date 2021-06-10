@@ -1,7 +1,7 @@
 /*
  * @Date: 2021-03-22 10:12:38
  * @LastEditors: viletyy
- * @LastEditTime: 2021-06-10 10:54:40
+ * @LastEditTime: 2021-06-10 15:43:12
  * @FilePath: /potato/initialize/gorm.go
  */
 package initialize
@@ -13,8 +13,8 @@ import (
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
 	"github.com/viletyy/potato/global"
-	"github.com/viletyy/potato/models"
-	"github.com/viletyy/potato/models/basic"
+	"github.com/viletyy/potato/internal/model"
+	"github.com/viletyy/potato/internal/model/basic"
 )
 
 func Gorm() *gorm.DB {
@@ -62,7 +62,7 @@ func GormSet(db *gorm.DB) {
 		basic.Vendor{},
 		basic.Business{},
 		basic.MetaDatabase{},
-		models.User{},
+		model.User{},
 	)
 
 	// 设置空闲连接池中的最大连接数

@@ -1,7 +1,7 @@
 /*
  * @Date: 2021-03-22 10:13:04
  * @LastEditors: viletyy
- * @LastEditTime: 2021-06-10 15:01:09
+ * @LastEditTime: 2021-06-10 15:44:06
  * @FilePath: /potato/initialize/zap.go
  */
 package initialize
@@ -11,7 +11,7 @@ import (
 	"time"
 
 	"github.com/viletyy/potato/global"
-	"github.com/viletyy/potato/utils"
+	"github.com/viletyy/potato/pkg"
 	"github.com/viletyy/yolk/directory"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
@@ -56,7 +56,7 @@ func Zap() (logger *zap.Logger) {
 }
 
 func getEncoderCore() (core zapcore.Core) {
-	writer, err := utils.GetWriteSyncer() // 使用file-rotatelogs进行日志分割
+	writer, err := pkg.GetWriteSyncer() // 使用file-rotatelogs进行日志分割
 	if err != nil {
 		fmt.Printf("Get Write Syncer Failed err: %v", err.Error())
 		return
