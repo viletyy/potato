@@ -1,10 +1,10 @@
 /*
  * @Date: 2021-03-22 17:16:46
  * @LastEditors: viletyy
- * @LastEditTime: 2021-03-23 09:24:08
- * @FilePath: /potato/utils/jwt.go
+ * @LastEditTime: 2021-06-10 15:17:56
+ * @FilePath: /potato/pkg/jwt.go
  */
-package utils
+package pkg
 
 import (
 	"fmt"

@@ -1,10 +1,10 @@
 /*
  * @Date: 2021-03-22 18:51:29
  * @LastEditors: viletyy
- * @LastEditTime: 2021-04-06 09:36:05
- * @FilePath: /potato/utils/response.go
+ * @LastEditTime: 2021-06-10 15:18:18
+ * @FilePath: /potato/pkg/response.go
  */
-package utils
+package pkg
 
 import (
 	"net/http"

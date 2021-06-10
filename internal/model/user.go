@@ -1,24 +1,24 @@
 /*
  * @Date: 2021-03-21 19:54:57
  * @LastEditors: viletyy
- * @LastEditTime: 2021-03-22 23:51:55
- * @FilePath: /potato/models/user.go
+ * @LastEditTime: 2021-06-10 15:26:49
+ * @FilePath: /potato/internal/model/user.go
  */
-package models
+package model
 
 import (
 	"github.com/viletyy/potato/global"
-	"github.com/viletyy/potato/utils"
-	"github.com/viletyy/potato/utils/crypt"
+	"github.com/viletyy/potato/pkg"
+	"github.com/viletyy/yolk/crypt"
 )
 
 type UserSearch struct {
 	User
-	utils.PageInfo
+	pkg.PageInfo
 }
 
 type User struct {
-	global.Model
+	Model
 
 	Username string `json:"username"`
 	Password string `json:"-"`
@@ -26,7 +26,7 @@ type User struct {
 	IsAdmin  bool   `json:"is_admin" gorm:"default: false"`
 }
 
-func GetUsers(search *UserSearch) (searchResult utils.SearchResult, err error) {
+func GetUsers(search *UserSearch) (searchResult pkg.SearchResult, err error) {
 	var users []User
 	offset := search.PageInfo.PageSize * (search.PageInfo.Page - 1)
 	limit := search.PageInfo.Page

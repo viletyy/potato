@@ -16,7 +16,6 @@ import (
 
 	"github.com/viletyy/potato/global"
 	"github.com/viletyy/potato/routers"
-	"github.com/viletyy/potato/utils"
 )
 
 func RunServer() {

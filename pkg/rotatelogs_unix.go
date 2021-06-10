@@ -1,12 +1,12 @@
 /*
  * @Date: 2021-03-22 16:44:06
  * @LastEditors: viletyy
- * @LastEditTime: 2021-03-22 16:45:12
- * @FilePath: /potato/utils/rotatelogs_unix.go
+ * @LastEditTime: 2021-06-10 15:18:37
+ * @FilePath: /potato/pkg/rotatelogs_unix.go
  */
 // +build !windows
 
-package utils
+package pkg
 
 import (
 	"os"

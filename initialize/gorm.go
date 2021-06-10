@@ -1,7 +1,7 @@
 /*
  * @Date: 2021-03-22 10:12:38
  * @LastEditors: viletyy
- * @LastEditTime: 2021-03-23 09:49:41
+ * @LastEditTime: 2021-06-10 10:54:40
  * @FilePath: /potato/initialize/gorm.go
  */
 package initialize
@@ -53,7 +53,9 @@ func GormSet(db *gorm.DB) {
 	}
 
 	// 设置日志
-	db.LogMode(true)
+	if global.GO_CONFIG.App.RunMode == "debug" {
+		db.LogMode(true)
+	}
 
 	// 设置迁移
 	db.AutoMigrate(

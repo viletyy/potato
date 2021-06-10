@@ -1,8 +1,8 @@
 /*
  * @Date: 2021-03-21 19:54:57
  * @LastEditors: viletyy
- * @LastEditTime: 2021-03-23 14:39:19
- * @FilePath: /potato/routers/router.go
+ * @LastEditTime: 2021-06-10 15:17:07
+ * @FilePath: /potato/internal/routers/router.go
  */
 package routers
 
@@ -12,10 +12,10 @@ import (
 	ginSwagger "github.com/swaggo/gin-swagger"
 	"github.com/swaggo/gin-swagger/swaggerFiles"
 	_ "github.com/swaggo/gin-swagger/swaggerFiles"
-	v1 "github.com/viletyy/potato/controller/api/v1"
 	_ "github.com/viletyy/potato/docs"
 	"github.com/viletyy/potato/global"
-	"github.com/viletyy/potato/middleware"
+	v1 "github.com/viletyy/potato/internal/controller/api/v1"
+	"github.com/viletyy/potato/internal/middleware"
 )
 
 var (

@@ -1,8 +1,8 @@
 /*
  * @Date: 2021-03-21 19:54:57
  * @LastEditors: viletyy
- * @LastEditTime: 2021-03-24 11:10:19
- * @FilePath: /potato/models/basic/meta_database.go
+ * @LastEditTime: 2021-06-10 15:26:27
+ * @FilePath: /potato/internal/model/basic/meta_database.go
  */
 package basic
 
@@ -10,16 +10,17 @@ import (
 	"time"
 
 	"github.com/viletyy/potato/global"
-	"github.com/viletyy/potato/utils"
+	"github.com/viletyy/potato/internal/model"
+	"github.com/viletyy/potato/pkg"
 )
 
 type MetaDatabaseSearch struct {
 	MetaDatabase
-	utils.PageInfo
+	pkg.PageInfo
 }
 
 type MetaDatabase struct {
-	global.Model
+	model.Model
 	Name            string    `json:"name"`
 	Adapter         string    `json:"adapter"`
 	Host            string    `json:"host"`
@@ -36,7 +37,7 @@ type MetaDatabase struct {
 	Business        Business
 }
 
-func GetMetaDatabases(search *MetaDatabaseSearch) (searchResult utils.SearchResult, err error) {
+func GetMetaDatabases(search *MetaDatabaseSearch) (searchResult pkg.SearchResult, err error) {
 	var metaDatabases []MetaDatabase
 	offset := search.PageInfo.PageSize * (search.PageInfo.Page - 1)
 	limit := search.PageInfo.Page

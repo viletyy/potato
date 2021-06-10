@@ -1,30 +1,31 @@
 /*
  * @Date: 2021-03-21 19:54:57
  * @LastEditors: viletyy
- * @LastEditTime: 2021-03-22 23:54:52
- * @FilePath: /potato/models/basic/business.go
+ * @LastEditTime: 2021-06-10 15:26:12
+ * @FilePath: /potato/internal/model/basic/business.go
  */
 package basic
 
 import (
 	"github.com/viletyy/potato/global"
-	"github.com/viletyy/potato/utils"
+	"github.com/viletyy/potato/internal/model"
+	"github.com/viletyy/potato/pkg"
 )
 
 type BusinessSearch struct {
 	Business
-	utils.PageInfo
+	pkg.PageInfo
 }
 
 type Business struct {
-	global.Model
+	model.Model
 
 	Name        string `json:"name"`
 	Description string `json:"description"`
 	Uuid        int    `json:"uuid"`
 }
 
-func GetBusinesses(search *BusinessSearch) (searchResult utils.SearchResult, err error) {
+func GetBusinesses(search *BusinessSearch) (searchResult pkg.SearchResult, err error) {
 	var businesses []Business
 	offset := search.PageInfo.PageSize * (search.PageInfo.Page - 1)
 	limit := search.PageInfo.Page

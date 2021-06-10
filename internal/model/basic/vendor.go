@@ -1,29 +1,30 @@
 /*
  * @Date: 2021-03-21 19:54:57
  * @LastEditors: viletyy
- * @LastEditTime: 2021-04-06 15:55:59
- * @FilePath: /potato/models/basic/vendor.go
+ * @LastEditTime: 2021-06-10 15:26:36
+ * @FilePath: /potato/internal/model/basic/vendor.go
  */
 package basic
 
 import (
 	"github.com/viletyy/potato/global"
-	"github.com/viletyy/potato/utils"
+	"github.com/viletyy/potato/internal/model"
+	"github.com/viletyy/potato/pkg"
 )
 
 type VendorSearch struct {
 	Vendor
-	utils.PageInfo
+	pkg.PageInfo
 }
 
 type Vendor struct {
-	global.Model
+	model.Model
 
 	Name string `json:"name"`
 	Uuid int    `json:"uuid"`
 }
 
-func GetVendors(search *VendorSearch) (searchResult utils.SearchResult, err error) {
+func GetVendors(search *VendorSearch) (searchResult pkg.SearchResult, err error) {
 	var vendors []Vendor
 	offset := search.PageInfo.PageSize * (search.PageInfo.Page - 1)
 	limit := search.PageInfo.PageSize

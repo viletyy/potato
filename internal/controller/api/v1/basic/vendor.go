@@ -6,8 +6,8 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
 	"github.com/viletyy/potato/global"
-	"github.com/viletyy/potato/models/basic"
-	"github.com/viletyy/potato/utils"
+	"github.com/viletyy/potato/internal/model/basic"
+	"github.com/viletyy/potato/pkg"
 	"go.uber.org/zap"
 )
 
@@ -36,13 +36,13 @@ func GetVendors(c *gin.Context) {
 	var search basic.VendorSearch
 
 	search.Name = c.Query("name")
-	search.Page, search.PageSize = utils.GetPageInfo(c)
+	search.Page, search.PageSize = pkg.GetPageInfo(c)
 
 	if result, err := basic.GetVendors(&search); err != nil {
 		global.GO_LOG.Error("获取失败!", zap.Any("err", err))
-		utils.FailWithMessage("获取失败", c)
+		pkg.FailWithMessage("获取失败", c)
 	} else {
-		utils.OkWithDetailed(result, "获取成功", c)
+		pkg.OkWithDetailed(result, "获取成功", c)
 	}
 }
 
@@ -65,7 +65,7 @@ func CreateVendor(c *gin.Context) {
 			return
 		} else {
 			c.JSON(http.StatusBadRequest, gin.H{
-				"msg": errs.Translate(utils.Trans),
+				"msg": errs.Translate(pkg.Trans),
 			})
 			return
 		}
@@ -73,20 +73,20 @@ func CreateVendor(c *gin.Context) {
 
 	if exist := basic.ExistVendorByName(vendor.Name); exist {
 		global.GO_LOG.Error("该系统厂商名称已存在!")
-		utils.FailWithMessage("该系统厂商名称已存在", c)
+		pkg.FailWithMessage("该系统厂商名称已存在", c)
 		return
 	}
 	if exist := basic.ExistVendorByUuid(vendor.Uuid); exist {
 		global.GO_LOG.Error("该系统厂商uuid已存在!")
-		utils.FailWithMessage("该系统厂商uuid已存在", c)
+		pkg.FailWithMessage("该系统厂商uuid已存在", c)
 		return
 	}
 
 	if mVendor, err := basic.CreateVendor(basic.Vendor{Name: vendor.Name, Uuid: vendor.Uuid}); err != nil {
 		global.GO_LOG.Error("创建失败!", zap.Any("err", err))
-		utils.FailWithMessage("创建失败", c)
+		pkg.FailWithMessage("创建失败", c)
 	} else {
-		utils.OkWithDetailed(mVendor, "创建成功", c)
+		pkg.OkWithDetailed(mVendor, "创建成功", c)
 	}
 }
 
@@ -104,7 +104,7 @@ func UpdateVendor(c *gin.Context) {
 	vendor, gErr := basic.GetVendorById(c.Param("id"))
 	if gErr != nil {
 		global.GO_LOG.Error("系统厂商不存在!", zap.Any("err", gErr))
-		utils.FailWithMessage("系统厂商不存在!", c)
+		pkg.FailWithMessage("系统厂商不存在!", c)
 		return
 	}
 
@@ -116,7 +116,7 @@ func UpdateVendor(c *gin.Context) {
 			return
 		} else {
 			c.JSON(http.StatusBadRequest, gin.H{
-				"msg": errs.Translate(utils.Trans),
+				"msg": errs.Translate(pkg.Trans),
 			})
 			return
 		}
@@ -124,20 +124,20 @@ func UpdateVendor(c *gin.Context) {
 
 	if exist := basic.ExistVendorByName(vendor.Name); exist {
 		global.GO_LOG.Error("该系统厂商名称已存在!")
-		utils.FailWithMessage("该系统厂商名称已存在", c)
+		pkg.FailWithMessage("该系统厂商名称已存在", c)
 		return
 	}
 	if exist := basic.ExistVendorByUuid(vendor.Uuid); exist {
 		global.GO_LOG.Error("该系统厂商uuid已存在!")
-		utils.FailWithMessage("该系统厂商uuid已存在", c)
+		pkg.FailWithMessage("该系统厂商uuid已存在", c)
 		return
 	}
 
 	if err := basic.UpdateVendor(&vendor); err != nil {
 		global.GO_LOG.Error("更新失败!", zap.Any("err", err))
-		utils.FailWithMessage("更新失败", c)
+		pkg.FailWithMessage("更新失败", c)
 	} else {
-		utils.OkWithDetailed(vendor, "更新成功", c)
+		pkg.OkWithDetailed(vendor, "更新成功", c)
 	}
 }
 
@@ -154,13 +154,13 @@ func DeleteVendor(c *gin.Context) {
 	vendor, gErr := basic.GetVendorById(c.Param("id"))
 	if gErr != nil {
 		global.GO_LOG.Error("系统厂商不存在!", zap.Any("err", gErr))
-		utils.FailWithMessage("系统厂商不存在!", c)
+		pkg.FailWithMessage("系统厂商不存在!", c)
 		return
 	}
 	if err := basic.DeleteVendor(&vendor); err != nil {
 		global.GO_LOG.Error("删除失败!", zap.Any("err", err))
-		utils.FailWithMessage("删除失败", c)
+		pkg.FailWithMessage("删除失败", c)
 	} else {
-		utils.OkWithMessage("删除成功", c)
+		pkg.OkWithMessage("删除成功", c)
 	}
 }

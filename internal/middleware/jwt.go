@@ -1,8 +1,8 @@
 /*
  * @Date: 2021-03-21 19:54:57
  * @LastEditors: viletyy
- * @LastEditTime: 2021-03-24 11:05:16
- * @FilePath: /potato/middleware/jwt.go
+ * @LastEditTime: 2021-06-10 15:20:29
+ * @FilePath: /potato/internal/middleware/jwt.go
  */
 package middleware
 
@@ -13,7 +13,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/viletyy/potato/global"
-	"github.com/viletyy/potato/utils"
+	"github.com/viletyy/potato/pkg"
 )
 
 func JWT() gin.HandlerFunc {
@@ -26,7 +26,7 @@ func JWT() gin.HandlerFunc {
 			c.Abort()
 			return
 		} else {
-			claims, err := utils.ParseToken(token)
+			claims, err := pkg.ParseToken(token)
 			if err != nil {
 				c.JSON(http.StatusBadRequest, gin.H{
 					"error": "token验证失败",

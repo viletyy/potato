@@ -1,8 +1,8 @@
 /*
  * @Date: 2021-03-21 19:54:57
  * @LastEditors: viletyy
- * @LastEditTime: 2021-04-06 18:01:36
- * @FilePath: /potato/controller/api/v1/user.go
+ * @LastEditTime: 2021-06-10 15:23:41
+ * @FilePath: /potato/internal/controller/api/v1/user.go
  */
 package v1
 
@@ -12,15 +12,15 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
 	"github.com/viletyy/potato/global"
-	"github.com/viletyy/potato/models"
-	"github.com/viletyy/potato/utils"
-	"github.com/viletyy/potato/utils/crypt"
+	"github.com/viletyy/potato/internal/model"
+	"github.com/viletyy/potato/pkg"
+	"github.com/viletyy/yolk/crypt"
 	"go.uber.org/zap"
 )
 
 type AuthResponse struct {
-	User  models.User `json:"user"`
-	Token string      `json:"token"`
+	User  model.User `json:"user"`
+	Token string     `json:"token"`
 }
 
 type AuthRequest struct {
@@ -51,34 +51,34 @@ func Auth(c *gin.Context) {
 			return
 		} else {
 			c.JSON(http.StatusBadRequest, gin.H{
-				"msg": errs.Translate(utils.Trans),
+				"msg": errs.Translate(pkg.Trans),
 			})
 			return
 		}
 	}
 
-	mUser, gErr := models.GetUserByUsername(user.Username)
+	mUser, gErr := model.GetUserByUsername(user.Username)
 	if gErr != nil {
 		global.GO_LOG.Error("查找用户失败", zap.Any("err", gErr))
-		utils.FailWithMessage("查找用户失败", c)
+		pkg.FailWithMessage("查找用户失败", c)
 		return
 	}
 
 	isTrue := mUser.CheckPassword(user.Password)
 	if !isTrue {
 		global.GO_LOG.Error("用户密码不正确")
-		utils.FailWithMessage("用户密码不正确", c)
+		pkg.FailWithMessage("用户密码不正确", c)
 		return
 	}
 
-	token, tokenErr := utils.GenerateToken(mUser.ID)
+	token, tokenErr := pkg.GenerateToken(mUser.ID)
 	if tokenErr != nil {
 		global.GO_LOG.Error("获取token失败", zap.Any("err", tokenErr))
-		utils.FailWithMessage("获取token失败", c)
+		pkg.FailWithMessage("获取token失败", c)
 		return
 	}
 
-	utils.OkWithDetailed(AuthResponse{
+	pkg.OkWithDetailed(AuthResponse{
 		User:  mUser,
 		Token: token,
 	}, "登录成功", c)
@@ -101,22 +101,22 @@ func Register(c *gin.Context) {
 			return
 		} else {
 			c.JSON(http.StatusBadRequest, gin.H{
-				"msg": errs.Translate(utils.Trans),
+				"msg": errs.Translate(pkg.Trans),
 			})
 			return
 		}
 	}
 
-	if isExsit := models.ExistUserByUsername(user.Username); isExsit {
+	if isExsit := model.ExistUserByUsername(user.Username); isExsit {
 		global.GO_LOG.Error("用户已存在")
-		utils.FailWithMessage("用户已存在", c)
+		pkg.FailWithMessage("用户已存在", c)
 		return
 	}
 
-	if err := models.CreateUser(models.User{Username: user.Username, Password: crypt.Md5Encode(user.Password), Nickname: user.Nickname}); err != nil {
+	if err := model.CreateUser(model.User{Username: user.Username, Password: crypt.Md5Encode(user.Password), Nickname: user.Nickname}); err != nil {
 		global.GO_LOG.Error("创建失败!", zap.Any("err", err))
-		utils.FailWithMessage("创建失败", c)
+		pkg.FailWithMessage("创建失败", c)
 	} else {
-		utils.OkWithMessage("创建成功", c)
+		pkg.OkWithMessage("创建成功", c)
 	}
 }

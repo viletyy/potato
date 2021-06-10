@@ -1,7 +1,7 @@
 <!--
  * @Date: 2021-03-21 19:54:57
  * @LastEditors: viletyy
- * @LastEditTime: 2021-04-06 10:36:10
+ * @LastEditTime: 2021-06-10 15:14:37
  * @FilePath: /potato/README.md
 -->
 # Potato
@@ -21,11 +21,32 @@ Go项目脚手架
 
 ## 内容列表
 
-- [安装](#安装)
-- [使用说明](#使用说明)
-- [相关仓库](#相关仓库)
-- [如何贡献](#如何贡献)
-- [使用许可](#使用许可)
+- [Potato](#potato)
+  - [内容列表](#内容列表)
+  - [项目结构](#项目结构)
+  - [安装](#安装)
+  - [使用说明](#使用说明)
+  - [相关仓库](#相关仓库)
+  - [如何贡献](#如何贡献)
+  - [使用许可](#使用许可)
+
+## 项目结构
+potato
+├── config(配置目录)
+├── docs(文档集合)
+├── global(全局变量)
+├── initialize(初始化函数)
+├── internal(内部模块)
+│   ├── controller(控制器层，用于存放控制器)
+│   ├── dao(数据访问层，所有与数据相关等操作都会在dao层进行)
+│   ├── middleware(HTTP中间件)
+│   ├── model(模型层，用于存放model对象)
+│   ├── routers(路由相关逻辑处理)
+│   └── service(项目核心业务逻辑)
+├── pkg(项目相关等模块包)
+├── scripts(各类构建、按照，分析等操作等脚本)
+└── tmp(项目生成的临时文件)
+
 
 ## 安装
 
@@ -47,6 +68,7 @@ $ ./potato
 
 - [Gin](https://github.com/gin-gonic/gin) — Web Framework
 - [Gorm](https://github.com/jinzhu/gorm) — ORM
+- [Swag](https://github.com/swaggo/swag) - RESTful API Doc
 
 ## 如何贡献
 

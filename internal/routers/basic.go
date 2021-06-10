@@ -1,13 +1,13 @@
 /*
  * @Date: 2021-03-21 19:54:57
  * @LastEditors: viletyy
- * @LastEditTime: 2021-03-24 11:23:01
- * @FilePath: /potato/routers/basic.go
+ * @LastEditTime: 2021-06-10 15:16:54
+ * @FilePath: /potato/internal/routers/basic.go
  */
 package routers
 
 import (
-	"github.com/viletyy/potato/controller/api/v1/basic"
+	"github.com/viletyy/potato/internal/controller/api/v1/basic"
 )
 
 func V1InitBasicRouter() {

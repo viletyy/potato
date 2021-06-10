@@ -1,10 +1,10 @@
 /*
  * @Date: 2021-03-22 23:46:49
  * @LastEditors: viletyy
- * @LastEditTime: 2021-03-22 23:47:53
- * @FilePath: /potato/utils/request.go
+ * @LastEditTime: 2021-06-10 15:18:09
+ * @FilePath: /potato/pkg/request.go
  */
-package utils
+package pkg
 
 type PageInfo struct {
 	Page     int `json:"page"`

@@ -1,7 +1,7 @@
 /*
  * @Date: 2021-03-22 10:13:04
  * @LastEditors: viletyy
- * @LastEditTime: 2021-03-22 16:55:16
+ * @LastEditTime: 2021-06-10 15:01:09
  * @FilePath: /potato/initialize/zap.go
  */
 package initialize
@@ -12,6 +12,7 @@ import (
 
 	"github.com/viletyy/potato/global"
 	"github.com/viletyy/potato/utils"
+	"github.com/viletyy/yolk/directory"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 )
@@ -19,7 +20,7 @@ import (
 var level zapcore.Level
 
 func Zap() (logger *zap.Logger) {
-	if err := utils.CreateDir(global.GO_CONFIG.Zap.Director); err != nil {
+	if err := directory.CreateDir(global.GO_CONFIG.Zap.Director); err != nil {
 		fmt.Printf("Create Zap Dir err:%v", err.Error())
 	}
 

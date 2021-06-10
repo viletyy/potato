@@ -1,10 +1,4 @@
-/*
- * @Date: 2021-03-22 17:50:15
- * @LastEditors: viletyy
- * @LastEditTime: 2021-03-22 17:53:11
- * @FilePath: /potato/global/model.go
- */
-package global
+package model
 
 import "time"
 

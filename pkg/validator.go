@@ -1,10 +1,10 @@
 /*
  * @Date: 2021-03-22 23:17:52
  * @LastEditors: viletyy
- * @LastEditTime: 2021-04-06 17:46:53
- * @FilePath: /potato/utils/validator.go
+ * @LastEditTime: 2021-06-10 15:18:44
+ * @FilePath: /potato/pkg/validator.go
  */
-package utils
+package pkg
 
 import (
 	"fmt"

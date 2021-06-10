@@ -4,7 +4,7 @@
  * @LastEditTime: 2021-03-22 16:44:53
  * @FilePath: /potato/utils/rotatelogs_windows.go
  */
-package utils
+package pkg
 
 import (
 	"os"
