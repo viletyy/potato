@@ -4,6 +4,10 @@ app:
   jwt_expire: '7200'
   run_mode: 'debug'
   page_size: 10
+  upload_save_path: 'tmp/uploads'
+  upload_server_path: '/static'
+  upload_image_max_size: 5 # MB
+  upload_image_allow_exts: ['.jpg','.jpeg','.png']
 server: 
   http_port: 8000
   read_timeout: 60 

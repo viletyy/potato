@@ -40,6 +40,34 @@ paths:
           schema:
             $ref: '#/definitions/errcode.Error'
       summary: 鉴权验证
+  /v1/upload:
+    post:
+      consumes:
+      - multipart/form-data
+      parameters:
+      - description: auth by /auth
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: 文件
+        in: formData
+        name: file
+        required: true
+        type: file
+      - description: 文件类型
+        in: formData
+        name: type
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 请求成功
+          schema:
+            $ref: '#/definitions/errcode.Error'
+      summary: 上传文件
   /v1/vendors:
     get:
       consumes:
