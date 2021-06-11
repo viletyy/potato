@@ -1,7 +1,7 @@
 /*
  * @Date: 2021-03-21 19:54:57
  * @LastEditors: viletyy
- * @LastEditTime: 2021-06-11 10:30:18
+ * @LastEditTime: 2021-06-11 11:01:28
  * @FilePath: /potato/internal/model/basic/vendor.go
  */
 package basic
@@ -51,9 +51,8 @@ func (v Vendor) List(db *gorm.DB, pageOffset, pageSize int) (vendors []Vendor, e
 }
 
 func (v Vendor) Get(db *gorm.DB) (vendor Vendor, err error) {
-	err = db.Where("id = ?", v.ID).First(&vendor).Error
-	if err != nil && err != gorm.ErrRecordNotFound {
-		return
+	if notFound := db.Where("id = ?", v.ID).First(&vendor).RecordNotFound(); notFound {
+		return v, gorm.ErrRecordNotFound
 	}
 
 	return vendor, nil
@@ -68,6 +67,6 @@ func (v *Vendor) Update(db *gorm.DB) error {
 	return err
 }
 
-func (v Vendor) Delete(db *gorm.DB) error {
-	return db.Where("id = ? AND deleted_at = ?", v.ID, nil).Delete(&v).Error
+func (v *Vendor) Delete(db *gorm.DB) error {
+	return db.Where("id = ?", v.ID).Delete(v).Error
 }

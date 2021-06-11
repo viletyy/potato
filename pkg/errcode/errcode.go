@@ -1,7 +1,7 @@
 /*
  * @Date: 2021-06-10 16:30:10
  * @LastEditors: viletyy
- * @LastEditTime: 2021-06-10 21:43:05
+ * @LastEditTime: 2021-06-11 15:36:11
  * @FilePath: /potato/pkg/errcode/errcode.go
  */
 package errcode
@@ -59,5 +59,5 @@ func (e *Error) StatusCode() int {
 		return http.StatusTooManyRequests
 	}
 
-	return http.StatusInternalServerError
+	return http.StatusBadRequest
 }

@@ -1,13 +1,14 @@
 /*
  * @Date: 2021-03-21 19:54:57
  * @LastEditors: viletyy
- * @LastEditTime: 2021-06-11 01:17:44
+ * @LastEditTime: 2021-06-11 15:22:16
  * @FilePath: /potato/internal/controller/api/v1/basic/vendor.go
  */
 package basic
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/jinzhu/gorm"
 	"github.com/viletyy/potato/global"
 	"github.com/viletyy/potato/internal/service"
 	"github.com/viletyy/potato/pkg/app"
@@ -158,9 +159,15 @@ func (vendor Vendor) Update(c *gin.Context) {
 	svc := service.New(c.Request.Context())
 	dbVendor, err := svc.UpdateVendor(&param)
 	if err != nil {
-		global.GO_LOG.Sugar().Errorf("svc.UpdateVendor err: %v", err)
-		response.ToErrorResponse(errcode.ErrorUpdateVendorFail)
-		return
+		if err == gorm.ErrRecordNotFound {
+			global.GO_LOG.Sugar().Errorf("svc.UpdateVendor err: %v", err)
+			response.ToErrorResponse(errcode.ErrorGetVendorFail)
+			return
+		} else {
+			global.GO_LOG.Sugar().Errorf("svc.UpdateVendor err: %v", err)
+			response.ToErrorResponse(errcode.ErrorUpdateVendorFail)
+			return
+		}
 	}
 
 	response.ToResponse(dbVendor)
@@ -187,9 +194,15 @@ func (vendor Vendor) Delete(c *gin.Context) {
 	svc := service.New(c.Request.Context())
 	err = svc.DeleteVendor(&param)
 	if err != nil {
-		global.GO_LOG.Sugar().Errorf("svc.DeleteVendor err: %v", err)
-		response.ToErrorResponse(errcode.ErrorDeleteVendorFail)
-		return
+		if err == gorm.ErrRecordNotFound {
+			global.GO_LOG.Sugar().Errorf("svc.DeleteVendor err: %v", err)
+			response.ToErrorResponse(errcode.ErrorGetVendorFail)
+			return
+		} else {
+			global.GO_LOG.Sugar().Errorf("svc.DeleteVendor err: %v", err)
+			response.ToErrorResponse(errcode.ErrorDeleteVendorFail)
+			return
+		}
 	}
 
 	response.ToErrorResponse(errcode.Success)

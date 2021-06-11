@@ -1,7 +1,7 @@
 /*
  * @Date: 2021-06-10 18:58:25
  * @LastEditors: viletyy
- * @LastEditTime: 2021-06-11 01:14:45
+ * @LastEditTime: 2021-06-11 15:44:18
  * @FilePath: /potato/internal/controller/api/v1/auth.go
  */
 package v1
@@ -33,7 +33,7 @@ func GetAuth(c *gin.Context) {
 	}
 
 	svc := service.New(c.Request.Context())
-	err := svc.CheckAuth(&param)
+	auth, err := svc.CheckAuth(&param)
 	if err != nil {
 		global.GO_LOG.Sugar().Errorf("svc.CheckAuth err: %v", err)
 		response.ToErrorResponse(errcode.UnauthorizedAuthNotExist)
@@ -48,6 +48,8 @@ func GetAuth(c *gin.Context) {
 	}
 
 	response.ToResponse(gin.H{
-		"token": token,
+		"app_key":    auth.AppKey,
+		"app_secret": auth.AppSecret,
+		"token":      token,
 	})
 }

@@ -1,7 +1,7 @@
 /*
  * @Date: 2021-06-10 22:53:09
  * @LastEditors: viletyy
- * @LastEditTime: 2021-06-11 10:37:45
+ * @LastEditTime: 2021-06-11 10:54:38
  * @FilePath: /potato/internal/dao/vendor.go
  */
 package dao
@@ -61,5 +61,11 @@ func (d *Dao) DeleteVendor(id int64) error {
 		Model: &model.Model{ID: id},
 	}
 
-	return vendor.Delete(d.Engine)
+	dbVendor, err := vendor.Get(d.Engine)
+
+	if err != nil {
+		return err
+	}
+
+	return dbVendor.Delete(d.Engine)
 }

@@ -1,7 +1,7 @@
 /*
  * @Date: 2021-06-10 18:21:37
  * @LastEditors: viletyy
- * @LastEditTime: 2021-06-11 10:38:15
+ * @LastEditTime: 2021-06-11 15:41:04
  * @FilePath: /potato/internal/model/auth.go
  */
 package model
@@ -14,12 +14,9 @@ type Auth struct {
 	AppSecret string `json:"app_secret"`
 }
 
-func (a Auth) Get(db *gorm.DB) (Auth, error) {
-	var auth Auth
-	db = db.Where("app_key = ? AND app_secret = ?", a.AppKey, a.AppSecret)
-	err := db.First(&auth).Error
-	if err != nil && err != gorm.ErrRecordNotFound {
-		return auth, err
+func (a Auth) Get(db *gorm.DB) (auth Auth, err error) {
+	if notFound := db.Where("app_key = ? AND app_secret = ?", a.AppKey, a.AppSecret).First(&auth).RecordNotFound(); notFound {
+		return a, gorm.ErrRecordNotFound
 	}
 
 	return auth, nil
