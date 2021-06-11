@@ -1,7 +1,7 @@
 /*
  * @Date: 2021-06-10 18:21:37
  * @LastEditors: viletyy
- * @LastEditTime: 2021-06-11 01:00:59
+ * @LastEditTime: 2021-06-11 10:38:15
  * @FilePath: /potato/internal/model/auth.go
  */
 package model
@@ -9,7 +9,7 @@ package model
 import "github.com/jinzhu/gorm"
 
 type Auth struct {
-	Model
+	*Model
 	AppKey    string `json:"app_key"`
 	AppSecret string `json:"app_secret"`
 }

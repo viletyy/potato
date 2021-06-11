@@ -1,7 +1,7 @@
 /*
  * @Date: 2021-03-21 19:54:57
  * @LastEditors: viletyy
- * @LastEditTime: 2021-06-10 23:20:22
+ * @LastEditTime: 2021-06-11 10:30:18
  * @FilePath: /potato/internal/model/basic/vendor.go
  */
 package basic
@@ -12,7 +12,7 @@ import (
 )
 
 type Vendor struct {
-	model.Model
+	*model.Model
 
 	Name string `json:"name"`
 	Uuid int    `json:"uuid"`
@@ -59,14 +59,15 @@ func (v Vendor) Get(db *gorm.DB) (vendor Vendor, err error) {
 	return vendor, nil
 }
 
-func (v Vendor) Create(db *gorm.DB) error {
-	return db.Create(&v).Error
+func (v *Vendor) Create(db *gorm.DB) error {
+	return db.Create(v).Error
 }
 
-func (v Vendor) Update(db *gorm.DB) error {
-	return db.Model(&Vendor{}).Where("id = ?", v.ID).Update(v).Error
+func (v *Vendor) Update(db *gorm.DB) error {
+	err := db.Save(v).Error
+	return err
 }
 
 func (v Vendor) Delete(db *gorm.DB) error {
-	return db.Where("id = ?", v.ID).Delete(&v).Error
+	return db.Where("id = ? AND deleted_at = ?", v.ID, nil).Delete(&v).Error
 }

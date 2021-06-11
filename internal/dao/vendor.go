@@ -1,7 +1,7 @@
 /*
  * @Date: 2021-06-10 22:53:09
  * @LastEditors: viletyy
- * @LastEditTime: 2021-06-10 23:59:15
+ * @LastEditTime: 2021-06-11 10:37:45
  * @FilePath: /potato/internal/dao/vendor.go
  */
 package dao
@@ -25,7 +25,7 @@ func (d *Dao) GetVendorList(name string, uuid int, page, pageSize int) ([]basic.
 
 func (d *Dao) GetVendor(id int64) (basic.Vendor, error) {
 	vendor := basic.Vendor{
-		Model: model.Model{ID: id},
+		Model: &model.Model{ID: id},
 	}
 
 	return vendor.Get(d.Engine)
@@ -44,15 +44,21 @@ func (d *Dao) UpdateVendor(id int64, name string, uuid int) (basic.Vendor, error
 	vendor := basic.Vendor{
 		Name:  name,
 		Uuid:  uuid,
-		Model: model.Model{ID: id},
+		Model: &model.Model{ID: id},
 	}
 
-	return vendor, vendor.Update(d.Engine)
+	dbVendor, err := vendor.Get(d.Engine)
+
+	if err != nil {
+		return vendor, err
+	}
+
+	return dbVendor, dbVendor.Update(d.Engine)
 }
 
 func (d *Dao) DeleteVendor(id int64) error {
 	vendor := basic.Vendor{
-		Model: model.Model{ID: id},
+		Model: &model.Model{ID: id},
 	}
 
 	return vendor.Delete(d.Engine)
