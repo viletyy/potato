@@ -12,6 +12,14 @@ server:
   http_port: 8000
   read_timeout: 60 
   write_timeout: 60 
+email:
+  host: 'smtp.163.com'
+  port: 465
+  username: 'ceshi'
+  password: '123456'
+  is_ssl: true 
+  from: 'yystopf@163.com'
+  to: ['yystopf@163.com']
 database: 
   type: 'postgresql'
   user: 'root'
