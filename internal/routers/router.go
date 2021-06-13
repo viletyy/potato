@@ -1,7 +1,7 @@
 /*
  * @Date: 2021-03-21 19:54:57
  * @LastEditors: viletyy
- * @LastEditTime: 2021-06-12 22:24:53
+ * @LastEditTime: 2021-06-13 22:03:27
  * @FilePath: /potato/internal/routers/router.go
  */
 package routers
@@ -35,6 +35,7 @@ func InitRouter() *gin.Engine {
 
 	Engine.Use(middleware.CORS())
 	Engine.Use(middleware.AccessLog())
+	Engine.Use(middleware.AppInfo())
 	Engine.StaticFS("/static", http.Dir(global.GO_CONFIG.App.UploadSavePath))
 
 	Engine.POST("/api/v1/auth", v1.GetAuth)

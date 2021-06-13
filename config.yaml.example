@@ -1,6 +1,7 @@
 app:
+  name: 'potato'
+  version: '1.0.0'
   jwt_secret: 'viletyy'
-  jwt_issuer: 'potato'
   jwt_expire: '7200'
   run_mode: 'debug'
   page_size: 10

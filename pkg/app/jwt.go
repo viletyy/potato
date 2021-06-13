@@ -1,7 +1,7 @@
 /*
  * @Date: 2021-06-10 18:25:19
  * @LastEditors: viletyy
- * @LastEditTime: 2021-06-10 22:23:51
+ * @LastEditTime: 2021-06-13 22:00:15
  * @FilePath: /potato/pkg/app/jwt.go
  */
 package app
@@ -33,7 +33,7 @@ func GenerateToken(appKey, appSecret string) (string, error) {
 		AppSecret: crypt.Md5Encode(appSecret),
 		StandardClaims: jwt.StandardClaims{
 			ExpiresAt: expireTime.Unix(),
-			Issuer:    global.GO_CONFIG.App.JwtIssuser,
+			Issuer:    global.GO_CONFIG.App.Name,
 		},
 	}
 
