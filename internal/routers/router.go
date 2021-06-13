@@ -1,13 +1,14 @@
 /*
  * @Date: 2021-03-21 19:54:57
  * @LastEditors: viletyy
- * @LastEditTime: 2021-06-13 22:03:27
+ * @LastEditTime: 2021-06-13 22:46:46
  * @FilePath: /potato/internal/routers/router.go
  */
 package routers
 
 import (
 	"net/http"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	_ "github.com/swaggo/gin-swagger"
@@ -16,29 +17,42 @@ import (
 	_ "github.com/swaggo/gin-swagger/swaggerFiles"
 	_ "github.com/viletyy/potato/docs"
 	"github.com/viletyy/potato/global"
+	"github.com/viletyy/potato/internal/controller/api"
 	v1 "github.com/viletyy/potato/internal/controller/api/v1"
 	"github.com/viletyy/potato/internal/middleware"
+	"github.com/viletyy/potato/pkg/limiter"
 )
 
 var (
-	Engine        = gin.Default()
-	V1RouterGroup = Engine.Group("../api/v1")
+	Engine         = gin.Default()
+	V1RouterGroup  = Engine.Group("../api/v1")
+	methodLimiters = limiter.NewMethodLimiter().AddBuckets(limiter.LimiterBucketRule{
+		Key:          "/auth",
+		FillInterval: time.Second,
+		Capacity:     10,
+		Quantum:      10,
+	})
 )
 
 func InitRouter() *gin.Engine {
-	Engine.Use(gin.Logger())
+	gin.SetMode(global.GO_CONFIG.App.RunMode) // 设置运行模式
 
-	Engine.Use(gin.Recovery())
-	Engine.Use(middleware.Translations())
+	if global.GO_CONFIG.App.RunMode == "debug" {
+		Engine.Use(gin.Logger())   // 设置log
+		Engine.Use(gin.Recovery()) // 设置recovery
+	} else {
+		Engine.Use(middleware.AccessLog())
+		Engine.Use(middleware.Recovery())
+	}
+	Engine.Use(middleware.AppInfo())                        // 设置app信息
+	Engine.Use(middleware.RateLimiter(methodLimiters))      // 设置限流控制
+	Engine.Use(middleware.ContextTimeout(60 * time.Second)) // 设置统一超时控制
+	Engine.Use(middleware.Translations())                   // 设置自定义验证
+	Engine.Use(middleware.CORS())                           // 设置跨域
 
-	gin.SetMode(global.GO_CONFIG.App.RunMode)
-
-	Engine.Use(middleware.CORS())
-	Engine.Use(middleware.AccessLog())
-	Engine.Use(middleware.AppInfo())
 	Engine.StaticFS("/static", http.Dir(global.GO_CONFIG.App.UploadSavePath))
 
-	Engine.POST("/api/v1/auth", v1.GetAuth)
+	Engine.POST("/api/auth", api.GetAuth)
 	Engine.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	V1InitModule()

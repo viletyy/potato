@@ -1,10 +1,10 @@
 /*
  * @Date: 2021-06-10 18:58:25
  * @LastEditors: viletyy
- * @LastEditTime: 2021-06-11 15:44:18
- * @FilePath: /potato/internal/controller/api/v1/auth.go
+ * @LastEditTime: 2021-06-13 22:41:01
+ * @FilePath: /potato/internal/controller/api/auth.go
  */
-package v1
+package api
 
 import (
 	"github.com/gin-gonic/gin"
@@ -21,7 +21,7 @@ import (
 // @Param app_key formData string true "app key"
 // @Param app_secret formData string true "app secret"
 // @Success 200 {object} errcode.Error "请求成功"
-// @Router /v1/auth [post]
+// @Router /auth [post]
 func GetAuth(c *gin.Context) {
 	param := service.AuthRequest{}
 	response := app.NewResponse(c)
