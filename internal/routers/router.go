@@ -1,7 +1,7 @@
 /*
  * @Date: 2021-03-21 19:54:57
  * @LastEditors: viletyy
- * @LastEditTime: 2021-06-13 23:39:38
+ * @LastEditTime: 2021-06-14 23:32:23
  * @FilePath: /potato/internal/routers/router.go
  */
 package routers
@@ -25,7 +25,6 @@ import (
 
 var (
 	Engine         = gin.Default()
-	V1RouterGroup  = Engine.Group("../api/v1")
 	methodLimiters = limiter.NewMethodLimiter().AddBuckets(limiter.LimiterBucketRule{
 		Key:          "/auth",
 		FillInterval: time.Second,
@@ -35,8 +34,13 @@ var (
 )
 
 func InitRouter() *gin.Engine {
-	gin.SetMode(global.GO_CONFIG.App.RunMode) // 设置运行模式
-
+	gin.SetMode(global.GO_CONFIG.App.RunMode)                                                        // 设置运行模式
+	Engine.Use(middleware.AppInfo())                                                                 // 设置app信息
+	Engine.Use(middleware.RateLimiter(methodLimiters))                                               // 设置限流控制
+	Engine.Use(middleware.ContextTimeout(time.Duration(global.GO_CONFIG.App.DefaultContextTimeout))) // 设置统一超时控制
+	Engine.Use(middleware.Translations())                                                            // 设置自定义验证
+	Engine.Use(middleware.CORS())                                                                    // 设置跨域
+	Engine.Use(middleware.Tracing())
 	if global.GO_CONFIG.App.RunMode == "debug" {
 		Engine.Use(gin.Logger())   // 设置log
 		Engine.Use(gin.Recovery()) // 设置recovery
@@ -44,26 +48,18 @@ func InitRouter() *gin.Engine {
 		Engine.Use(middleware.AccessLog())
 		Engine.Use(middleware.Recovery())
 	}
-	Engine.Use(middleware.AppInfo())                                                                 // 设置app信息
-	Engine.Use(middleware.RateLimiter(methodLimiters))                                               // 设置限流控制
-	Engine.Use(middleware.ContextTimeout(time.Duration(global.GO_CONFIG.App.DefaultContextTimeout))) // 设置统一超时控制
-	Engine.Use(middleware.Translations())                                                            // 设置自定义验证
-	Engine.Use(middleware.CORS())                                                                    // 设置跨域
-	Engine.Use(middleware.Tracing())
 
 	Engine.StaticFS("/static", http.Dir(global.GO_CONFIG.App.UploadSavePath))
 
 	Engine.POST("/api/auth", api.GetAuth)
 	Engine.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
-	V1InitModule()
+	v1RouterGroup := Engine.Group("../api/v1")
+	v1RouterGroup.Use(middleware.JWT())
+
+	upload := v1.NewUpload()
+	v1RouterGroup.POST("/upload", upload.Create)
+	V1InitBasicRouter()
 
 	return Engine
-}
-
-func V1InitModule() {
-	V1RouterGroup.Use(middleware.JWT())
-	upload := v1.NewUpload()
-	V1RouterGroup.POST("/upload", upload.Create)
-	V1InitBasicRouter()
 }

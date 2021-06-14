@@ -1,7 +1,7 @@
 /*
  * @Date: 2021-06-10 17:57:48
  * @LastEditors: viletyy
- * @LastEditTime: 2021-06-11 01:17:09
+ * @LastEditTime: 2021-06-14 23:19:35
  * @FilePath: /potato/internal/service/vendor.go
  */
 package service
@@ -60,6 +60,6 @@ func (svc *Service) UpdateVendor(param *UpdateVendorRequest) (basic.Vendor, erro
 	return svc.dao.UpdateVendor(param.ID, param.Name, param.Uuid)
 }
 
-func (svc *Service) DeleteVendor(param *DeleteVendorRequest) error {
+func (svc *Service) DeleteVendor(param *DeleteVendorRequest) (basic.Vendor, error) {
 	return svc.dao.DeleteVendor(param.ID)
 }

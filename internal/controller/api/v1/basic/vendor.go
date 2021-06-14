@@ -1,7 +1,7 @@
 /*
  * @Date: 2021-03-21 19:54:57
  * @LastEditors: viletyy
- * @LastEditTime: 2021-06-11 15:22:16
+ * @LastEditTime: 2021-06-14 23:19:52
  * @FilePath: /potato/internal/controller/api/v1/basic/vendor.go
  */
 package basic
@@ -192,7 +192,7 @@ func (vendor Vendor) Delete(c *gin.Context) {
 	}
 	param := service.DeleteVendorRequest{ID: vendorId}
 	svc := service.New(c.Request.Context())
-	err = svc.DeleteVendor(&param)
+	dbvendor, err := svc.DeleteVendor(&param)
 	if err != nil {
 		if err == gorm.ErrRecordNotFound {
 			global.GO_LOG.Sugar().Errorf("svc.DeleteVendor err: %v", err)
@@ -205,5 +205,6 @@ func (vendor Vendor) Delete(c *gin.Context) {
 		}
 	}
 
+	errcode.Success.Data = dbvendor
 	response.ToErrorResponse(errcode.Success)
 }
