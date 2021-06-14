@@ -1,7 +1,7 @@
 /*
  * @Date: 2021-06-12 21:55:50
  * @LastEditors: viletyy
- * @LastEditTime: 2021-06-12 22:22:31
+ * @LastEditTime: 2021-06-14 21:00:47
  * @FilePath: /potato/internal/middleware/access_log.go
  */
 package middleware
@@ -40,6 +40,8 @@ func AccessLog() gin.HandlerFunc {
 		global.GO_LOG.With(
 			zap.String("request", c.Request.PostForm.Encode()),
 			zap.String("response", bodyWriter.body.String()),
+			zap.String("trace_id", c.GetString("X-Trace-ID")),
+			zap.String("span_id", c.GetString("X-Span-ID")),
 		).Sugar().Infof("access log: method: %s, status_code: %d, begin_time: %d, end_time: %d",
 			c.Request.Method,
 			bodyWriter.Status(),

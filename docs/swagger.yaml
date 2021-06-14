@@ -17,7 +17,7 @@ info:
   title: Potato Api
   version: "1.0"
 paths:
-  /v1/auth:
+  /auth:
     post:
       consumes:
       - multipart/form-data

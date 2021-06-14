@@ -1,7 +1,7 @@
 /*
  * @Date: 2021-03-22 10:12:38
  * @LastEditors: viletyy
- * @LastEditTime: 2021-06-10 21:53:31
+ * @LastEditTime: 2021-06-14 21:11:29
  * @FilePath: /potato/initialize/gorm.go
  */
 package initialize
@@ -9,6 +9,7 @@ package initialize
 import (
 	"fmt"
 
+	otgorm "github.com/eddycjy/opentracing-gorm"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
@@ -68,4 +69,7 @@ func GormSet(db *gorm.DB) {
 
 	// 设置打开数据库连接的最大数量
 	db.DB().SetMaxOpenConns(100)
+
+	// 设置链路追踪
+	otgorm.AddGormCallbacks(db)
 }

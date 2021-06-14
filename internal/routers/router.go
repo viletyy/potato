@@ -1,7 +1,7 @@
 /*
  * @Date: 2021-03-21 19:54:57
  * @LastEditors: viletyy
- * @LastEditTime: 2021-06-13 22:46:46
+ * @LastEditTime: 2021-06-13 23:39:38
  * @FilePath: /potato/internal/routers/router.go
  */
 package routers
@@ -44,11 +44,12 @@ func InitRouter() *gin.Engine {
 		Engine.Use(middleware.AccessLog())
 		Engine.Use(middleware.Recovery())
 	}
-	Engine.Use(middleware.AppInfo())                        // 设置app信息
-	Engine.Use(middleware.RateLimiter(methodLimiters))      // 设置限流控制
-	Engine.Use(middleware.ContextTimeout(60 * time.Second)) // 设置统一超时控制
-	Engine.Use(middleware.Translations())                   // 设置自定义验证
-	Engine.Use(middleware.CORS())                           // 设置跨域
+	Engine.Use(middleware.AppInfo())                                                                 // 设置app信息
+	Engine.Use(middleware.RateLimiter(methodLimiters))                                               // 设置限流控制
+	Engine.Use(middleware.ContextTimeout(time.Duration(global.GO_CONFIG.App.DefaultContextTimeout))) // 设置统一超时控制
+	Engine.Use(middleware.Translations())                                                            // 设置自定义验证
+	Engine.Use(middleware.CORS())                                                                    // 设置跨域
+	Engine.Use(middleware.Tracing())
 
 	Engine.StaticFS("/static", http.Dir(global.GO_CONFIG.App.UploadSavePath))
 

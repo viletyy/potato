@@ -4,6 +4,7 @@ app:
   jwt_secret: 'viletyy'
   jwt_expire: '7200'
   run_mode: 'debug'
+  default_context_timeout: 60
   page_size: 10
   upload_save_path: 'tmp/uploads'
   upload_server_path: '/static'

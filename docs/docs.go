@@ -24,7 +24,7 @@ var doc = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/v1/auth": {
+        "/auth": {
             "post": {
                 "consumes": [
                     "multipart/form-data"
