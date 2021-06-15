@@ -1,7 +1,7 @@
 <!--
  * @Date: 2021-03-21 19:54:57
  * @LastEditors: viletyy
- * @LastEditTime: 2021-06-10 15:39:28
+ * @LastEditTime: 2021-06-15 00:19:24
  * @FilePath: /potato/README.md
 -->
 # Potato
@@ -51,11 +51,32 @@ potato
 
 ## 安装
 
-这个项目使用 [go](https://golang.org/) 和 [swag](https://github.com/swaggo/swag)。请确保你本地安装了它们。
+这个项目使用 [go](https://golang.org/) 、 [swag](https://github.com/swaggo/swag)、[docker](https://www.docker.com/)[下载地址](https://www.docker.com/products/docker-desktop)、[jaeger](https://www.jaegertracing.io/)。请确保你本地安装了它们。
 
+go
 ```sh
 $ tar -C /usr/local -xzf go1.4.linux-amd64.tar.gz
 $ export PATH=$PATH:/usr/local/go/bin
+```
+
+swag安装
+```sh
+$ go get -u github.com/swaggo/swag/cmd/swag 
+$ mv $GOPATH/bin/swag /usr/local/go/bin          
+```
+
+jaeger
+```sh
+docker run -d --name jaeger \                                                             
+-e COLLECTOR_ZIPKIN_HTTP_PORT=9411 \
+-p 5775:5775/udp \
+-p 6831:6831/udp \
+-p 6832:6832/udp \
+-p 5778:5778 \
+-p 16686:16686 \
+-p 14268:14268 \
+-p 9411:9411 \
+jaegertracing/all-in-one:1.16
 ```
 
 ## 使用说明
