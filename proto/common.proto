@@ -1,0 +1,9 @@
+syntax = "proto3";
+
+option go_package= "github.com/viletyy/potato/proto";
+
+message Pager {
+  int64 page = 1;
+  int64 page_size = 2;
+  int64 total = 3;
+}

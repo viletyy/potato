@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+option go_package = "github.com/viletyy/potato/proto/basic";
+
+import "proto/common.proto";
+
+service VendorService {
+  rpc GetVendorList(GetVendorListRequest) returns (GetVendorListReply) {}
+}
+
+message GetVendorListRequest {
+  string name = 1;
+  int64 uuid = 2;
+  int64 page = 3;
+  int64 page_size = 4;
+}
+
+message Vendor {
+  int64 id = 1;
+  string name = 2;
+  int64 uuid = 3;
+}
+
+message GetVendorListReply {
+  repeated Vendor list = 1;
+  Pager pager = 2;
+}

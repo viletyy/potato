@@ -1,7 +1,7 @@
 /*
  * @Date: 2021-03-21 19:54:57
  * @LastEditors: viletyy
- * @LastEditTime: 2021-06-13 23:32:06
+ * @LastEditTime: 2021-06-17 00:29:41
  * @FilePath: /potato/main.go
  */
 package main
@@ -26,6 +26,7 @@ func main() {
 	defer global.GO_DB.Close()
 	defer global.GO_REDIS.Close()
 
+	initialize.RunGrpc()
 	initialize.RunServer()
 
 }
