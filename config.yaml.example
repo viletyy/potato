@@ -13,6 +13,7 @@ app:
   upload_image_allow_exts: ['.jpg','.jpeg','.png']
 server: 
   http_port: 8000
+  rpc_port: 8001
   read_timeout: 60 
   write_timeout: 60 
   tracer_host_port: '127.0.0.1:6831'
