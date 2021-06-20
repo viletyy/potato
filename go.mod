@@ -21,6 +21,7 @@ require (
 	github.com/onsi/gomega v1.13.0 // indirect
 	github.com/opentracing/opentracing-go v1.2.0
 	github.com/smacker/opentracing-gorm v0.0.0-20181207094635-cd4974441042 // indirect
+	github.com/soheilhy/cmux v0.1.5
 	github.com/spf13/viper v1.7.1
 	github.com/swaggo/gin-swagger v1.3.0
 	github.com/swaggo/swag v1.7.0
@@ -29,6 +30,7 @@ require (
 	github.com/viletyy/yolk v1.0.1
 	go.uber.org/atomic v1.8.0 // indirect
 	go.uber.org/zap v1.17.0
+	golang.org/x/net v0.0.0-20210614182718-04defd469f4e // indirect
 	google.golang.org/grpc v1.38.0
 	google.golang.org/protobuf v1.26.0
 	gopkg.in/alexcesaro/quotedprintable.v3 v3.0.0-20150716171945-2caba252f4dc // indirect
