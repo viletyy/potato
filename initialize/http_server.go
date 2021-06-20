@@ -1,8 +1,8 @@
 /*
  * @Date: 2021-03-22 17:03:27
  * @LastEditors: viletyy
- * @LastEditTime: 2021-06-20 19:18:10
- * @FilePath: /potato/initialize/server.go
+ * @LastEditTime: 2021-06-20 22:22:10
+ * @FilePath: /potato/initialize/http_server.go
  */
 package initialize
 
@@ -14,7 +14,7 @@ import (
 	"github.com/viletyy/potato/internal/routers"
 )
 
-func RunServer(port string) *http.Server {
+func RunHttpServer(port string) *http.Server {
 	router := routers.InitRouter()
 	server := &http.Server{
 		Addr:           port,

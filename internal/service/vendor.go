@@ -1,7 +1,7 @@
 /*
  * @Date: 2021-06-10 17:57:48
  * @LastEditors: viletyy
- * @LastEditTime: 2021-06-14 23:19:35
+ * @LastEditTime: 2021-06-16 23:59:12
  * @FilePath: /potato/internal/service/vendor.go
  */
 package service
@@ -41,25 +41,25 @@ type DeleteVendorRequest struct {
 }
 
 func (svc *Service) CountVendor(param *CountVendorRequest) (int, error) {
-	return svc.dao.CountVendor(param.Name, param.Uuid)
+	return svc.Dao.CountVendor(param.Name, param.Uuid)
 }
 
 func (svc *Service) GetVendorList(param *VendorListRequest, pager *app.Pager) ([]basic.Vendor, error) {
-	return svc.dao.GetVendorList(param.Name, param.Uuid, pager.Page, pager.PageSize)
+	return svc.Dao.GetVendorList(param.Name, param.Uuid, pager.Page, pager.PageSize)
 }
 
 func (svc *Service) GetVendor(param *VendorRequest) (basic.Vendor, error) {
-	return svc.dao.GetVendor(param.ID)
+	return svc.Dao.GetVendor(param.ID)
 }
 
 func (svc *Service) CreateVendor(param *CreateVendorRequest) (basic.Vendor, error) {
-	return svc.dao.CreateVendor(param.Name, param.Uuid)
+	return svc.Dao.CreateVendor(param.Name, param.Uuid)
 }
 
 func (svc *Service) UpdateVendor(param *UpdateVendorRequest) (basic.Vendor, error) {
-	return svc.dao.UpdateVendor(param.ID, param.Name, param.Uuid)
+	return svc.Dao.UpdateVendor(param.ID, param.Name, param.Uuid)
 }
 
 func (svc *Service) DeleteVendor(param *DeleteVendorRequest) (basic.Vendor, error) {
-	return svc.dao.DeleteVendor(param.ID)
+	return svc.Dao.DeleteVendor(param.ID)
 }

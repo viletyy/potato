@@ -14,5 +14,5 @@ type AuthRequest struct {
 }
 
 func (svc *Service) CheckAuth(param *AuthRequest) (model.Auth, error) {
-	return svc.dao.GetAuth(param.AppKey, param.AppSecret)
+	return svc.Dao.GetAuth(param.AppKey, param.AppSecret)
 }
