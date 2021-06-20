@@ -1,7 +1,7 @@
 /*
  * @Date: 2021-06-17 00:19:32
  * @LastEditors: viletyy
- * @LastEditTime: 2021-06-20 19:06:15
+ * @LastEditTime: 2021-06-20 19:46:17
  * @FilePath: /potato/initialize/grpc_server.go
  */
 package initialize
@@ -18,16 +18,5 @@ func RunGrpcServer() *grpc.Server {
 	pb.RegisterVendorServiceServer(server, basic.NewVendorServer())
 	reflection.Register(server)
 
-	// go func() {
-	// 	listen, err := net.Listen("tcp", ":"+convert.ToString(global.GO_CONFIG.Server.RpcPort))
-	// 	if err != nil {
-	// 		global.GO_LOG.Sugar().Fatalf("net.Listen err: %v", err)
-	// 	}
-
-	// 	err = server.Serve(listen)
-	// 	if err != nil {
-	// 		global.GO_LOG.Sugar().Fatalf("server.Serve err: %v", err)
-	// 	}
-	// }()
 	return server
 }

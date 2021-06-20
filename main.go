@@ -1,7 +1,7 @@
 /*
  * @Date: 2021-03-21 19:54:57
  * @LastEditors: viletyy
- * @LastEditTime: 2021-06-20 19:24:16
+ * @LastEditTime: 2021-06-20 19:45:38
  * @FilePath: /potato/main.go
  */
 package main
@@ -37,7 +37,7 @@ func main() {
 	defer global.GO_DB.Close()
 	defer global.GO_REDIS.Close()
 
-	flag.StringVar(&port, "port", convert.ToString(global.GO_CONFIG.Server.HttpPort), "启动端口号")
+	flag.StringVar(&port, "port", convert.ToString(global.GO_CONFIG.Server.Port), "启动端口号")
 	flag.Parse()
 
 	l, err := runTcpServer(port)
