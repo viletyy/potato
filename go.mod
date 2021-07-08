@@ -20,6 +20,7 @@ require (
 	github.com/onsi/ginkgo v1.16.4 // indirect
 	github.com/onsi/gomega v1.13.0 // indirect
 	github.com/opentracing/opentracing-go v1.2.0
+	github.com/robfig/cron/v3 v3.0.0
 	github.com/smacker/opentracing-gorm v0.0.0-20181207094635-cd4974441042 // indirect
 	github.com/soheilhy/cmux v0.1.5
 	github.com/spf13/viper v1.7.1
