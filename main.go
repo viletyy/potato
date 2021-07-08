@@ -1,7 +1,7 @@
 /*
  * @Date: 2021-03-21 19:54:57
  * @LastEditors: viletyy
- * @LastEditTime: 2021-06-20 19:45:38
+ * @LastEditTime: 2021-07-08 13:59:06
  * @FilePath: /potato/main.go
  */
 package main
@@ -33,6 +33,7 @@ func main() {
 	global.GO_DB = initialize.Gorm()
 	global.GO_REDIS = initialize.Redis()
 	global.GO_TRACER = initialize.Tracer()
+	initialize.Cron()
 
 	defer global.GO_DB.Close()
 	defer global.GO_REDIS.Close()
