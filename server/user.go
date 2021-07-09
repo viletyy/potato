@@ -1,7 +1,7 @@
 /*
  * @Date: 2021-07-09 14:33:26
  * @LastEditors: viletyy
- * @LastEditTime: 2021-07-09 14:34:16
+ * @LastEditTime: 2021-07-09 14:52:23
  * @FilePath: /potato/server/user.go
  */
 
@@ -21,7 +21,7 @@ type UserServer struct {
 	pb.UnimplementedUserServiceServer
 }
 
-func NewVendorServer() *UserServer {
+func NewUserServer() *UserServer {
 	return &UserServer{}
 }
 
