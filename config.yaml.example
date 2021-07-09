@@ -12,7 +12,8 @@ app:
   upload_image_max_size: 5 # MB
   upload_image_allow_exts: ['.jpg','.jpeg','.png']
 server: 
-  port: 8000
+  http_port: 8001
+  grpc_port: 8002
   read_timeout: 60 
   write_timeout: 60 
   tracer_host_port: '127.0.0.1:6831'
