@@ -22,7 +22,6 @@ require (
 	github.com/opentracing/opentracing-go v1.2.0
 	github.com/robfig/cron/v3 v3.0.0
 	github.com/smacker/opentracing-gorm v0.0.0-20181207094635-cd4974441042 // indirect
-	github.com/soheilhy/cmux v0.1.5
 	github.com/spf13/viper v1.7.1
 	github.com/swaggo/gin-swagger v1.3.0
 	github.com/swaggo/swag v1.7.0

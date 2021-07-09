@@ -1,7 +1,7 @@
 <!--
  * @Date: 2021-03-21 19:54:57
  * @LastEditors: viletyy
- * @LastEditTime: 2021-06-15 00:19:24
+ * @LastEditTime: 2021-07-09 14:48:06
  * @FilePath: /potato/README.md
 -->
 # Potato
@@ -10,13 +10,13 @@
 
 Go项目脚手架
 
-基于gin、gorm、zap的脚手架
+基于gin、gorm、zap、cron的脚手架
 
 本脚手架包含以下内容：
 
 1. mvc结构。
 2. swagger接口文档。
-3. 配置、数据库、redis、日志、工具库封装。
+3. 配置、数据库、redis、日志、工具库、后台任务封装。
 4. 单点登陆(jwt)。
 
 ## 内容列表
@@ -40,6 +40,7 @@ potato
 ├── internal(内部模块)
 │   ├── controller(控制器层，用于存放控制器)
 │   ├── dao(数据访问层，所有与数据相关等操作都会在dao层进行)
+│   ├── job(后台任务)
 │   ├── middleware(HTTP中间件)
 │   ├── model(模型层，用于存放model对象)
 │   ├── routers(路由相关逻辑处理)
@@ -82,8 +83,11 @@ jaegertracing/all-in-one:1.16
 ## 使用说明
 
 ```sh
+# 启动项目
 $ go build -o potato main.go
 $ ./potato
+# 生成api文档
+$ swag init
 ```
 
 ## 相关仓库
@@ -91,6 +95,7 @@ $ ./potato
 - [Gin](https://github.com/gin-gonic/gin) — Web Framework
 - [Gorm](https://github.com/jinzhu/gorm) — ORM
 - [Swag](https://github.com/swaggo/swag) - RESTful API Doc
+- [Cron](https://github.com/robfig/cron) - A cron library
 
 ## 如何贡献
 

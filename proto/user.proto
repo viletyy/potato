@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+option go_package= "github.com/viletyy/potato/proto";
+
+import "proto/common.proto";
+
+service UserService {
+  rpc GetUserList(GetUserListRequest) returns (GetUserListReply) {}
+}
+
+message GetUserListRequest {
+  string username = 1;
+  string nickname = 2;
+  int64 page = 3;
+  int64 page_size = 4;
+}
+
+message User {
+  int64 id = 1;
+  string username = 2;
+  string password = 3;
+  string nickname = 4;
+  bool is_admin = 5;
+}
+
+message GetUserListReply {
+  repeated User list = 1;
+  Pager pager = 2;
+}
