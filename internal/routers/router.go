@@ -1,7 +1,7 @@
 /*
  * @Date: 2021-03-21 19:54:57
  * @LastEditors: viletyy
- * @LastEditTime: 2021-06-14 23:32:23
+ * @LastEditTime: 2021-07-09 14:44:37
  * @FilePath: /potato/internal/routers/router.go
  */
 package routers
@@ -52,6 +52,8 @@ func InitRouter() *gin.Engine {
 	Engine.StaticFS("/static", http.Dir(global.GO_CONFIG.App.UploadSavePath))
 
 	Engine.POST("/api/auth", api.GetAuth)
+	Engine.POST("/api/user/register", api.UserRegister)
+	Engine.POST("/api/user/login", api.UserLogin)
 	Engine.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	v1RouterGroup := Engine.Group("../api/v1")
@@ -59,6 +61,16 @@ func InitRouter() *gin.Engine {
 
 	upload := v1.NewUpload()
 	v1RouterGroup.POST("/upload", upload.Create)
+
+	users := v1RouterGroup.Group("/users")
+	user := v1.NewUser()
+	{
+		users.GET("", user.List)
+		users.POST("", user.Create)
+		users.GET("/:id", user.Get)
+		users.PATCH("/:id", user.Update)
+		users.DELETE("/:id", user.Delete)
+	}
 	V1InitBasicRouter()
 
 	return Engine
