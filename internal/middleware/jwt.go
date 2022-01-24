@@ -7,8 +7,8 @@
 package middleware
 
 import (
-	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
+	"github.com/golang-jwt/jwt"
 	"github.com/viletyy/potato/pkg/app"
 	"github.com/viletyy/potato/pkg/errcode"
 )
