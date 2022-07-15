@@ -9,13 +9,12 @@ package initialize
 import (
 	"fmt"
 
-	otgorm "github.com/eddycjy/opentracing-gorm"
-	"github.com/jinzhu/gorm"
-	_ "github.com/jinzhu/gorm/dialects/mysql"
-	_ "github.com/jinzhu/gorm/dialects/postgres"
 	"github.com/viletyy/potato/global"
-	"github.com/viletyy/potato/internal/model"
-	"github.com/viletyy/potato/internal/model/basic"
+	"gorm.io/driver/mysql"
+	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
+	gormlogger "gorm.io/gorm/logger"
+	"moul.io/zapgorm2"
 )
 
 func Gorm() *gorm.DB {
@@ -30,7 +29,8 @@ func Gorm() *gorm.DB {
 }
 
 func GormMysql() *gorm.DB {
-	db, err := gorm.Open("mysql", fmt.Sprintf("%s:%s@(%s:%d)/%s?charset=utf8mb4&parseTime=True&loc=Local", global.GO_CONFIG.Database.User, global.GO_CONFIG.Database.Password, global.GO_CONFIG.Database.Host, global.GO_CONFIG.Database.Port, global.GO_CONFIG.Database.Name))
+	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8mb4&parseTime=True&loc=Local", global.GO_CONFIG.Database.User, global.GO_CONFIG.Database.Password, global.GO_CONFIG.Database.Host, global.GO_CONFIG.Database.Port, global.GO_CONFIG.Database.Name)
+	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	if err != nil {
 		global.GO_LOG.Error(fmt.Sprintf("Mysql Gorm Open Error: %v", err))
 	}
@@ -39,7 +39,8 @@ func GormMysql() *gorm.DB {
 }
 
 func GormPostgresql() *gorm.DB {
-	db, err := gorm.Open("postgres", fmt.Sprintf("host=%s user=%s dbname=%s port=%d sslmode=disable password=%s", global.GO_CONFIG.Database.Host, global.GO_CONFIG.Database.User, global.GO_CONFIG.Database.Name, global.GO_CONFIG.Database.Port, global.GO_CONFIG.Database.Password))
+	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%d sslmode=disable TimeZone=Asia/Shanghai", global.GO_CONFIG.Database.Host, global.GO_CONFIG.Database.User, global.GO_CONFIG.Database.Password, global.GO_CONFIG.Database.Name, global.GO_CONFIG.Database.Port)
+	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
 		global.GO_LOG.Error(fmt.Sprintf("Postgresql Gorm Open Error: %v", err))
 	}
@@ -48,29 +49,21 @@ func GormPostgresql() *gorm.DB {
 }
 
 func GormSet(db *gorm.DB) {
-	// 设置表前缀
-	gorm.DefaultTableNameHandler = func(db *gorm.DB, defaultTableName string) string {
-		return global.GO_CONFIG.Database.TablePrefix + defaultTableName
+	if global.GO_CONFIG.App.RunMode != "debug" {
+		logger := zapgorm2.New(global.GO_LOG)
+		logger.SetAsDefault()
+		logger.LogLevel = gormlogger.Info
+		db.Logger = logger
 	}
 
-	// 设置日志
-	if global.GO_CONFIG.App.RunMode == "debug" {
-		db.LogMode(true)
+	sqlDB, err := db.DB()
+	if err != nil {
+		global.GO_LOG.Error(fmt.Sprintf("Gorm setting db.DB(): %v ", err))
 	}
-
-	// 设置迁移
-	db.AutoMigrate(
-		&basic.Vendor{},
-		&model.User{},
-		&model.Auth{},
-	)
 
 	// 设置空闲连接池中的最大连接数
-	db.DB().SetMaxIdleConns(10)
+	sqlDB.SetConnMaxIdleTime(10)
 
 	// 设置打开数据库连接的最大数量
-	db.DB().SetMaxOpenConns(100)
-
-	// 设置链路追踪
-	otgorm.AddGormCallbacks(db)
+	sqlDB.SetMaxOpenConns(100)
 }

@@ -8,12 +8,12 @@ package v1
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/jinzhu/gorm"
 	"github.com/viletyy/potato/global"
 	"github.com/viletyy/potato/internal/service"
 	"github.com/viletyy/potato/pkg/app"
 	"github.com/viletyy/potato/pkg/errcode"
 	"github.com/viletyy/yolk/convert"
+	"gorm.io/gorm"
 )
 
 type User struct{}

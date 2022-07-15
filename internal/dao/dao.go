@@ -6,7 +6,7 @@
  */
 package dao
 
-import "github.com/jinzhu/gorm"
+import "gorm.io/gorm"
 
 type Dao struct {
 	Engine *gorm.DB

@@ -6,7 +6,7 @@
  */
 package model
 
-import "github.com/jinzhu/gorm"
+import "gorm.io/gorm"
 
 type Auth struct {
 	*Model
@@ -15,8 +15,8 @@ type Auth struct {
 }
 
 func (a Auth) Get(db *gorm.DB) (auth Auth, err error) {
-	if notFound := db.Where("app_key = ? AND app_secret = ?", a.AppKey, a.AppSecret).First(&auth).RecordNotFound(); notFound {
-		return a, gorm.ErrRecordNotFound
+	if err := db.Where("app_key = ? AND app_secret = ?", a.AppKey, a.AppSecret).First(&auth).Error; err != nil {
+		return a, err
 	}
 
 	return auth, nil

@@ -40,7 +40,7 @@ type DeleteVendorRequest struct {
 	ID int64 `json:"id" validate:"required,gte=1"`
 }
 
-func (svc *Service) CountVendor(param *CountVendorRequest) (int, error) {
+func (svc *Service) CountVendor(param *CountVendorRequest) (int64, error) {
 	return svc.Dao.CountVendor(param.Name, param.Uuid)
 }
 

@@ -8,11 +8,11 @@ package global
 
 import (
 	"github.com/go-redis/redis"
-	"github.com/jinzhu/gorm"
 	"github.com/opentracing/opentracing-go"
 	"github.com/spf13/viper"
 	"github.com/viletyy/potato/config"
 	"go.uber.org/zap"
+	"gorm.io/gorm"
 )
 
 var (

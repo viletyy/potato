@@ -12,7 +12,7 @@ import (
 	"github.com/viletyy/potato/pkg/app"
 )
 
-func (d *Dao) CountVendor(name string, uuid int) (int, error) {
+func (d *Dao) CountVendor(name string, uuid int) (int64, error) {
 	vendor := basic.Vendor{Name: name, Uuid: uuid}
 	return vendor.Count(d.Engine)
 }

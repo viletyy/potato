@@ -63,7 +63,7 @@ func (svc *Service) LoginUser(param *UserLoginRequest) (model.User, error) {
 	return svc.Dao.LoginUser(param.Username, param.Password)
 }
 
-func (svc *Service) CountUser(param *CountUserRequest) (int, error) {
+func (svc *Service) CountUser(param *CountUserRequest) (int64, error) {
 	return svc.Dao.CountUser(param.Username, param.Nickname)
 }
 
