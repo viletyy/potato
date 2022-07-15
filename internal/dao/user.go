@@ -31,7 +31,7 @@ func (d *Dao) LoginUser(username string, password string) (model.User, error) {
 	return user.GetByUsernameAndPassword(d.Engine)
 }
 
-func (d *Dao) CountUser(username, nickname string) (int, error) {
+func (d *Dao) CountUser(username, nickname string) (int64, error) {
 	vendor := model.User{Username: username, Nickname: nickname}
 	return vendor.Count(d.Engine)
 }

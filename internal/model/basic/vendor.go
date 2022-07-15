@@ -7,8 +7,8 @@
 package basic
 
 import (
-	"github.com/jinzhu/gorm"
 	"github.com/viletyy/potato/internal/model"
+	"gorm.io/gorm"
 )
 
 type Vendor struct {
@@ -18,8 +18,8 @@ type Vendor struct {
 	Uuid int    `json:"uuid"`
 }
 
-func (v Vendor) Count(db *gorm.DB) (int, error) {
-	var count int
+func (v Vendor) Count(db *gorm.DB) (int64, error) {
+	var count int64
 	if v.Name != "" {
 		db = db.Where("name = ?", v.Name)
 	}
@@ -51,8 +51,8 @@ func (v Vendor) List(db *gorm.DB, pageOffset, pageSize int) (vendors []Vendor, e
 }
 
 func (v Vendor) Get(db *gorm.DB) (vendor Vendor, err error) {
-	if notFound := db.Where("id = ?", v.ID).First(&vendor).RecordNotFound(); notFound {
-		return v, gorm.ErrRecordNotFound
+	if err := db.Where("id = ?", v.ID).First(&vendor).Error; err != nil {
+		return v, err
 	}
 
 	return vendor, nil

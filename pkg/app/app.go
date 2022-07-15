@@ -16,9 +16,9 @@ type Response struct {
 }
 
 type Pager struct {
-	Page     int `json:"page"`
-	PageSize int `json:"page_size"`
-	Total    int `json:"total"`
+	Page     int   `json:"page"`
+	PageSize int   `json:"page_size"`
+	Total    int64 `json:"total"`
 }
 
 func NewResponse(ctx *gin.Context) *Response {
@@ -38,7 +38,7 @@ func (r *Response) ToResponseErrors(data interface{}) {
 	r.ToErrorResponse(err)
 }
 
-func (r *Response) ToResponseList(list interface{}, total int) {
+func (r *Response) ToResponseList(list interface{}, total int64) {
 	err := errcode.Success
 	err.WithData(map[string]interface{}{
 		"list": list,
