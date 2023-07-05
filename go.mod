@@ -27,9 +27,8 @@ require (
 	github.com/viletyy/yolk v1.0.1
 	go.uber.org/atomic v1.8.0 // indirect
 	go.uber.org/zap v1.21.0
-	golang.org/x/net v0.0.0-20210614182718-04defd469f4e // indirect
-	google.golang.org/grpc v1.38.0
-	google.golang.org/protobuf v1.26.0
+	google.golang.org/grpc v1.53.0
+	google.golang.org/protobuf v1.28.1
 	gopkg.in/alexcesaro/quotedprintable.v3 v3.0.0-20150716171945-2caba252f4dc // indirect
 	gopkg.in/gomail.v2 v2.0.0-20160411212932-81ebce5c23df
 	gorm.io/driver/mysql v1.3.5
